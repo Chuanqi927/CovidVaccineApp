@@ -1,0 +1,90 @@
+Project Schema Design
+
+Assumption:
+	a patient can have only one account. If he wants to reserve multiple appointments for others, he can not do that. Each person needs to register as an individual patient, and each time 1 patient can only receive 1 same appointment offer at the same time slot (the same provider can't offer two vaccine to one patient).
+---------------------------------------------------
+Patients:	(Strong entity)
+username
+password
+SSN
+name
+dob
+phone
+email
+address
+isEligible
+	(based on vReceived question and age<16? while registration)
+priorityGroup
+	(initially null, update by administrator)
+maxDistancePreference
+	(based on preferred distance question while registration)
+Primary Key:
+username
+	(based on SSN)
+
+---------------------------------------------------
+TimePreference:	(relationship)
+username	references Patients(username)
+timeSlot 	references WeeklyTimeSlot(timeSlot)
+	(there can be multiple timeSlot for one patient)
+Primary Key:
+(username, timeSlot)
+
+---------------------------------------------------
+WeeklyTimeSlot:	(Strong Entity)
+timeSlot
+	(Example: Monday 8am-12pm, Monday )
+Primary Key:
+(timeSlot)
+
+---------------------------------------------------
+Providers:	(Strong Entity)
+username
+password
+name
+address
+	(one hospital may have many locations)
+phone
+email
+providerType
+
+Primary Key:
+username
+	(based on uniqueness of (name, address))
+
+---------------------------------------------------
+Appointments:	(Weak Entity)
+ProviderUsername	references Provider(username)
+appointmentDate
+	(identifier for weak entity set)
+timeSlot 			references WeeklyTimeSlot(timeSlot)
+availableNumber
+	(large hospital can have several available appointments at the same time)
+
+Primary Key:
+(ProviderUsername, appointmentDate, timeSlot)
+
+
+---------------------------------------------------
+Administrators:	(Strong Entity)
+username
+password
+email
+	(email can be primary key, but we dont allow duplicate username)
+
+Primary Key:
+(username)
+
+---------------------------------------------------
+Offer:	(Weak Relationship)
+ProviderUsername	references Appointments(ProviderUsername)
+appointmentDate		references Appointments(appointmentDate)
+timeSlot			references Appointments(timeSlot)
+username			references Patients(username)
+status
+	(pending/accepted/declined/expired/finished)
+sentTime
+	(the time when the appointment is sent to patient)
+
+---------------------------------------------------
+
