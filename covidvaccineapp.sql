@@ -219,7 +219,7 @@ ALTER TABLE `timepreference`
 --
 -- Indexes for table `uploadappointment`
 --
-ALTER TABLE `uploadappointment`
+ALTER TABLE appointment
   ADD PRIMARY KEY (`appointmentid`),
   ADD KEY `uploadappointment_providers_username_fk` (`ProviderUsername`);
 
@@ -246,7 +246,7 @@ ALTER TABLE `definepriority`
 --
 ALTER TABLE `offerappointment`
   ADD CONSTRAINT `offerappointment_patients_username_fk` FOREIGN KEY (`PatientUsername`) REFERENCES `patients` (`username`),
-  ADD CONSTRAINT `offerappointment_uploadappointment_appointmentid_fk` FOREIGN KEY (`appointmentid`) REFERENCES `uploadappointment` (`appointmentid`);
+  ADD CONSTRAINT `offerappointment_uploadappointment_appointmentid_fk` FOREIGN KEY (`appointmentid`) REFERENCES appointment (`appointmentid`);
 
 --
 -- Constraints for table `timepreference`
@@ -258,7 +258,7 @@ ALTER TABLE `timepreference`
 --
 -- Constraints for table `uploadappointment`
 --
-ALTER TABLE `uploadappointment`
+ALTER TABLE appointment
   ADD CONSTRAINT `uploadappointment_providers_username_fk` FOREIGN KEY (`ProviderUsername`) REFERENCES `providers` (`username`);
 COMMIT;
 
