@@ -1,99 +1,121 @@
 Project Schema Design
 
 Assumption:
-	a patient can have only one account. If he wants to reserve multiple appointments for others, he can not do that. Each person needs to register as an individual patient, and each time 1 patient can only receive 1 same appointment offer at the same time slot (the same provider can't offer two vaccine to one patient).
----------------------------------------------------
-Patients:	(Strong entity)
-username
-password
-SSN
-name
-dob
-phone
-email
-address
-isEligible
-	(based on vReceived question and age<16? while registration)
-priorityGroup
-	(initially null, update by administrator)
-maxDistancePreference
-	(based on preferred distance question while registration)
-Primary Key:
-username
-	(based on SSN)
-
----------------------------------------------------
-TimePreferences:	(relationship)
-username	references Patients(username)
-weekday		references WeeklyTimeSlot(weekday)
-timeSlot 	references WeeklyTimeSlot(timeSlot)
-	(there can be multiple timeSlot for one patient)
-Primary Key:
-(username, weekday, timeSlot)
-
----------------------------------------------------
-WeeklyTimeSlot:	(Strong Entity)
-weekday
-	(Example, Monday, Tuesday...)
-timeSlot
-	(Example: 8am-12pm)
-Primary Key:
-(weekday, timeSlot)
-
----------------------------------------------------
-Providers:	(Strong Entity)
-username
-password
-name
-address
-	(one hospital may have many locations)
-phone
-email
-providerType
-
-Primary Key:
-username
-	(based on uniqueness of (name, address))
-
----------------------------------------------------
-Appointments:	(Weak Entity)
-ProviderUsername	references Provider(username)
-appointmentDate
-	(identifier for weak entity set)
-availableNumber
-	(large hospital can have several available appointments at the same time)
-
-Primary Key:
-(ProviderUsername, appointmentDate)
-
-
+	a patient can have only one account. If he wants to reserve multiple appointments
+for others, he can not do that. Each person needs to register as an individual patient,
+and each time 1 patient can only receive 1 same appointment offer at the same time slot
+(the same provider can't offer two vaccine to one patient).
 ---------------------------------------------------
 Administrators:	(Strong Entity)
-username
-password
-email
-	(email can be primary key, but we dont allow duplicate username)
+    username varchar(255) not null,
+    password varchar(255) not null,
+    email    varchar(255) not null,
 
-Primary Key:
-(username)
-
+    constraint administrators_username_uindex
+        unique (username)
+    primary key (username);
 ---------------------------------------------------
-Offer:	(Weak Relationship)
-appointmentid		references Appointments(appointmentid)
-username			references Patients(username)
-status
-	(pending/accepted/declined/expired/finished/miss/canceled)
-expireTime
-	(the time when the appointment will expire)
-Primary Key:
-(appointmentid, username)
+Patients:	(Strong entity)
+    username              varchar(255) not null,
+    password              varchar(255) not null,
+    firstName             varchar(255) not null,
+    lastName              varchar(255) not null,
+    SSN                   int          not null,
+    dob                   date         not null,
+    phone                 varchar(255) not null,
+    email                 varchar(255) not null,
+    addressLine1          varchar(255) not null,
+    addressLine2          varchar(255) null,
+    city                  varchar(255) not null,
+    state                 varchar(255) not null,
+    country               varchar(255) not null,
+    zipcode               varchar(255) not null,
+    maxDistancePreference varchar(255) not null,
+    longitude             varchar(255) not null,
+    latitude              varchar(255) not null,
 
+    constraint patients_SSN_uindex
+        unique (SSN),
+    constraint patients_username_uindex
+        unique (username)
+    primary key (username);
 ---------------------------------------------------
-definePriority: (relationship)
-AdminUsername	references Administrators(username)
-PatientUsername	references Patients(username)
-PriorityGroup
+Providers:	(Strong Entity)
+    username     varchar(255) not null,
+    password     varchar(255) not null,
+    name         varchar(255) not null,
+    phone        varchar(255) not null,
+    email        varchar(255) not null,
+    providerType varchar(255) not null,
+    addressLine1 varchar(255) not null,
+    addressLine2 varchar(255) not null,
+    city         varchar(255) not null,
+    state        varchar(255) not null,
+    country      varchar(255) not null,
+    zipcode      varchar(255) not null,
+    longitude    varchar(255) not null,
+    latitude     varchar(255) not null,
 
-Primary Key:
-(AdminUsername, PatientUsername)
+    constraint providers_username_uindex
+        unique (username)
+    primary key (username);
+---------------------------------------------------
+PriorityGroup:  (Strong Entity)
+    groupNumber  int  not null,
+    EligibleDate date not null,
+
+    primary key (groupNumber);
+---------------------------------------------------
+definePriority: (Strong relationship)
+    AdminUsername       varchar(255) not null,
+    PatientUsername     varchar(255) not null,
+    priorityGroupNumber int          not null,
+
+    constraint definepriority_administrators_username_fk
+        foreign key (AdminUsername) references administrators (username),
+    constraint definepriority_patients_username_fk
+        foreign key (PatientUsername) references patients (username),
+    constraint definepriority_prioritygroup_groupNumber_fk
+        foreign key (priorityGroupNumber) references prioritygroup (groupNumber),
+    primary key (AdminUsername, PatientUsername),
+---------------------------------------------------
+WeeklyTimeSlot:	(Strong Entity)
+    slotid    int          not null,
+    weekday   varchar(255) not null,
+    startTime time         not null,
+    endTime   time         not null,
+
+    primary key (slotid);
+---------------------------------------------------
+TimePreferences:	(Strong relationship)
+    patientUsername varchar(255) not null,
+    slotid          int          not null,
+
+    constraint timepreference_patients_username_fk
+        foreign key (patientUsername) references patients (username),
+    constraint timepreference_weeklytimeslot_slotid_fk
+        foreign key (slotid) references weeklytimeslot (slotid),
+    primary key (patientUsername, slotid);
+---------------------------------------------------
+uploadAppointments:	(Strong Entity)
+    appointmentid    int          not null,
+    ProviderUsername varchar(255) not null,
+    appointmentDate  datetime     not null,
+    availableNumber  int          not null,
+
+    constraint uploadappointment_providers_username_fk
+        foreign key (ProviderUsername) references providers (username),
+    primary key(appointmentid);
+---------------------------------------------------
+Offer:	(Strong Relationship)
+    appointmentid   int          not null,
+    PatientUsername varchar(255) not null,
+    status          varchar(255) not null,
+    expireTime      datetime     not null,
+    constraint offerappointment_patients_username_fk
+        foreign key (PatientUsername) references patients (username),
+    constraint offerappointment_uploadappointment_appointmentid_fk
+        foreign key (appointmentid) references uploadappointment (appointmentid),
+    primary key (appointmentid, PatientUsername);
+
 
