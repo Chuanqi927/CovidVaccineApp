@@ -60,13 +60,11 @@ Appointments:	(Weak Entity)
 ProviderUsername	references Provider(username)
 appointmentDate
 	(identifier for weak entity set)
-weekday				references WeeklyTimeSlot(weekday)
-timeSlot 			references WeeklyTimeSlot(timeSlot)
 availableNumber
 	(large hospital can have several available appointments at the same time)
 
 Primary Key:
-(ProviderUsername, appointmentDate, weekday, timeSlot)
+(ProviderUsername, appointmentDate)
 
 
 ---------------------------------------------------
@@ -81,17 +79,14 @@ Primary Key:
 
 ---------------------------------------------------
 Offer:	(Weak Relationship)
-ProviderUsername	references Appointments(ProviderUsername)
-appointmentDate		references Appointments(appointmentDate)
-weekday				references Appointments(weekday)
-timeSlot			references Appointments(timeSlot)
+appointmentid		references Appointments(appointmentid)
 username			references Patients(username)
 status
-	(pending/accepted/declined/expired/finished)
-sentTime
-	(the time when the appointment is sent to patient)
+	(pending/accepted/declined/expired/finished/miss/canceled)
+expireTime
+	(the time when the appointment will expire)
 Primary Key:
-(ProviderUsername, appointmentDate, weekday, timeSlot, username)
+(appointmentid, username)
 
 ---------------------------------------------------
 definePriority: (relationship)
@@ -100,5 +95,5 @@ PatientUsername	references Patients(username)
 PriorityGroup
 
 Primary Key:
-(AdminUsername, PatientUsername, PriorityGroup)
+(AdminUsername, PatientUsername)
 
