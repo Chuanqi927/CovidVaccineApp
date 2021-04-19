@@ -6,7 +6,7 @@ for others, he can not do that. Each person needs to register as an individual p
 and each time 1 patient can only receive 1 same appointment offer at the same time slot
 (the same provider can't offer two vaccine to one patient).
 ---------------------------------------------------
-Administrators:	(Strong Entity)
+Administrators:	
     username varchar(255) not null,
     password varchar(255) not null,
     email    varchar(255) not null,
@@ -15,7 +15,7 @@ Administrators:	(Strong Entity)
         unique (username)
     primary key (username);
 ---------------------------------------------------
-Patients:	(Strong entity)
+Patients:	
     username              varchar(255) not null,
     password              varchar(255) not null,
     firstName             varchar(255) not null,
@@ -40,7 +40,7 @@ Patients:	(Strong entity)
         unique (username)
     primary key (username);
 ---------------------------------------------------
-Providers:	(Strong Entity)
+Providers:	
     username     varchar(255) not null,
     password     varchar(255) not null,
     name         varchar(255) not null,
@@ -60,13 +60,13 @@ Providers:	(Strong Entity)
         unique (username)
     primary key (username);
 ---------------------------------------------------
-PriorityGroup:  (Strong Entity)
+PriorityGroup:  
     groupNumber  int  not null,
-    EligibleDate date not null,
+    eligibleDate date not null,
 
     primary key (groupNumber);
 ---------------------------------------------------
-definePriority: (Strong relationship)
+definePriority: 
     AdminUsername       varchar(255) not null,
     PatientUsername     varchar(255) not null,
     priorityGroupNumber int          not null,
@@ -79,7 +79,7 @@ definePriority: (Strong relationship)
         foreign key (priorityGroupNumber) references prioritygroup (groupNumber),
     primary key (AdminUsername, PatientUsername),
 ---------------------------------------------------
-WeeklyTimeSlot:	(Strong Entity)
+WeeklyTimeSlot:	
     slotid    int          not null,
     weekday   varchar(255) not null,
     startTime time         not null,
@@ -87,7 +87,7 @@ WeeklyTimeSlot:	(Strong Entity)
 
     primary key (slotid);
 ---------------------------------------------------
-TimePreferences:	(Strong relationship)
+TimePreferences:	
     patientUsername varchar(255) not null,
     slotid          int          not null,
 
@@ -97,17 +97,19 @@ TimePreferences:	(Strong relationship)
         foreign key (slotid) references weeklytimeslot (slotid),
     primary key (patientUsername, slotid);
 ---------------------------------------------------
-uploadAppointments:	(Strong Entity)
+UploadAppointments:	
     appointmentid    int          not null,
-    ProviderUsername varchar(255) not null,
+    providerUsername varchar(255) not null,
     appointmentDate  datetime     not null,
+    slotid           int          not null,
     availableNumber  int          not null,
-
     constraint uploadappointment_providers_username_fk
         foreign key (ProviderUsername) references providers (username),
+    constraint uploadappointment_weeklytimeslot_slotid_fk
+        foreign key (slotid) references weeklytimeslot (slotid)
     primary key(appointmentid);
 ---------------------------------------------------
-Offer:	(Strong Relationship)
+OfferAppointments:	
     appointmentid   int          not null,
     PatientUsername varchar(255) not null,
     status          varchar(255) not null,
