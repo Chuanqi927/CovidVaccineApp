@@ -23,19 +23,22 @@ username
 	(based on SSN)
 
 ---------------------------------------------------
-TimePreference:	(relationship)
+TimePreferences:	(relationship)
 username	references Patients(username)
+weekday		references WeeklyTimeSlot(weekday)
 timeSlot 	references WeeklyTimeSlot(timeSlot)
 	(there can be multiple timeSlot for one patient)
 Primary Key:
-(username, timeSlot)
+(username, weekday, timeSlot)
 
 ---------------------------------------------------
 WeeklyTimeSlot:	(Strong Entity)
+weekday
+	(Example, Monday, Tuesday...)
 timeSlot
-	(Example: Monday 8am-12pm, Monday )
+	(Example: 8am-12pm)
 Primary Key:
-(timeSlot)
+(weekday, timeSlot)
 
 ---------------------------------------------------
 Providers:	(Strong Entity)
@@ -57,12 +60,13 @@ Appointments:	(Weak Entity)
 ProviderUsername	references Provider(username)
 appointmentDate
 	(identifier for weak entity set)
+weekday				references WeeklyTimeSlot(weekday)
 timeSlot 			references WeeklyTimeSlot(timeSlot)
 availableNumber
 	(large hospital can have several available appointments at the same time)
 
 Primary Key:
-(ProviderUsername, appointmentDate, timeSlot)
+(ProviderUsername, appointmentDate, weekday, timeSlot)
 
 
 ---------------------------------------------------
@@ -79,12 +83,22 @@ Primary Key:
 Offer:	(Weak Relationship)
 ProviderUsername	references Appointments(ProviderUsername)
 appointmentDate		references Appointments(appointmentDate)
+weekday				references Appointments(weekday)
 timeSlot			references Appointments(timeSlot)
 username			references Patients(username)
 status
 	(pending/accepted/declined/expired/finished)
 sentTime
 	(the time when the appointment is sent to patient)
+Primary Key:
+(ProviderUsername, appointmentDate, weekday, timeSlot, username)
 
 ---------------------------------------------------
+definePriority: (relationship)
+AdminUsername	references Administrators(username)
+PatientUsername	references Patients(username)
+PriorityGroup
+
+Primary Key:
+(AdminUsername, PatientUsername, PriorityGroup)
 
