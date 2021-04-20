@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2021 at 03:06 AM
+-- Generation Time: Apr 20, 2021 at 06:08 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -33,6 +33,13 @@ CREATE TABLE `administrators` (
   `email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `administrators`
+--
+
+INSERT INTO `administrators` (`username`, `password`, `email`) VALUES
+('Chuanqi', 'ChuanqiPass123', 'cx657@nyu.edu');
+
 -- --------------------------------------------------------
 
 --
@@ -47,6 +54,13 @@ CREATE TABLE `appointment` (
   `availableNumber` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`appointmentid`, `providerUsername`, `appointmentDate`, `slotid`, `availableNumber`) VALUES
+(1, 'provider1', '2021-04-20 11:00:00', 1, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -58,6 +72,13 @@ CREATE TABLE `definepriority` (
   `patientUsername` varchar(255) NOT NULL,
   `priorityGroupNumber` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `definepriority`
+--
+
+INSERT INTO `definepriority` (`adminUsername`, `patientUsername`, `priorityGroupNumber`) VALUES
+('Chuanqi', 'sampleP1', 1);
 
 -- --------------------------------------------------------
 
@@ -72,6 +93,13 @@ CREATE TABLE `offerappointment` (
   `status` varchar(255) NOT NULL,
   `expireTime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `offerappointment`
+--
+
+INSERT INTO `offerappointment` (`appointmentid`, `adminUsername`, `patientUsername`, `status`, `expireTime`) VALUES
+(1, 'Chuanqi', 'sampleP1', 'finished', '2021-04-22 00:06:04');
 
 -- --------------------------------------------------------
 
@@ -99,6 +127,13 @@ CREATE TABLE `patients` (
   `latitude` decimal(10,8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `patients`
+--
+
+INSERT INTO `patients` (`username`, `password`, `firstName`, `lastName`, `SSN`, `dob`, `phone`, `email`, `addressLine1`, `addressLine2`, `city`, `state`, `country`, `zipcode`, `maxDistancePreference`, `longitude`, `latitude`) VALUES
+('sampleP1', 'samplePassword1', 'p1FirstName', 'p1LastName', 1234123412, '2000-01-12', '732-111-1111', 'sampleP1@gmail.com', '151 Centre St', 'apt1314', 'Bayonne', 'NJ', 'US', '07002', 30, '40.67730000', '-74.10064000');
+
 -- --------------------------------------------------------
 
 --
@@ -109,6 +144,17 @@ CREATE TABLE `prioritygroup` (
   `groupNumber` int(11) NOT NULL,
   `eligibleDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `prioritygroup`
+--
+
+INSERT INTO `prioritygroup` (`groupNumber`, `eligibleDate`) VALUES
+(1, '2021-01-01'),
+(2, '2021-02-01'),
+(3, '2021-03-01'),
+(4, '2021-04-01'),
+(5, '2021-05-01');
 
 -- --------------------------------------------------------
 
@@ -133,6 +179,13 @@ CREATE TABLE `providers` (
   `latitude` decimal(10,8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `providers`
+--
+
+INSERT INTO `providers` (`username`, `password`, `name`, `phone`, `email`, `providerType`, `addressLine1`, `addressLine2`, `city`, `state`, `country`, `zipcode`, `longitude`, `latitude`) VALUES
+('provider1', 'providerPassword1', 'CVS', '733-111-1111', 'provider1@gmail.com', 'Pharmacy', '18-40 Goldsborough Dr', '', 'Bayonne', 'NJ', 'US', '07002', '40.67209000', '-74.10548000');
+
 -- --------------------------------------------------------
 
 --
@@ -144,6 +197,13 @@ CREATE TABLE `timepreference` (
   `slotid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `timepreference`
+--
+
+INSERT INTO `timepreference` (`patientUsername`, `slotid`) VALUES
+('sampleP1', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -152,10 +212,17 @@ CREATE TABLE `timepreference` (
 
 CREATE TABLE `weeklytimeslot` (
   `slotid` int(11) NOT NULL,
-  `weekday` varchar(255) NOT NULL,
+  `weekday` int(11) NOT NULL,
   `startTime` time NOT NULL,
   `endTime` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `weeklytimeslot`
+--
+
+INSERT INTO `weeklytimeslot` (`slotid`, `weekday`, `startTime`, `endTime`) VALUES
+(1, 1, '08:00:00', '12:00:00');
 
 --
 -- Indexes for dumped tables
@@ -174,7 +241,7 @@ ALTER TABLE `administrators`
 ALTER TABLE `appointment`
   ADD PRIMARY KEY (`appointmentid`),
   ADD KEY `uploadappointment_providers_username_fk` (`providerUsername`),
-  ADD KEY `uploadappointment_weeklytimeslot_slotid_fk` (`slotid`);
+  ADD KEY `appointment_weeklytimeslot_slotid_fk` (`slotid`);
 
 --
 -- Indexes for table `definepriority`
@@ -235,8 +302,8 @@ ALTER TABLE `weeklytimeslot`
 -- Constraints for table `appointment`
 --
 ALTER TABLE `appointment`
-  ADD CONSTRAINT `uploadappointment_providers_username_fk` FOREIGN KEY (`ProviderUsername`) REFERENCES `providers` (`username`),
-  ADD CONSTRAINT `uploadappointment_weeklytimeslot_slotid_fk` FOREIGN KEY (`slotid`) REFERENCES `weeklytimeslot` (`slotid`);
+  ADD CONSTRAINT `appointment_weeklytimeslot_slotid_fk` FOREIGN KEY (`slotid`) REFERENCES `weeklytimeslot` (`slotid`),
+  ADD CONSTRAINT `uploadappointment_providers_username_fk` FOREIGN KEY (`ProviderUsername`) REFERENCES `providers` (`username`);
 
 --
 -- Constraints for table `definepriority`
