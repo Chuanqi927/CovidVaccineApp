@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2021 at 02:52 AM
+-- Generation Time: Apr 20, 2021 at 03:06 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -94,7 +94,7 @@ CREATE TABLE `patients` (
   `state` varchar(255) NOT NULL,
   `country` varchar(255) NOT NULL,
   `zipcode` varchar(255) NOT NULL,
-  `maxDistancePreference` varchar(255) NOT NULL,
+  `maxDistancePreference` float NOT NULL,
   `longitude` decimal(11,8) NOT NULL,
   `latitude` decimal(10,8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
