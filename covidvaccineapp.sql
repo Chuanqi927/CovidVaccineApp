@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2021 at 05:07 AM
+-- Generation Time: Apr 20, 2021 at 02:52 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -36,12 +36,26 @@ CREATE TABLE `administrators` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `appointment`
+--
+
+CREATE TABLE `appointment` (
+  `appointmentid` int(11) NOT NULL,
+  `providerUsername` varchar(255) NOT NULL,
+  `appointmentDate` datetime NOT NULL,
+  `slotid` int(11) NOT NULL,
+  `availableNumber` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `definepriority`
 --
 
 CREATE TABLE `definepriority` (
-  `AdminUsername` varchar(255) NOT NULL,
-  `PatientUsername` varchar(255) NOT NULL,
+  `adminUsername` varchar(255) NOT NULL,
+  `patientUsername` varchar(255) NOT NULL,
   `priorityGroupNumber` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -53,7 +67,8 @@ CREATE TABLE `definepriority` (
 
 CREATE TABLE `offerappointment` (
   `appointmentid` int(11) NOT NULL,
-  `PatientUsername` varchar(255) NOT NULL,
+  `adminUsername` varchar(255) NOT NULL,
+  `patientUsername` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
   `expireTime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -80,16 +95,9 @@ CREATE TABLE `patients` (
   `country` varchar(255) NOT NULL,
   `zipcode` varchar(255) NOT NULL,
   `maxDistancePreference` varchar(255) NOT NULL,
-  `longitude` varchar(255) NOT NULL,
-  `latitude` varchar(255) NOT NULL
+  `longitude` decimal(11,8) NOT NULL,
+  `latitude` decimal(10,8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `patients`
---
-
-INSERT INTO `patients` (`username`, `password`, `firstName`, `lastName`, `SSN`, `dob`, `phone`, `email`, `addressLine1`, `addressLine2`, `city`, `state`, `country`, `zipcode`, `maxDistancePreference`, `longitude`, `latitude`) VALUES
-('user1', '123456', '', '', 1231451, '2021-04-19', '73227777', 'xcx657@nyu.edu', 'dsadwada', '', '', '', '', '', '50', '', '');
 
 -- --------------------------------------------------------
 
@@ -99,7 +107,7 @@ INSERT INTO `patients` (`username`, `password`, `firstName`, `lastName`, `SSN`, 
 
 CREATE TABLE `prioritygroup` (
   `groupNumber` int(11) NOT NULL,
-  `EligibleDate` date NOT NULL
+  `eligibleDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -121,8 +129,8 @@ CREATE TABLE `providers` (
   `state` varchar(255) NOT NULL,
   `country` varchar(255) NOT NULL,
   `zipcode` varchar(255) NOT NULL,
-  `longitude` varchar(255) NOT NULL,
-  `latitude` varchar(255) NOT NULL
+  `longitude` decimal(11,8) NOT NULL,
+  `latitude` decimal(10,8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -134,19 +142,6 @@ CREATE TABLE `providers` (
 CREATE TABLE `timepreference` (
   `patientUsername` varchar(255) NOT NULL,
   `slotid` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `uploadappointment`
---
-
-CREATE TABLE `uploadappointment` (
-  `appointmentid` int(11) NOT NULL,
-  `ProviderUsername` varchar(255) NOT NULL,
-  `appointmentDate` datetime NOT NULL,
-  `availableNumber` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -174,19 +169,28 @@ ALTER TABLE `administrators`
   ADD UNIQUE KEY `administrators_username_uindex` (`username`);
 
 --
+-- Indexes for table `appointment`
+--
+ALTER TABLE `appointment`
+  ADD PRIMARY KEY (`appointmentid`),
+  ADD KEY `uploadappointment_providers_username_fk` (`providerUsername`),
+  ADD KEY `uploadappointment_weeklytimeslot_slotid_fk` (`slotid`);
+
+--
 -- Indexes for table `definepriority`
 --
 ALTER TABLE `definepriority`
-  ADD PRIMARY KEY (`AdminUsername`,`PatientUsername`),
-  ADD KEY `definepriority_patients_username_fk` (`PatientUsername`),
+  ADD PRIMARY KEY (`adminUsername`,`patientUsername`),
+  ADD KEY `definepriority_patients_username_fk` (`patientUsername`),
   ADD KEY `definepriority_prioritygroup_groupNumber_fk` (`priorityGroupNumber`);
 
 --
 -- Indexes for table `offerappointment`
 --
 ALTER TABLE `offerappointment`
-  ADD PRIMARY KEY (`appointmentid`,`PatientUsername`),
-  ADD KEY `offerappointment_patients_username_fk` (`PatientUsername`);
+  ADD PRIMARY KEY (`appointmentid`,`adminUsername`,`patientUsername`),
+  ADD KEY `offerappointment_patients_username_fk` (`patientUsername`),
+  ADD KEY `offerappointment_administrators_username_fk` (`adminUsername`);
 
 --
 -- Indexes for table `patients`
@@ -200,7 +204,8 @@ ALTER TABLE `patients`
 -- Indexes for table `prioritygroup`
 --
 ALTER TABLE `prioritygroup`
-  ADD PRIMARY KEY (`groupNumber`);
+  ADD PRIMARY KEY (`groupNumber`),
+  ADD UNIQUE KEY `prioritygroup_groupNumber_uindex` (`groupNumber`);
 
 --
 -- Indexes for table `providers`
@@ -217,13 +222,6 @@ ALTER TABLE `timepreference`
   ADD KEY `timepreference_weeklytimeslot_slotid_fk` (`slotid`);
 
 --
--- Indexes for table `uploadappointment`
---
-ALTER TABLE appointment
-  ADD PRIMARY KEY (`appointmentid`),
-  ADD KEY `uploadappointment_providers_username_fk` (`ProviderUsername`);
-
---
 -- Indexes for table `weeklytimeslot`
 --
 ALTER TABLE `weeklytimeslot`
@@ -232,6 +230,13 @@ ALTER TABLE `weeklytimeslot`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `appointment`
+--
+ALTER TABLE `appointment`
+  ADD CONSTRAINT `uploadappointment_providers_username_fk` FOREIGN KEY (`ProviderUsername`) REFERENCES `providers` (`username`),
+  ADD CONSTRAINT `uploadappointment_weeklytimeslot_slotid_fk` FOREIGN KEY (`slotid`) REFERENCES `weeklytimeslot` (`slotid`);
 
 --
 -- Constraints for table `definepriority`
@@ -245,8 +250,9 @@ ALTER TABLE `definepriority`
 -- Constraints for table `offerappointment`
 --
 ALTER TABLE `offerappointment`
+  ADD CONSTRAINT `offerappointment_administrators_username_fk` FOREIGN KEY (`adminUsername`) REFERENCES `administrators` (`username`),
   ADD CONSTRAINT `offerappointment_patients_username_fk` FOREIGN KEY (`PatientUsername`) REFERENCES `patients` (`username`),
-  ADD CONSTRAINT `offerappointment_uploadappointment_appointmentid_fk` FOREIGN KEY (`appointmentid`) REFERENCES appointment (`appointmentid`);
+  ADD CONSTRAINT `offerappointment_uploadappointment_appointmentid_fk` FOREIGN KEY (`appointmentid`) REFERENCES `appointment` (`appointmentid`);
 
 --
 -- Constraints for table `timepreference`
@@ -254,12 +260,6 @@ ALTER TABLE `offerappointment`
 ALTER TABLE `timepreference`
   ADD CONSTRAINT `timepreference_patients_username_fk` FOREIGN KEY (`patientUsername`) REFERENCES `patients` (`username`),
   ADD CONSTRAINT `timepreference_weeklytimeslot_slotid_fk` FOREIGN KEY (`slotid`) REFERENCES `weeklytimeslot` (`slotid`);
-
---
--- Constraints for table `uploadappointment`
---
-ALTER TABLE appointment
-  ADD CONSTRAINT `uploadappointment_providers_username_fk` FOREIGN KEY (`ProviderUsername`) REFERENCES `providers` (`username`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
