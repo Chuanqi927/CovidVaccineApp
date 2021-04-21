@@ -32,22 +32,20 @@ order by distanceInKM;
 
 # 4
 WITH patientGroupStatus AS(
-    select p.username as patientUsername, d.priorityGroupNumber, COALESCE(o.status, 'waiting') as status
+    select p.username as patientUsername, p.groupNumber, COALESCE(o.status, 'waiting') as status
     from covidvaccineapp.patients p
-    left join covidvaccineapp.definepriority d on p.username = d.PatientUsername
-    left join covidvaccineapp.offerappointment o on o.PatientUsername = d.PatientUsername
+    left join covidvaccineapp.offerappointment o on o.PatientUsername = p.username
 )
 select pg.groupNumber, sum(pgs.status = 'finished') as received, sum(pgs.status = 'accepted') as scheduled,
 		sum(pgs.status = 'waiting') as waiting
 from covidvaccineapp.prioritygroup pg
-left join patientGroupStatus pgs on pg.groupNumber = pgs.priorityGroupNumber
+left join patientGroupStatus pgs on pg.groupNumber = pgs.groupNumber
 group by pg.groupNumber;
 
 #5
-select p.username, d.priorityGroupNumber, pg.EligibleDate
+select p.username, p.groupNumber, pg.EligibleDate
 from covidvaccineapp.patients p
-left join covidvaccineapp.definepriority d on p.username = d.patientUsername
-left join covidvaccineapp.prioritygroup pg on d.priorityGroupNumber = pg.groupNumber;
+left join covidvaccineapp.prioritygroup pg on p.groupNumber = pg.groupNumber;
 
 # 6
 select o.PatientUsername, CONCAT_WS(' ',p.firstName, p.lastName) as name
