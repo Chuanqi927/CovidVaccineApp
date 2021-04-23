@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.apps import apps
-
-PriorityGroup = apps.get_model('staticInfo', 'PriorityGroup')
+import staticInfo.models
 
 
 class AppUser(AbstractUser):
@@ -17,13 +16,16 @@ class AppUser(AbstractUser):
     country = models.CharField(max_length=255)
     zipcode = models.CharField(max_length=255)
     max_distance_preferences = models.FloatField()
-    longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True,
-                                    null=True)
-    latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True,
-                                   null=True)
-    group_number = models.ForeignKey(PriorityGroup, on_delete=models.CASCADE)
+    longitude = models.DecimalField(
+        max_digits=22, decimal_places=16, blank=True, null=True
+    )
+    latitude = models.DecimalField(
+        max_digits=22, decimal_places=16, blank=True, null=True
+    )
+    group_number = models.ForeignKey(
+        staticInfo.models.PriorityGroup, on_delete=models.CASCADE
+    )
 
     is_provider = models.BooleanField()
     name = models.CharField(max_length=255)
     providerType = models.CharField(max_length=255)
-
