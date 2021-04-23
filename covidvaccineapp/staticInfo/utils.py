@@ -13,4 +13,6 @@ def get_time_slot_info():
 
 def get_priority_group_info():
     all_groups = list(PriorityGroup.objects.values())
-    return model_to_dict(all_groups)
+    for i in range(len(all_groups)):
+        all_groups[i]['eligible_date'] = all_groups[i]['eligible_date'].strftime("%Y/%m/%d")
+    return all_groups
