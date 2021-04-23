@@ -3,8 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    is_customer = models.BooleanField(default=False)
-    is_employee = models.BooleanField(default=False)
+    is_patient = models.BooleanField(default=False)
+    is_provider = models.BooleanField(default=False)
 
 
 class Patient(models.Model):
