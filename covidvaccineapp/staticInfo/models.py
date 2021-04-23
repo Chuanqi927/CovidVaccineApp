@@ -1,5 +1,4 @@
 from django.db import models
-import user.models
 from django.conf import settings
 
 

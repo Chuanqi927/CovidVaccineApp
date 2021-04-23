@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Time Slots</title>
+</head>
+<body>
+    <table id="TimeSlotTable" cellpadding="2" cellspacing="2" border="1">
+        <caption>Weekly Time Slots Information</caption>
+          <tr>
+            <th>Slot id</th>
+            <th>Weekday</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+    </table>
+</body>
+
+
+<script>
+    var all_time_slots = {{ all_time_slots | safe}};
+    // console.log(all_time_slots);
+    // console.log(typeof all_time_slots);
+    function ConvertWeekdayToString(temp_dict){
+        switch(temp_dict.weekday){
+            case 1:
+                return "Monday";
+            case 2:
+                return "Tuesday";
+            case 3:
+                return "Wednesday";
+            case 4:
+                return "Thursday";
+            case 5:
+                return "Friday";
+            case 6:
+                return "Saturday";
+            case 7:
+                return "Sunday";
+        }
+    }
+    function CreateTimeSlotTable() {
+        var table = document.getElementById("TimeSlotTable");
+        var i;
+        for(i=0; i<all_time_slots.length; i++) {
+            var temp_dict = all_time_slots[i];
+            // console.log(temp_dict);
+            // console.log(typeof temp_dict);
+            var row = table.insertRow(i+1);
+            var cell_slot_id = row.insertCell(0);
+            var cell_weekday = row.insertCell(1);
+            var cell_start_time = row.insertCell(2);
+            var cell_end_time = row.insertCell(3);
+            cell_slot_id.innerHTML = temp_dict.slot_id;
+            cell_weekday.innerHTML = ConvertWeekdayToString(temp_dict);
+            cell_start_time.innerHTML = temp_dict.start_time;
+            cell_end_time.innerHTML = temp_dict.end_time;
+
+        }
+    }
+    CreateTimeSlotTable();
+</script>
+
+
+</html>
