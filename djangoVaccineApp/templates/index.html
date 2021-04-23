@@ -31,8 +31,8 @@
                 {% if user.is_authenticated%}
                 <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>
                     {% else %}
-                <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Login</a></li>
-                    <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Register</a></li>
+                <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>
+                    <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>
                 {% endif %}
             </ul>
         </div>
