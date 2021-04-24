@@ -1,16 +1,15 @@
 from django.db import models
-from django.conf import settings
-import staticInfo.models
 
-# Create your models here.
+import staticInfo.models
 
 
 class Appointment(models.Model):
     appointment_id = models.AutoField(primary_key=True)
-    provider_username = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name="provider_username",
+    provider = models.ForeignKey(
+        "user.Provider",
+        related_name="provider",
         on_delete=models.CASCADE,
+        default=1,
     )
     appointment_time = models.DateTimeField()
     slot_id = models.ForeignKey(
@@ -19,8 +18,6 @@ class Appointment(models.Model):
     )
     available_number = models.IntegerField()
 
-    patient_username = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="patient_username"
-    )
+    patient = models.ManyToManyField("user.Patient", related_name="patient")
     status = models.CharField(max_length=255)
     expire_time = models.DateTimeField()

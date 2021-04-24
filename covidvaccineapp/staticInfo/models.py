@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 
 
 # Create your models here.
@@ -9,7 +8,7 @@ class WeeklyTimeSlot(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
 
-    patient_username = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    patient = models.ManyToManyField("user.Patient")
 
 
 class PriorityGroup(models.Model):

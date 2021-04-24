@@ -132,3 +132,5 @@ dmypy.json
 .idea
 
 .flake8
+
+djangoVaccineApp
