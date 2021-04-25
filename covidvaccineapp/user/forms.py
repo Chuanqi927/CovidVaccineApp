@@ -10,6 +10,7 @@ class PatientSignUpForm(UserCreationForm):
     phone_number = forms.CharField(required=True)
     address_Line1 = forms.CharField(required=True)
     ssn = forms.CharField(required=True)
+    city = forms.CharField(required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
