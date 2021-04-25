@@ -14,6 +14,7 @@ class Patient(models.Model):
     phone_number = models.CharField(max_length=20)
     addressLine1 = models.CharField(max_length=20)
     ssn = models.CharField(max_length=20)
+    city = models.CharField(max_length=20)
 
 
 class Provider(models.Model):
