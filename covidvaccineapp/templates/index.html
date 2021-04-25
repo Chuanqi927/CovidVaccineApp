@@ -1,0 +1,49 @@
+<head>
+    <title>Vaccine</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style type="text/css">
+	  .brand{
+	  	background: #cbb09c !important;
+	  }
+  	.brand-text{
+  		color: #cbb09c !important;
+  	}
+    form{
+        max-width:490px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    th {
+    text-align: center;
+    }
+    td {
+    text-align: center;
+    }
+    td:empty::before {content: "N/A"}
+    </style>
+</head>
+  <body class="grey lighten-4">
+    <nav class = "white z-depth-0">
+        <div class="container">
+            <a href="index.html" class="brand-logo brand-text">Vaccine</a>
+            <ul id="nav-mobile" class="right hide-on-small-and-down">
+                {% if user.is_authenticated%}
+                <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>
+                    {% else %}
+                <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>
+                    <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    </body>
+
+
+
+{#{% if user.is_authenticated%}#}
+{#<a href="{% url 'logout' %}">Logout</a> <br>#}
+{#{% else %}#}
+{#<a href="{% url 'register' %}">Register</a> <br>#}
+{#<a href="{% url 'login' %}">Login</a> #}
+{#{% endif %}#}

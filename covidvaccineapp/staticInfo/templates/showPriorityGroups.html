@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Priority Groups</title>
+</head>
+<body>
+    <table id="PriorityGroups" cellpadding="2" cellspacing="2" border="1">
+        <caption>Priority Groups Information</caption>
+          <tr>
+            <th>Group Number</th>
+            <th>Eligible Date</th>
+          </tr>
+    </table>
+</body>
+
+<script>
+    var all_priority_groups = {{ all_priority_groups | safe}};
+    // console.log(all_priority_groups);
+    // console.log(typeof all_priority_groups);
+    function CreateTimeSlotTable() {
+        var table = document.getElementById("PriorityGroups");
+        var i;
+        for(i=0; i<all_priority_groups.length; i++) {
+            var temp_dict = all_priority_groups[i];
+            // console.log(temp_dict);
+            // console.log(typeof temp_dict);
+            var row = table.insertRow(i+1);
+            var cell_group_number = row.insertCell(0);
+            var cell_eligible_date = row.insertCell(1);
+            cell_group_number.innerHTML = temp_dict.group_number;
+            cell_eligible_date.innerHTML = temp_dict.eligible_date;
+
+
+        }
+    }
+    CreateTimeSlotTable();
+</script>
+</html>

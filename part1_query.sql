@@ -1,10 +1,10 @@
 # 1
-INSERT INTO `covidvaccineapp`.`patients` (`username`, `password`, `firstname`, `lastname`, `SSN`, `dob`, `phone`, `email`, `addressLine1`, `city`, `state`, `country`, `zipcode`, `maxDistancePreference`, `latitude`, `longitude`) VALUES ('Bryan', 'XXX', 'Bryan', 'CC.', '123456789', '2003-02-12', '1234567890', 'bryan@gmail.com', '40 W 40th St', 'New York', 'New York', 'United States', '10018', '30', '40.73003889197802', '-74.00136170694712');
+INSERT INTO `covidvaccineapp`.`patients` (`username`, `password`, `firstname`, `lastname`, `SSN`, `dob`, `phone`, `email`, `addressLine1`, `city`, `state`, `country`, `zipcode`, `maxDistancePreference`, `latitude`, `longitude`, `groupNumber`) VALUES ('Bryan', 'XXX', 'Bryan', 'CC.', '123456789', '2003-02-12', '1234567890', 'bryan@gmail.com', '40 W 40th St', 'New York', 'New York', 'United States', '10018', '30', '40.73003889197802', '-74.00136170694712', '3');
 
 # 2
 INSERT INTO `covidvaccineapp`.`appointment` (`appointmentid`, `ProviderUsername`, `appointmentDate`, `slotid`, `availableNumber`) VALUES ('7', 'cvs_1', '2021-05-12 10:00:00', '17', '3');
 INSERT INTO `covidvaccineapp`.`providers` (`username`, `password`, `name`, `phone`, `email`, `providerType`, `addressLine1`, `city`, `state`, `country`, `zipcode`, `latitude`, `longitude`) VALUES ('cvs_1', 'XXXX', 'cvs', '+12122266111', 'cvs1@gmail.com', 'pharmacy', '298 Mulberry St', 'New York', 'New York', 'United States', '10012', '40.72711549627752', '-73.99416331767502');
-INSERT INTO `covidvaccineapp`.`offerappointment` (`appointmentid`, `PatientUsername`, `AdminUsername`, `status`, `expiretime`) VALUES ('7', 'Bryan', 'admin1', 'finished', '2021-05-20 12:00:00');
+INSERT INTO `covidvaccineapp`.`offerappointment` (`appointmentid`, `PatientUsername`, `status`, `expiretime`) VALUES ('7', 'Bryan', 'finished', '2021-05-20 12:00:00');
 
 # 3
 WITH patientAvailableAppointment AS(
@@ -32,22 +32,20 @@ order by distanceInKM;
 
 # 4
 WITH patientGroupStatus AS(
-    select p.username as patientUsername, d.priorityGroupNumber, COALESCE(o.status, 'waiting') as status
+    select p.username as patientUsername, p.groupNumber, COALESCE(o.status, 'waiting') as status
     from covidvaccineapp.patients p
-    left join covidvaccineapp.definepriority d on p.username = d.PatientUsername
-    left join covidvaccineapp.offerappointment o on o.PatientUsername = d.PatientUsername
+    left join covidvaccineapp.offerappointment o on o.PatientUsername = p.username
 )
 select pg.groupNumber, sum(pgs.status = 'finished') as received, sum(pgs.status = 'accepted') as scheduled,
 		sum(pgs.status = 'waiting') as waiting
 from covidvaccineapp.prioritygroup pg
-left join patientGroupStatus pgs on pg.groupNumber = pgs.priorityGroupNumber
+left join patientGroupStatus pgs on pg.groupNumber = pgs.groupNumber
 group by pg.groupNumber;
 
 #5
-select p.username, d.priorityGroupNumber, pg.EligibleDate
+select p.username, p.groupNumber, pg.EligibleDate
 from covidvaccineapp.patients p
-left join covidvaccineapp.definepriority d on p.username = d.patientUsername
-left join covidvaccineapp.prioritygroup pg on d.priorityGroupNumber = pg.groupNumber;
+left join covidvaccineapp.prioritygroup pg on p.groupNumber = pg.groupNumber;
 
 # 6
 select o.PatientUsername, CONCAT_WS(' ',p.firstName, p.lastName) as name
