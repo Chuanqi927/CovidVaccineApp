@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "user.apps.UserConfig",
     "appointment.apps.AppointmentConfig",
     "staticInfo.apps.StaticinfoConfig",
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
