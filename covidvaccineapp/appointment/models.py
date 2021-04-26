@@ -18,6 +18,11 @@ class Appointment(models.Model):
     )
     available_number = models.IntegerField()
 
-    patient = models.ManyToManyField("user.Patient", related_name="patient")
+    patient = models.ManyToManyField("user.Patient", related_name="patient", through='OfferAppointment')
+
+
+class OfferAppointment(models.Model):
+    appointment_id = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    patient = models.ForeignKey("user.Patient", on_delete=models.CASCADE)
     status = models.CharField(max_length=255)
     expire_time = models.DateTimeField()
