@@ -35,12 +35,11 @@ class Provider(models.Model):
     name = models.CharField(max_length=20)
     providerType = models.CharField(max_length=20)
     address_line1 = models.CharField(max_length=255)
-    address_line2 = models.CharField(max_length=255)
+    address_line2 = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     zipcode = models.CharField(max_length=255)
-    max_distance_preferences = models.FloatField()
     longitude = models.DecimalField(
         max_digits=22, decimal_places=16, blank=True, null=True
     )

@@ -14,7 +14,7 @@ def show_time_slots(request):
     parameter_dict = {
         "all_time_slots": all_time_slots_info,
     }
-    return render(request, "showTimeSlots.html", parameter_dict)
+    return render(request, "show_time_slots.html", parameter_dict)
 
 
 def show_priority_groups(request):
@@ -23,4 +23,4 @@ def show_priority_groups(request):
     parameter_dict = {
         "all_priority_groups": all_priority_groups_info,
     }
-    return render(request, "showPriorityGroups.html", parameter_dict)
+    return render(request, "show_priority_groups.html", parameter_dict)

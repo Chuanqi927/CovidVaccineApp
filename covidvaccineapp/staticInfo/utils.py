@@ -13,7 +13,10 @@ def get_time_slot_info():
 
 def get_priority_group_info():
     all_groups = list(PriorityGroup.objects.values())
+    # print(all_groups)
     for i in range(len(all_groups)):
+        # print(all_groups[i]["eligible_date"])
+        # print(type(all_groups[i]["eligible_date"]))
         all_groups[i]["eligible_date"] = all_groups[i]["eligible_date"].strftime(
             "%Y/%m/%d"
         )
