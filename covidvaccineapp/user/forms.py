@@ -20,11 +20,11 @@ class PatientSignUpForm(UserCreationForm):
         user.is_customer = True
         user.save()
         patient = Patient.objects.create(user=user)
-        patient.firstName = self.cleaned_data.get('firstName')
-        patient.lastName = self.cleaned_data.get('lastName')
-        patient.phone_number = self.cleaned_data.get('phone_number')
-        patient.address_Line1 = self.cleaned_data.get('address_Line1')
-        patient.ssn = self.cleaned_data.get('ssn')
+        patient.firstName = self.cleaned_data.get("firstName")
+        patient.lastName = self.cleaned_data.get("lastName")
+        patient.phone_number = self.cleaned_data.get("phone_number")
+        patient.address_Line1 = self.cleaned_data.get("address_Line1")
+        patient.ssn = self.cleaned_data.get("ssn")
         patient.save()
         return user
 
@@ -46,8 +46,8 @@ class ProviderSignUpForm(UserCreationForm):
         user.save()
         provider = Provider.objects.create(user=user)
 
-        provider.name = self.cleaned_data.get('name')
-        provider.phone_number = self.cleaned_data.get('phone_number')
-        provider.providerType = self.cleaned_data.get('providerType')
+        provider.name = self.cleaned_data.get("name")
+        provider.phone_number = self.cleaned_data.get("phone_number")
+        provider.providerType = self.cleaned_data.get("providerType")
         provider.save()
         return user

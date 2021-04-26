@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0002_remove_provider_max_distance_preferences'),
+        ("user", "0002_remove_provider_max_distance_preferences"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='provider',
-            name='address_line2',
+            model_name="provider",
+            name="address_line2",
             field=models.CharField(default=None, max_length=255),
         ),
     ]

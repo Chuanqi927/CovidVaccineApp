@@ -4,9 +4,15 @@ from . import views
 
 
 urlpatterns = [
-    path('register/', views.register, name='register'),
-    path('patient_register/', views.patient_register.as_view(), name='patient_register'),
-    path('provider_register/', views.provider_register.as_view(), name='provider_register'),
-    path('login/', views.login_request, name='login'),
-    path('logout/', views.logout_view, name='logout'),
+    path("register/", views.register, name="register"),
+    path(
+        "patient_register/", views.patient_register.as_view(), name="patient_register"
+    ),
+    path(
+        "provider_register/",
+        views.provider_register.as_view(),
+        name="provider_register",
+    ),
+    path("login/", views.login_request, name="login"),
+    path("logout/", views.logout_view, name="logout"),
 ]
