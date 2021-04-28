@@ -11,6 +11,10 @@ class PatientSignUpForm(UserCreationForm):
     address_Line1 = forms.CharField(required=True)
     ssn = forms.CharField(required=True)
     city = forms.CharField(required=True)
+    state = forms.CharField(required=True)
+    country = forms.CharField(required=True)
+    zipcode = forms.CharField(required=True)
+    max_distance_preference = forms.FloatField(min_value=0)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -31,9 +35,12 @@ class PatientSignUpForm(UserCreationForm):
 
 
 class ProviderSignUpForm(UserCreationForm):
-
     name = forms.CharField(required=True)
     addressLine1 = forms.CharField(required=True)
+    city = forms.CharField(required=True)
+    state = forms.CharField(required=True)
+    country = forms.CharField(required=True)
+    zipcode = forms.CharField(required=True)
     providerType = forms.CharField(required=True)
 
     class Meta(UserCreationForm.Meta):

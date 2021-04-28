@@ -62,3 +62,15 @@ select temp.ProviderUsername, providers.name, temp.number
 from providerUploadNumber temp
 inner join providers on temp.ProviderUsername = providers.username
 where temp.number in (select max(number) from providerUploadNumber);
+
+# # 7w
+# with finished as (
+# select p.username, p.name, count(*) as totalPerform
+# from covidvaccineapp.providers p inner join covidvaccineapp.appointment a
+# on a.ProviderUsername = p.username
+# inner join covidvaccineapp.offerappointment o on o.appointmentid = a.appointmentid
+# where o.status = "finished"
+# group by p.username, p.name
+# )
+# select username, name, totalPerform
+# from finished where totalPerform in (select max(totalPerform) from finished)
