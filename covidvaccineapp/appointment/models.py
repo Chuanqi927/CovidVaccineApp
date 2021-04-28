@@ -24,5 +24,5 @@ class Appointment(models.Model):
 class OfferAppointment(models.Model):
     appointment_id = models.ForeignKey(Appointment, on_delete=models.CASCADE)
     patient = models.ForeignKey("user.Patient", on_delete=models.CASCADE)
-    status = models.CharField(max_length=255)
-    expire_time = models.DateTimeField()
+    status = models.CharField(max_length=255, null=True, blank=True, default=None)
+    expire_time = models.DateTimeField(null=True, blank=True, default=None)

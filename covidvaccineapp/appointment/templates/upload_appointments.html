@@ -10,6 +10,8 @@
 
     <form id="upload_app_form" method="POST" novalidate>
         {% csrf_token %}
+        <input type="hidden" name="provider_id" id="provider_id" value="{{request.user.id}}">
+        <input type="hidden" name="slot_id" id="slot_id" value=0>
         <br>
         <label for="appointment_time">Choose a time for your appointment:</label>
         <br>
@@ -18,37 +20,16 @@
         <br>
         <label for="available_number">How many available appointments can you provide for this time?</label>
         <br>
-        <input type="number" id="available_number" name="quantity">
+        <input type="number" id="available_number" name="available_number">
         <br>
         <button type="submit" class="btn btn-block btn-primary">SUBMIT</button>
     </form>
+
 <script>
 $('#upload_app_form').on('submit', function(event) {
     event.preventDefault();
     var form_data = new FormData(document.getElementById("upload_app_form"));
     console.log("uploaded appointment form value is ",form_data.get("appointment_time"));
-    // console.log(type(jQuery.type(form_data.get("appointment_time"))));
-    // $.ajaxSetup({
-    //      beforeSend: function(xhr, settings) {
-    //          function getCookie(name) {
-    //              var cookieValue = null;
-    //              if (document.cookie && document.cookie != '') {
-    //                  var cookies = document.cookie.split(';');
-    //                  for (var i = 0; i < cookies.length; i++) {
-    //                      var cookie = jQuery.trim(cookies[i]);
-    //                      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-    //                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-    //                          break;
-    //                      }
-    //                  }
-    //              }
-    //              return cookieValue;
-    //          }
-    //          if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-    //              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    //          }
-    //      }
-    // });
     $.ajax({
       type: 'POST',
       url: "",
@@ -57,7 +38,7 @@ $('#upload_app_form').on('submit', function(event) {
       contentType: false,
       // handle a successful response
       success : function(response) {
-          window.location.reload(true);
+          // window.location.reload(true);
       },
       error : function(xhr,errmsg,err) {
         console.log('Ajax Error')
