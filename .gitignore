@@ -134,3 +134,5 @@ dmypy.json
 .flake8
 
 djangoVaccineApp
+
+**/.DS_Store
