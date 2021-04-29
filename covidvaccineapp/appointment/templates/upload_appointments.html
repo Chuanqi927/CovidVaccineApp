@@ -1,10 +1,56 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Upload Available Appointments</title>
 </head>
 <body>
+{#{% if user.is_authenticated and user is provider %}#}
 
+    <form id="upload_app_form" method="POST" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="provider_id" id="provider_id" value="{{request.user.id}}">
+        <input type="hidden" name="slot_id" id="slot_id" value=0>
+        <br>
+        <label for="appointment_time">Choose a time for your appointment:</label>
+        <br>
+        <input type="datetime-local" id="appointment_time"
+               name="appointment_time">
+        <br>
+        <label for="available_number">How many available appointments can you provide for this time?</label>
+        <br>
+        <input type="number" id="available_number" name="available_number">
+        <br>
+        <button type="submit" class="btn btn-block btn-primary">SUBMIT</button>
+    </form>
+
+<script>
+$('#upload_app_form').on('submit', function(event) {
+    event.preventDefault();
+    var form_data = new FormData(document.getElementById("upload_app_form"));
+    console.log("uploaded appointment form value is ",form_data.get("appointment_time"));
+    $.ajax({
+      type: 'POST',
+      url: "",
+      data: form_data,
+      processData: false,
+      contentType: false,
+      // handle a successful response
+      success : function(response) {
+          // window.location.reload(true);
+      },
+      error : function(xhr,errmsg,err) {
+        console.log('Ajax Error')
+      }
+    });
+});
+
+
+</script>
+
+{#{% else %}#}
+
+{#{% endif %}#}
 </body>
 </html>
