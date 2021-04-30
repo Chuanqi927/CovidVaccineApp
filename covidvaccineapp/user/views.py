@@ -90,7 +90,6 @@ def patient_profile(request):
 
 # class PatientRegister(CreateView):
 #     model = User
-#     fields = ['username', 'email', 'password', 'first_name', 'last_name', 'is_patient']
 #     form = PatientSignUpForm
 #     template_name = "patient_register.html"
 #
