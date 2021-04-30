@@ -7,59 +7,120 @@ from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic import CreateView
-from .forms import PatientSignUpForm, ProviderSignUpForm
+from .models import User, Patient, Provider
+from .forms import PatientSignUpForm, PatientLoginForm, PatientProfileForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User
+from django.contrib.auth.decorators import login_required
+
+
+def index(request):
+    return render(request, "index.html")
 
 
 def register(request):
-    return render(request, "../templates/register.html")
+    return render(request, "register.html")
 
 
-class patient_register(CreateView):
-    model = User
-    form_class = PatientSignUpForm
-    template_name = "../templates/patient_register.html"
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("/")
-
-
-class provider_register(CreateView):
-    model = User
-    form_class = ProviderSignUpForm
-    template_name = "../templates/provider_register.html"
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("/")
-
-
-def login_request(request):
-    if request.method == "POST":
-        form = AuthenticationForm(data=request.POST)
+def patient_login(request):
+    if request.user.is_authenticated:
+        return redirect("/user")
+    else:
+        form = PatientLoginForm(request.POST or None)
+        context = {"form" : form}
+        print(request.POST)
         if form.is_valid():
+            print("form is valid")
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
-            user = authenticate(username=username, password=password)
+            user = authenticate(request, username=username, password=password)
+            print(user)
             if user is not None:
+                print("will login")
                 login(request, user)
-                return redirect("/")
+                return redirect("/user/patient_profile")
             else:
-                messages.error(request, "Invalid username or password")
+                messages.error(request, "Invalid username or password 1")
         else:
-            messages.error(request, "Invalid username or password")
-    return render(
-        request, "../templates/login.html", context={"form": AuthenticationForm()}
-    )
+            messages.error(request, "Invalid username or password 2")
+            print("error")
+    return render(request, "patient_login.html", context)
 
 
-def logout_view(request):
-    logout(request)
-    return redirect("/")
+def patient_register(request):
+    if request.user.is_authenticated:
+        return HttpResponse("You have already logged in.")
+    if request.method == "POST":
+        print(request.POST)
+        form = PatientSignUpForm(request.POST)
+        if form.is_valid():
+            print("form is valid")
+            user = form.save()
+            user.is_active = True
+            user.save()
+            return render(request=request,
+                          template_name="registration_success.html")
+    else:
+        form = PatientSignUpForm()
+    return render(request=request, template_name="patient_register.html", context={"form": form})
+
+
+@login_required(login_url="/user/login")
+def patient_profile(request):
+    if request.method == "POST":
+        print(request.POST)
+        form = PatientProfileForm(request.POST)
+        if form.is_valid():
+            form.save(request.user.id)
+            return render(request=request,
+                          template_name="registration_success.html")
+    else:
+        form = PatientProfileForm()
+    return render(request=request, template_name="patient_profile.html", context={"form": form})
+
+
+
+
+
+
+
+
+
+
+
+# class PatientRegister(CreateView):
+#     model = User
+#     fields = ['username', 'email', 'password', 'first_name', 'last_name', 'is_patient']
+#     form = PatientSignUpForm
+#     template_name = "patient_register.html"
+#
+#     def form_valid(self, form):
+#         print(form)
+#         form.save()
+#         return render(template_name="registration_success.html")
+
+
+# def provider_register(request):
+#     if request.user.is_authenticated:
+#         return redirect("index")
+#     if request.method == "POST":
+#         print(request.POST)
+#         form = ProviderSignUpForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             user.is_active = False
+#             user.save()
+#             return render(request=request, template_name="registration_success.html")
+#     else:
+#         return render(request=request, template_name="provider_register.html")
+
+
+
+#
+#
+# def logout_view(request):
+#     logout(request)
+#     return redirect("/")
 
 
 # def user_login(request):
@@ -76,7 +137,7 @@ def logout_view(request):
 #                 return redirect("user:register")
 #     else:
 #         form = AuthenticationForm()
-#     return render(request, template_name="login.html", context={"form": form})
+#     return render(request, template_name="patient_login.html", context={"form": form})
 #
 #
 # def register(request):

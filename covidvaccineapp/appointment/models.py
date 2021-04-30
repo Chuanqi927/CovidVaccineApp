@@ -18,7 +18,9 @@ class Appointment(models.Model):
     )
     available_number = models.IntegerField()
 
-    patient = models.ManyToManyField("user.Patient", related_name="patient", through='OfferAppointment')
+    patient = models.ManyToManyField(
+        "user.Patient", related_name="patient", through="OfferAppointment"
+    )
 
 
 class OfferAppointment(models.Model):

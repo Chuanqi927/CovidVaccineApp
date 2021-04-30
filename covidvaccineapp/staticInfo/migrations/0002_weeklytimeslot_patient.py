@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0001_initial'),
-        ('staticInfo', '0001_initial'),
+        ("user", "0001_initial"),
+        ("staticInfo", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='weeklytimeslot',
-            name='patient',
-            field=models.ManyToManyField(to='user.Patient'),
+            model_name="weeklytimeslot",
+            name="patient",
+            field=models.ManyToManyField(to="user.Patient"),
         ),
     ]

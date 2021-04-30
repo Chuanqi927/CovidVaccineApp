@@ -26,13 +26,13 @@
   <body class="grey lighten-4">
     <nav class = "white z-depth-0">
         <div class="container">
-            <a href="index.html" class="brand-logo brand-text">Vaccine</a>
+            <a href="" class="brand-logo brand-text">Vaccine</a>
             <ul id="nav-mobile" class="right hide-on-small-and-down">
                 {% if user.is_authenticated%}
-                <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>
+<!--                <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>-->
                     {% else %}
-                <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>
-                    <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>
+                <li><a href= "{% url 'patient_login' %}" class="btn brand z-depth-0">Patient Login</a></li>
+                <li><a href= "{% url 'patient_register' %}" class="btn brand z-depth-0">Patient Register</a></li>
                 {% endif %}
             </ul>
         </div>

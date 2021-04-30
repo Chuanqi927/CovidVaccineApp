@@ -7,24 +7,23 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='PriorityGroup',
+            name="PriorityGroup",
             fields=[
-                ('group_number', models.AutoField(primary_key=True, serialize=False)),
-                ('eligible_date', models.DateTimeField()),
+                ("group_number", models.AutoField(primary_key=True, serialize=False)),
+                ("eligible_date", models.DateTimeField()),
             ],
         ),
         migrations.CreateModel(
-            name='WeeklyTimeSlot',
+            name="WeeklyTimeSlot",
             fields=[
-                ('slot_id', models.AutoField(primary_key=True, serialize=False)),
-                ('weekday', models.IntegerField()),
-                ('start_time', models.TimeField()),
-                ('end_time', models.TimeField()),
+                ("slot_id", models.AutoField(primary_key=True, serialize=False)),
+                ("weekday", models.IntegerField()),
+                ("start_time", models.TimeField()),
+                ("end_time", models.TimeField()),
             ],
         ),
     ]

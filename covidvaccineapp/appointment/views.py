@@ -15,9 +15,17 @@ def upload(request):
         # print("username :", username)
         user_id = request.user.id
         # print("user_id :", user_id)
-        if request.method == "POST" and Provider.objects.filter(user_id=user_id).exists():
+        if (
+            request.method == "POST"
+            and Provider.objects.filter(user_id=user_id).exists()
+        ):
             # print("request.POST :", request.POST)
-            if "provider_id" in request.POST and "appointment_time" in request.POST and "available_number" in request.POST and "slot_id" in request.POST:
+            if (
+                "provider_id" in request.POST
+                and "appointment_time" in request.POST
+                and "available_number" in request.POST
+                and "slot_id" in request.POST
+            ):
                 upload_appointment_form = AppointmentCreationForm(data=request.POST)
                 # print("form created")
                 if upload_appointment_form.is_valid():
@@ -29,7 +37,6 @@ def upload(request):
             return render(request, "upload_appointments.html")
     else:
         return HttpResponse("you are not logged in as provider")
-
 
 
 def success(request):

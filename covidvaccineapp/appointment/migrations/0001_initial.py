@@ -9,19 +9,33 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('staticInfo', '0002_weeklytimeslot_patient'),
-        ('user', '0001_initial'),
+        ("staticInfo", "0002_weeklytimeslot_patient"),
+        ("user", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Appointment',
+            name="Appointment",
             fields=[
-                ('appointment_id', models.AutoField(primary_key=True, serialize=False)),
-                ('appointment_time', models.DateTimeField()),
-                ('available_number', models.IntegerField()),
-                ('provider', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='provider', to='user.provider')),
-                ('slot_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='staticInfo.weeklytimeslot')),
+                ("appointment_id", models.AutoField(primary_key=True, serialize=False)),
+                ("appointment_time", models.DateTimeField()),
+                ("available_number", models.IntegerField()),
+                (
+                    "provider",
+                    models.ForeignKey(
+                        default=1,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="provider",
+                        to="user.provider",
+                    ),
+                ),
+                (
+                    "slot_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="staticInfo.weeklytimeslot",
+                    ),
+                ),
             ],
         ),
     ]
