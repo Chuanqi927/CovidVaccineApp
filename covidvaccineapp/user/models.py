@@ -18,7 +18,7 @@ class Patient(models.Model):
     state = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     zipcode = models.CharField(max_length=255)
-    max_distance_preferences = models.FloatField(default=500)
+    max_distance_preferences = models.FloatField(default=0)
     longitude = models.DecimalField(
         max_digits=22, decimal_places=16, blank=True, null=True
     )

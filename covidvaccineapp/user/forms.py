@@ -5,8 +5,8 @@ from .models import User, Patient, Provider
 
 
 class PatientSignUpForm(UserCreationForm):
-    firstName = forms.CharField(required=True)
-    lastName = forms.CharField(required=True)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
     address_line1 = forms.CharField(required=True)
     address_line2 = forms.CharField(required=False)
@@ -15,6 +15,7 @@ class PatientSignUpForm(UserCreationForm):
     state = forms.CharField(required=True)
     country = forms.CharField(required=True)
     zipcode = forms.CharField(required=True)
+
     # max_distance_preference = forms.FloatField(min_value=0)
 
     # dob = forms.DateTimeField(required=True)
@@ -26,10 +27,12 @@ class PatientSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.is_patient = True
+
+        user.first_name = self.cleaned_data.get("first_name")
+        user.last_name = self.cleaned_data.get("last_name")
         user.save()
+
         patient = Patient.objects.create(user=user)
-        patient.firstName = self.cleaned_data.get("firstName")
-        patient.lastName = self.cleaned_data.get("lastName")
         patient.phone_number = self.cleaned_data.get("phone_number")
         patient.address_line1 = self.cleaned_data.get("address_line1")
         patient.address_line2 = self.cleaned_data.get("address_line2")
@@ -40,6 +43,7 @@ class PatientSignUpForm(UserCreationForm):
         # patient.max_distance_preferences = self.cleaned_data.get("max_distance_preferences")
         patient.zipcode = self.cleaned_data.get("zipcode")
         patient.country = self.cleaned_data.get("country")
+
         patient.save()
         return user
 
