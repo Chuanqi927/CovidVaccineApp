@@ -10,7 +10,7 @@ class User(AbstractUser):
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     ssn = models.CharField(max_length=20)
-    # dob = models.DateTimeField()
+    dob = models.DateTimeField(auto_now_add=True)
     phone_number = models.CharField(max_length=20)
     address_line1 = models.CharField(max_length=255)
     address_line2 = models.CharField(max_length=255, null=True)
@@ -25,9 +25,9 @@ class Patient(models.Model):
     latitude = models.DecimalField(
         max_digits=22, decimal_places=16, blank=True, null=True
     )
-    # group_number = models.ForeignKey(
-    #     "staticInfo.PriorityGroup", on_delete=models.CASCADE, blank=True, null=True
-    # )
+    group_number = models.ForeignKey(
+        "staticInfo.PriorityGroup", on_delete=models.CASCADE, blank=True, null=True
+    )
 
 
 class Provider(models.Model):

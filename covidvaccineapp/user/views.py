@@ -65,6 +65,7 @@ def logout_view(request):
 
 
 def provider_profile(request):
+
     return render(request, "provider_profile.html")
 
 

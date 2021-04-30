@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.db import transaction
 from .models import User, Patient, Provider
+from staticInfo.models import  PriorityGroup
 
 
 class PatientSignUpForm(UserCreationForm):
@@ -18,7 +19,7 @@ class PatientSignUpForm(UserCreationForm):
 
     # max_distance_preference = forms.FloatField(min_value=0)
 
-    # dob = forms.DateTimeField(required=True)
+    dob = forms.DateField(required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -37,12 +38,13 @@ class PatientSignUpForm(UserCreationForm):
         patient.address_line1 = self.cleaned_data.get("address_line1")
         patient.address_line2 = self.cleaned_data.get("address_line2")
         patient.ssn = self.cleaned_data.get("ssn")
-        # patient.dob = self.cleaned_data.get("dob")
+        patient.dob = self.cleaned_data.get("dob")
         patient.city = self.cleaned_data.get("city")
         patient.state = self.cleaned_data.get("state")
         # patient.max_distance_preferences = self.cleaned_data.get("max_distance_preferences")
         patient.zipcode = self.cleaned_data.get("zipcode")
         patient.country = self.cleaned_data.get("country")
+        patient.group_number = PriorityGroup.objects.get(group_number=6)
 
         patient.save()
         return user
