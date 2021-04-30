@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.views.generic import CreateView
 from .forms import PatientSignUpForm, ProviderSignUpForm
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User
+from .models import User, Patient, Provider
 
 
 def register(request):
@@ -20,11 +20,13 @@ class patient_register(CreateView):
     model = User
     form_class = PatientSignUpForm
     template_name = "../templates/patient_register.html"
+    form = PatientSignUpForm()
+    print(form)
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect("/")
+        return redirect("/user/patient_profile")
 
 
 class provider_register(CreateView):
@@ -35,7 +37,7 @@ class provider_register(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect("/")
+        return redirect("/user/provider_profile")
 
 
 def login_request(request):
@@ -61,6 +63,13 @@ def logout_view(request):
     logout(request)
     return redirect("/")
 
+
+def provider_profile(request):
+    return render(request, "provider_profile.html")
+
+
+def patient_profile(request):
+    return render(request, "patient_profile.html")
 
 # def user_login(request):
 #     if request.user.is_authenticated:

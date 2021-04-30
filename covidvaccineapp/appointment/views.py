@@ -4,6 +4,7 @@ from user.models import User, Patient, Provider
 from .forms import AppointmentCreationForm
 from django.contrib.auth import authenticate, login as auth_login
 
+
 # Create your views here.
 def index(request):
     return HttpResponse("this is appointment home page")
@@ -29,7 +30,6 @@ def upload(request):
             return render(request, "upload_appointments.html")
     else:
         return HttpResponse("you are not logged in as provider")
-
 
 
 def success(request):

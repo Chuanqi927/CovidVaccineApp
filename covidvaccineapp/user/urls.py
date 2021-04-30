@@ -15,4 +15,7 @@ urlpatterns = [
     ),
     path("login/", views.login_request, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    path("provider_profile/", views.provider_profile),
+    path("patient_profile/", views.patient_profile),
+
 ]
