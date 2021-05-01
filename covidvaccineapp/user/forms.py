@@ -8,18 +8,17 @@ from staticInfo.models import PriorityGroup
 class PatientSignUpForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
+    email = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
+    ssn = forms.CharField(required=True)
+    dob = forms.DateField(required=True)
     address_line1 = forms.CharField(required=True)
     address_line2 = forms.CharField(required=False)
-    ssn = forms.CharField(required=True)
     city = forms.CharField(required=True)
     state = forms.CharField(required=True)
     country = forms.CharField(required=True)
     zipcode = forms.CharField(required=True)
-
     # max_distance_preference = forms.FloatField(min_value=0)
-
-    dob = forms.DateField(required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -28,7 +27,7 @@ class PatientSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.is_patient = True
-
+        user.email = self.cleaned_data.get("email")
         user.first_name = self.cleaned_data.get("first_name")
         user.last_name = self.cleaned_data.get("last_name")
         user.save()
@@ -52,13 +51,14 @@ class PatientSignUpForm(UserCreationForm):
 
 class ProviderSignUpForm(UserCreationForm):
     name = forms.CharField(required=True)
+    providerType = forms.CharField(required=True)
+    email = forms.CharField(required=True)
     address_line1 = forms.CharField(required=True)
     address_line2 = forms.CharField(required=False)
     city = forms.CharField(required=True)
     state = forms.CharField(required=True)
     country = forms.CharField(required=True)
     zipcode = forms.CharField(required=True)
-    providerType = forms.CharField(required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -67,6 +67,7 @@ class ProviderSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.is_provider = True
+        user.email = self.cleaned_data.get("email")
         user.save()
         provider = Provider.objects.create(user=user)
         provider.name = self.cleaned_data.get("name")

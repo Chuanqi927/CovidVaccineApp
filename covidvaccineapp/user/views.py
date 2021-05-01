@@ -13,31 +13,30 @@ from .models import User, Patient, Provider
 
 
 def register(request):
-    return render(request, "../templates/register.html")
+    return render(request, "register.html")
 
 
-class patient_register(CreateView):
+class PatientRegister(CreateView):
     model = User
     form_class = PatientSignUpForm
-    template_name = "../templates/patient_register.html"
+    template_name = "patient_register.html"
     form = PatientSignUpForm()
-    print(form)
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect("/user/patient_profile")
+        return redirect("patient_profile")
 
 
-class provider_register(CreateView):
+class ProviderRegister(CreateView):
     model = User
     form_class = ProviderSignUpForm
-    template_name = "../templates/provider_register.html"
+    template_name = "provider_register.html"
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect("/user/provider_profile")
+        return redirect("provider_profile")
 
 
 def login_request(request):
@@ -49,20 +48,20 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/user/patient_profile")
+                return redirect("patient_profile")
             else:
                 messages.error(request, "Invalid username or password")
         else:
             messages.error(request, "Invalid username or password")
     else:
         return render(
-            request, "../templates/login.html", context={"form": AuthenticationForm()}
+            request, "login.html", context={"form": AuthenticationForm()}
         )
 
 
 def logout_view(request):
     logout(request)
-    return redirect("/")
+    return redirect("homepage")
 
 
 def provider_profile(request):
