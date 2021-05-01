@@ -6,36 +6,37 @@ import json
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from .forms import PatientSignUpForm, ProviderSignUpForm
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User
+from .models import User, Patient, Provider
 
 
 def register(request):
-    return render(request, "../templates/register.html")
+    return render(request, "register.html")
 
 
-class patient_register(CreateView):
+class PatientRegister(CreateView):
     model = User
     form_class = PatientSignUpForm
-    template_name = "../templates/patient_register.html"
+    template_name = "patient_register.html"
+    form = PatientSignUpForm()
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect("/")
+        return redirect("patient_profile")
 
 
-class provider_register(CreateView):
+class ProviderRegister(CreateView):
     model = User
     form_class = ProviderSignUpForm
-    template_name = "../templates/provider_register.html"
+    template_name = "provider_register.html"
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect("/")
+        return redirect("provider_profile")
 
 
 def login_request(request):
@@ -47,19 +48,43 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/")
+                return redirect("patient_profile")
             else:
                 messages.error(request, "Invalid username or password")
         else:
             messages.error(request, "Invalid username or password")
-    return render(
-        request, "../templates/login.html", context={"form": AuthenticationForm()}
-    )
+    else:
+        return render(
+            request, "login.html", context={"form": AuthenticationForm()}
+        )
 
 
 def logout_view(request):
     logout(request)
-    return redirect("/")
+    return redirect("homepage")
+
+
+def provider_profile(request):
+    return render(request, "provider_profile.html")
+
+
+def patient_profile(request):
+    # patient = Patient.objects.get(id=pk)
+    # context = {
+    #     "patient": patient
+    # }
+    first_name = request.user.first_name
+    last_name = request.user.last_name
+    username = request.user.username
+    context = {
+        "first_name": first_name,
+        "last_name": last_name,
+        "username": username
+    }
+    return render(request, "patient_profile.html", context)
+
+
+
 
 
 # def user_login(request):
