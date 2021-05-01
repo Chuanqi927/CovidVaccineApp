@@ -41,7 +41,7 @@ class PatientSignUpForm(UserCreationForm):
         patient.dob = self.cleaned_data.get("dob")
         patient.city = self.cleaned_data.get("city")
         patient.state = self.cleaned_data.get("state")
-        # patient.max_distance_preferences = self.cleaned_data.get("max_distance_preferences")
+        # patient.max_distance_preferences = 50
         patient.zipcode = self.cleaned_data.get("zipcode")
         patient.country = self.cleaned_data.get("country")
         patient.group_number = PriorityGroup.objects.get(group_number=6)

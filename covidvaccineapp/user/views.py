@@ -81,7 +81,6 @@ def patient_profile(request):
         "first_name": first_name,
         "last_name": last_name,
         "username": username
-
     }
     return render(request, "patient_profile.html", context)
 
