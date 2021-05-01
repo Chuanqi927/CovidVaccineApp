@@ -6,7 +6,7 @@ import json
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from .forms import PatientSignUpForm, ProviderSignUpForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
@@ -49,14 +49,15 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/")
+                return redirect("/user/patient_profile")
             else:
                 messages.error(request, "Invalid username or password")
         else:
             messages.error(request, "Invalid username or password")
-    return render(
-        request, "../templates/login.html", context={"form": AuthenticationForm()}
-    )
+    else:
+        return render(
+            request, "../templates/login.html", context={"form": AuthenticationForm()}
+        )
 
 
 def logout_view(request):
@@ -65,12 +66,28 @@ def logout_view(request):
 
 
 def provider_profile(request):
-
     return render(request, "provider_profile.html")
 
 
 def patient_profile(request):
-    return render(request, "patient_profile.html")
+    # patient = Patient.objects.get(id=pk)
+    # context = {
+    #     "patient": patient
+    # }
+    first_name = request.user.first_name
+    last_name = request.user.last_name
+    username = request.user.username
+    context = {
+        "first_name": first_name,
+        "last_name": last_name,
+        "username": username
+
+    }
+    return render(request, "patient_profile.html", context)
+
+
+
+
 
 # def user_login(request):
 #     if request.user.is_authenticated:

@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.db import transaction
 from .models import User, Patient, Provider
-from staticInfo.models import  PriorityGroup
+from staticInfo.models import PriorityGroup
 
 
 class PatientSignUpForm(UserCreationForm):
