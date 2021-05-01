@@ -6,9 +6,11 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("register/", views.register, name="register"),
-    path("patient_register/", views.patient_register, name="patient_register"),
-    path("patient_login/", views.patient_login, name="patient_login"),
+    path("patient_register/", views.PatientRegister.as_view(), name="patient_register"),
+    path("provider_register/", views.ProviderRegister.as_view(), name="provider_register"),
+    path("login/", views.login_request, name="login"),
     path("patient_profile/", views.patient_profile, name="patient_profile"),
+    path("provider_profile/", views.provider_profile, name="provider_profile"),
 
     # path(
     #     "provider_register/",

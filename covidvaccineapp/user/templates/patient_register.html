@@ -19,71 +19,145 @@
                   <h2>Patient Register</h2>
                 </div>
                 <div class="card-body">
-                    <form class="form-validate" method="post">
-                        {% csrf_token %}
-                            {% if form.errors %}
-                                {% for field in form %}
+<!--                    <form class="form-validate" method="post">-->
+<!--                        {% csrf_token %}-->
+<!--                            {% if form.errors %}-->
+<!--                                {% for field in form %}-->
+<!--                                    {% for error in field.errors %}-->
+<!--                                        <div class="alert alert-danger">-->
+<!--                                            <strong>{{ error|escape }}</strong>-->
+<!--                                        </div>-->
+<!--                                    {% endfor %}-->
+<!--                                {% endfor %}-->
+<!--                                {% for error in form.non_field_errors %}-->
+<!--                                    <div class="alert alert-danger">-->
+<!--                                        <strong>{{ error|escape }}</strong>-->
+<!--                                    </div>-->
+<!--                                {% endfor %}-->
+<!--                            {% endif %}-->
+<!--					<div class="form-group">-->
+<!--						<label class="form-label" for="username"> Username-->
+<!--                            <i class="fas fa-question-circle" data-toggle="tooltip"-->
+<!--							   data-html="true"-->
+<!--							   title='<small>Must be at least 5+ characters-->
+<!--							   <br><br>Cannot start with a number</small>'></i></label>-->
+<!--						<input class="form-control" type="text" name="username" id="username"-->
+<!--                               placeholder="Username" autocomplete="off" required-->
+<!--                               pattern="^[a-zA-Z][a-zA-Z\d\.]{5,}$"-->
+<!--							   data-msg="Please enter your username">-->
+<!--					</div>-->
+<!--                    <div class="form-group">-->
+<!--						<label class="form-label" for="email"> Email Address</label>-->
+<!--						<input class="form-control" type="text" name="email" id="email"-->
+<!--                               placeholder="name@address.com"-->
+<!--							   autocomplete="off" required-->
+<!--							   data-msg="Please enter your email">-->
+<!--					</div>-->
+<!--					<div class="form-group">-->
+<!--						<label class="form-label" for="password1"> Password</label>-->
+<!--						<input class="form-control" name="password1" id="password1"-->
+<!--                               placeholder="Password"-->
+<!--							   type="password"-->
+<!--							   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"-->
+<!--							   required data-msg="Please enter your password">-->
+<!--					</div>-->
+<!--					<div class="form-group mb-4">-->
+<!--						<label class="form-label" for="password2"> Confirm your-->
+<!--                            password</label>-->
+<!--						<input class="form-control" name="password2" id="password2"-->
+<!--                               placeholder="Password" type="password" required-->
+<!--                               data-msg="Please confirm your password">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="first_name"> Enter your-->
+<!--                            First Name</label>-->
+<!--						<input class="form-control" name="first_name" id="first_name"-->
+<!--                               placeholder="First Name" type="text" required-->
+<!--                               data-msg="Please enter your first name">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="last_name"> Enter your-->
+<!--                            Last Name</label>-->
+<!--						<input class="form-control" name="last_name" id="last_name"-->
+<!--                               placeholder="Last Name" type="text" required-->
+<!--                               data-msg="Please enter your last name">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="dob">Enter your-->
+<!--                            Date of Birth</label>-->
+<!--						<input class="form-control" name="dob" id="dob"-->
+<!--                               placeholder="Date of Birth" type="date" required-->
+<!--                               data-msg="Please enter your date of birth">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="phone_number">Enter your-->
+<!--                            Phone Number</label>-->
+<!--						<input class="form-control" name="phone_number" id="phone_number"-->
+<!--                               placeholder="Phone Number" type="tel" required-->
+<!--                               data-msg="Please enter your phone number">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="ssn">Enter your-->
+<!--                            Social Security Number</label>-->
+<!--						<input class="form-control" name="ssn" id="ssn"-->
+<!--                               placeholder="SSN" type="text" required-->
+<!--                               data-msg="Please enter your social security number">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="address_line1">Enter your-->
+<!--                            Address</label>-->
+<!--						<input class="form-control" name="address_line1" id="address_line1"-->
+<!--                               placeholder="address line 1" type="text" required-->
+<!--                               data-msg="Please enter your address">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<input class="form-control" name="address_line2" id="address_line2"-->
+<!--                               placeholder="address line 2 if you need more lines" type="text"-->
+<!--                               data-msg="Please enter your address">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="city">Enter your-->
+<!--                            City</label>-->
+<!--						<input class="form-control" name="city" id="city"-->
+<!--                               placeholder="city" type="text" required-->
+<!--                               data-msg="Please enter your city">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="state">Enter your-->
+<!--                            State</label>-->
+<!--						<input class="form-control" name="state" id="state"-->
+<!--                               placeholder="state" type="text" required-->
+<!--                               data-msg="Please enter your state">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="country">Enter your-->
+<!--                            Country</label>-->
+<!--						<input class="form-control" name="country" id="country"-->
+<!--                               placeholder="country" type="text" required-->
+<!--                               data-msg="Please enter your country">-->
+<!--					</div>-->
+<!--                    <div class="form-group mb-4">-->
+<!--						<label class="form-label" for="zip_code">Enter your-->
+<!--                            Zip Code</label>-->
+<!--						<input class="form-control" name="zip_code" id="zip_code"-->
+<!--                               placeholder="zip code" type="text" required-->
+<!--                               data-msg="Please enter your zip code">-->
+<!--					</div>-->
+<!--					<button class="btn btn-lg btn-block btn-primary" type="submit">Sign up</button>-->
+<!--                </form>-->
+                    <form action="{% url 'patient_register' %}" method="POST" novalidate>
+                      {% csrf_token %}
+                         {% for field in form.visible_fields %}
+                           <div class="form-group">
+                               {{ field.label_tag }}
+                                  {% render_field field class="form-control" %}
                                     {% for error in field.errors %}
-                                        <div class="alert alert-danger">
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
+                                      <span style="color:red">{{ error }}</span>
                                     {% endfor %}
-                                {% endfor %}
-                                {% for error in form.non_field_errors %}
-                                    <div class="alert alert-danger">
-                                        <strong>{{ error|escape }}</strong>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-					<div class="form-group">
-						<label class="form-label" for="username"> Username
-                            <i class="fas fa-question-circle" data-toggle="tooltip"
-							   data-html="true"
-							   title='<small>Must be at least 5+ characters
-							   <br><br>Cannot start with a number</small>'></i></label>
-						<input class="form-control" type="text" name="username" id="username"
-                               placeholder="Username" autocomplete="off" required
-                               pattern="^[a-zA-Z][a-zA-Z\d\.]{5,}$"
-							   data-msg="Please enter your username">
-					</div>
-                    <div class="form-group">
-						<label class="form-label" for="email"> Email Address</label>
-						<input class="form-control" type="email" name="email" id="email"
-                               type="email" placeholder="name@address.com"
-							   autocomplete="off" required
-							   data-msg="Please enter your email">
-					</div>
-					<div class="form-group">
-						<label class="form-label" for="password1"> Password</label>
-						<input class="form-control" name="password1" id="password1"
-                               placeholder="Password"
-							   type="password"
-							   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-							   required data-msg="Please enter your password">
-					</div>
-					<div class="form-group mb-4">
-						<label class="form-label" for="password2"> Confirm your
-                            password</label>
-						<input class="form-control" name="password2" id="password2"
-                               placeholder="Password" type="password" required
-                               data-msg="Please confirm your password">
-					</div>
-                    <div class="form-group mb-4">
-						<label class="form-label" for="first_name"> Enter your
-                            First Name</label>
-						<input class="form-control" name="first_name" id="first_name"
-                               placeholder="First Name" type="first_name" required
-                               data-msg="Please enter your first name">
-					</div>
-                    <div class="form-group mb-4">
-						<label class="form-label" for="last_name">Enter your
-                            Last Name</label>
-						<input class="form-control" name="last_name" id="last_name"
-                               placeholder="Last Name" type="last_name" required
-                               data-msg="Please enter your last name">
-					</div>
-					<button class="btn btn-lg btn-block btn-primary" type="submit">Sign up</button>
-                </form>
+                         {% endfor %}
+                             <input type="submit" value="Register" class="btn btn-block btn-grey">
+                           </div>
+                    </form>
                  </div>
                     </div>
                 </div>
