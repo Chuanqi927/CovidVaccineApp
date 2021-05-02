@@ -97,8 +97,8 @@
             <a href="index.html" class="brand-logo brand-text">Vaccine</a>
             <ul id="nav-mobile" class="right hide-on-small-and-down">
                 {% if user.is_authenticated%}
-                <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>
-                    <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Edit Information</a></li>
+                <li><a href="{% url 'homepage' %}" class="btn brand z-depth-0">Logout</a></li>
+                    <li><a href="" class="btn brand z-depth-0">Edit Information</a></li>
                     {% else %}
                 <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>
                     <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>

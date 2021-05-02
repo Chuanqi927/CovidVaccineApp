@@ -48,7 +48,13 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("patient_profile")
+                if user.is_patient:
+                    return redirect("patient_profile")
+                elif user.is_provider:
+                    return redirect("provider_profile")
+                else:
+                    return redirect("homepage")
+
             else:
                 messages.error(request, "Invalid username or password")
         else:
@@ -62,10 +68,6 @@ def login_request(request):
 def logout_view(request):
     logout(request)
     return redirect("homepage")
-
-
-def provider_profile(request):
-    return render(request, "provider_profile.html")
 
 
 def patient_profile(request):
@@ -84,7 +86,22 @@ def patient_profile(request):
     return render(request, "patient_profile.html", context)
 
 
+def provider_profile(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    user = request.user
+    provider = Provider.objects.get(user=user)
+    parameter_dict = {
+        "name": provider.name,
+        "providerType": provider.providerType,
+        "address_line1": provider.address_line1,
+        "address_line2": provider.address_line2,
+        "city": provider.city,
+        "country": provider.country,
+        "zipcode": provider.zipcode,
+    }
 
+    return render(request, "provider_profile.html", context=parameter_dict)
 
 
 # def user_login(request):
@@ -127,25 +144,25 @@ def patient_profile(request):
 #     return redirect("user:login")
 #
 #
-# def account_details(request):
-#     if not request.user.is_authenticated:
-#         return redirect("user:login")
-#
-#     user = request.user
-#
-#     favorite_restaurant_list = user.favorite_restaurants.all()
-#     user_pref_list = user.preferences.all()
-#     user_pref_list_json = []
-#     for pref in user_pref_list:
-#         pref_dic = model_to_dict(pref)
-#         user_pref_list_json.append(pref_dic)
-#
-#     return render(
-#         request=request,
-#         template_name="account_details.html",
-#         context={
-#             "favorite_restaurant_list": favorite_restaurant_list,
-#             "user_pref": user_pref_list,
-#             "user_pref_json": json.dumps(user_pref_list_json, cls=DjangoJSONEncoder),
-#         },
-#     )
+def account_details(request):
+    if not request.user.is_authenticated:
+        return redirect("user:login")
+
+    user = request.user
+
+    favorite_restaurant_list = user.favorite_restaurants.all()
+    user_pref_list = user.preferences.all()
+    user_pref_list_json = []
+    for pref in user_pref_list:
+        pref_dic = model_to_dict(pref)
+        user_pref_list_json.append(pref_dic)
+
+    return render(
+        request=request,
+        template_name="account_details.html",
+        context={
+            "favorite_restaurant_list": favorite_restaurant_list,
+            "user_pref": user_pref_list,
+            "user_pref_json": json.dumps(user_pref_list_json, cls=DjangoJSONEncoder),
+        },
+    )

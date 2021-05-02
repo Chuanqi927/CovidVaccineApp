@@ -26,7 +26,7 @@
   <body class="grey lighten-4">
     <nav class = "white z-depth-0">
         <div class="container">
-            <a href="homepage.html" class="brand-logo brand-text">Vaccine</a>
+            <a href="{% url 'homepage' %}" class="brand-logo brand-text">Vaccine</a>
             <ul id="nav-mobile" class="right hide-on-small-and-down">
                 {% if user.is_authenticated%}
                 <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>
