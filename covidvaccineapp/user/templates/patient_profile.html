@@ -9,6 +9,8 @@
 {#</body>#}
 {#</html>#}
 
+
+
 <head>
     <title>Vaccine</title>
     <!-- Compiled and minified CSS -->
@@ -108,10 +110,39 @@
     </nav>
 
     <div class="container">
+        <div class="row">
+            <div class="col1 s6">
+                <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Update Info</legend>
+              {{ u_form.as_p}}
+              {{ p_form.as_p }}
+          </fieldset>
+          <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Update</button>
+          </div>
+      </form>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
     <div class="main-body">
-
-
-
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
               <div class="card">
@@ -215,7 +246,7 @@
             </div>
           </div>
         </div>
-    </div>
+
 
 {#    <div class="container">#}
 {#                <ul class="collapsible">#}
