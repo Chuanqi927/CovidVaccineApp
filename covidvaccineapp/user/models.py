@@ -18,7 +18,7 @@ class Patient(models.Model):
     state = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     zipcode = models.CharField(max_length=255)
-    max_distance_preferences = models.FloatField(default=50)
+    max_distance_preferences = models.FloatField(blank=True, null=True)
     longitude = models.DecimalField(
         max_digits=22, decimal_places=16, blank=True, null=True
     )
@@ -26,7 +26,7 @@ class Patient(models.Model):
         max_digits=22, decimal_places=16, blank=True, null=True
     )
     group_number = models.ForeignKey(
-        "staticInfo.PriorityGroup", on_delete=models.CASCADE
+        "staticInfo.PriorityGroup", on_delete=models.CASCADE, blank=True, null=True
     )
 
 

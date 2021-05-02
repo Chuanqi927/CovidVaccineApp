@@ -61,5 +61,6 @@ class AppointmentCreationForm(forms.Form):
             appointment_time=self.cleaned_data["appointment_time"],
             slot_id=slot_id,
             available_number=self.cleaned_data["available_number"],
+            remaining_number=self.cleaned_data["available_number"],
         )
         return appointment

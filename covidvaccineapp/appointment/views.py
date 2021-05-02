@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from user.models import User, Patient, Provider
@@ -12,8 +13,6 @@ def index(request):
 
 def upload(request):
     if request.user.is_authenticated:
-        username = request.user.username
-        # print("username :", username)
         user_id = request.user.id
         # print("user_id :", user_id)
         if request.method == "POST" and Provider.objects.filter(user_id=user_id).exists():
@@ -23,6 +22,7 @@ def upload(request):
                 # print("form created")
                 if upload_appointment_form.is_valid():
                     # print(upload_appointment_form)
+                    # timezone.activate(upload_appointment_form.cleaned_data['appointment_time'])
                     upload_appointment_form.calculate_slot_id()
                     upload_appointment_form.save()
                     return redirect("../appointment/success")

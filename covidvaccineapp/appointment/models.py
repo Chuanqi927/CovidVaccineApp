@@ -17,7 +17,7 @@ class Appointment(models.Model):
         on_delete=models.CASCADE,
     )
     available_number = models.IntegerField()
-
+    remaining_number = models.IntegerField(blank=True, null=True)
     patient = models.ManyToManyField("user.Patient", related_name="patient", through='OfferAppointment')
 
 
