@@ -131,3 +131,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 SITE_ID = 1
 
 AUTH_USER_MODEL = "user.User"
+
+STATIC_URL = '/static/'
