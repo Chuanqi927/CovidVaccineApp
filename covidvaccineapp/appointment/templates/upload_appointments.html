@@ -1,13 +1,36 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!DOCTYPE html>
 <html lang="en">
-<head>
     <meta charset="UTF-8">
+<head>
     <title>Upload Available Appointments</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style type="text/css">
+	  .brand{
+	  	background: #cbb09c !important;
+	  }
+  	.brand-text{
+  		color: #cbb09c !important;
+  	}
+    form{
+        max-width:490px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    th {
+    text-align: center;
+    }
+    td {
+    text-align: center;
+    }
+    td:empty::before {content: "N/A"}
+    </style>
 </head>
 <body>
-{#{% if user.is_authenticated and user is provider %}#}
-
+    <div style="text-align: center;">
+        <h4>Enter appointment information</h4>
+    </div>
     <form id="upload_app_form" method="POST" novalidate>
         {% csrf_token %}
         <input type="hidden" name="provider_id" id="provider_id" value="{{request.user.id}}">
@@ -15,7 +38,7 @@
         <br>
         <label for="appointment_time">Choose a time for your appointment:</label>
         <br>
-        <input type="datetime" id="appointment_time"
+        <input type="datetime-local" id="appointment_time"
                name="appointment_time">
         <br>
         <label for="available_number">How many available appointments can you provide for this time?</label>
@@ -25,32 +48,28 @@
         <button type="submit" class="btn btn-block btn-primary">SUBMIT</button>
     </form>
 
-<script>
-$('#upload_app_form').on('submit', function(event) {
-    event.preventDefault();
-    var form_data = new FormData(document.getElementById("upload_app_form"));
-    console.log("uploaded appointment form value is ",form_data.get("appointment_time"));
-    $.ajax({
-      type: 'POST',
-      url: "",
-      data: form_data,
-      processData: false,
-      contentType: false,
-      // handle a successful response
-      success : function(response) {
-          // window.location.reload(true);
-      },
-      error : function(xhr,errmsg,err) {
-        console.log('Ajax Error')
-      }
-    });
-});
+<!--<script>-->
+<!--$('#upload_app_form').on('submit', function(event) {-->
+<!--    event.preventDefault();-->
+<!--    var form_data = new FormData(document.getElementById("upload_app_form"));-->
+<!--    console.log("uploaded appointment form value is ",form_data.get("appointment_time"));-->
+<!--    $.ajax({-->
+<!--      type: 'POST',-->
+<!--      url: "",-->
+<!--      data: form_data,-->
+<!--      processData: false,-->
+<!--      contentType: false,-->
+<!--      // handle a successful response-->
+<!--      success : function(response) {-->
+<!--          // window.location.reload(true);-->
+<!--      },-->
+<!--      error : function(xhr,errmsg,err) {-->
+<!--        console.log('Ajax Error')-->
+<!--      }-->
+<!--    });-->
+<!--});-->
+<!--</script>-->
 
 
-</script>
-
-{#{% else %}#}
-
-{#{% endif %}#}
 </body>
 </html>
