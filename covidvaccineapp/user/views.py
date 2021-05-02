@@ -7,9 +7,10 @@ from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
-from .forms import PatientSignUpForm, ProviderSignUpForm
+from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, PatientUpdateForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
+
 
 
 def register(request):
@@ -71,17 +72,38 @@ def logout_view(request):
 
 
 def patient_profile(request):
-    # patient = Patient.objects.get(id=pk)
-    # context = {
-    #     "patient": patient
-    # }
+    # def profile(request):
+    #     if request.method == 'POST':
+    #         u_form = UserUpdateForm(request.POST, instance=request.user)
+    #         p_form = ProfileUpdateForm(request.POST,
+    #                                    request.FILES,
+    #                                    instance=request.user.profile)
+    #         if u_form.is_valid() and p_form.is_valid():
+    #             u_form.save()
+    #             p_form.save()
+    #             messages.success(request, f'Your account has been updated!')
+    #             return redirect('profile')
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = PatientUpdateForm(request.POST, instance=request.user.patient)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f"Your information has been updated!")
+            return redirect("patient_profile")
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = PatientUpdateForm(instance=request.user.patient)
+
     first_name = request.user.first_name
     last_name = request.user.last_name
     username = request.user.username
     context = {
         "first_name": first_name,
         "last_name": last_name,
-        "username": username
+        "username": username,
+        "u_form": u_form,
+        "p_form": p_form
     }
     return render(request, "patient_profile.html", context)
 

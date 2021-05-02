@@ -18,6 +18,7 @@ class PatientSignUpForm(UserCreationForm):
     state = forms.CharField(required=True)
     country = forms.CharField(required=True)
     zipcode = forms.CharField(required=True)
+
     # max_distance_preference = forms.FloatField(min_value=0)
 
     class Meta(UserCreationForm.Meta):
@@ -81,3 +82,17 @@ class ProviderSignUpForm(UserCreationForm):
         provider.zipcode = self.cleaned_data.get("zipcode")
         provider.save()
         return user
+
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+
+class PatientUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['max_distance_preferences']
