@@ -1,13 +1,7 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Provider Profile</title>#}
-{#</head>#}
-{#<body>#}
-{#<h1>This is provider profile</h1>#}
-{#</body>#}
-{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <title>Vaccine</title>
@@ -50,91 +44,92 @@
     </nav>
     <div class="container">
         <h1 class="hero-heading mb-0">Account Profile</h1>
-        <p class="text-muted mb-5">Manage your Account Details and settings here.</p>
+        <p class="text-muted mb-5">Manage your Account Details and Settings here.</p>
         <div class="row">
             <div class="col-lg-7">
                 <div class="text-block">
-                    <h3 class="mb-4">Login</h3>
+                    <h3 class="mb-4">Credentials</h3>
                     <div class="row">
                         <div class="col-sm-8">
                             <h5>Update Password</h5>
                         </div>
                     </div>
-<!--                    <form class="form-validate" method="post" id="update_password_form">-->
-<!--                        {% csrf_token %}-->
-<!--                        <div class="collapse" id="updatePassword">-->
-<!--                            <div class="row mt-4" id="sub_update_password_form">-->
-<!--                                <div id="error_update_pass">-->
-
-<!--                                </div>-->
-<!--                                <div class="form-group col-12">-->
-<!--                                    <label class="form-label" for="password_current">Current Password</label>-->
-<!--                                    <input class="form-control" type="password" name="password_current" id="password_current" required>-->
-<!--                                </div>-->
-<!--                                <div class="form-group col-md-6">-->
-<!--                                    <label class="form-label" for="password_new">New Password</label>-->
-<!--                                    <input class="form-control" type="password" name="password_new" id="password_new" required>-->
-<!--                                </div>-->
-<!--                                <div class="form-group col-md-6">-->
-<!--                                    <label class="form-label" for="password_confirm">Confirm Password</label>-->
-<!--                                    <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <button class="btn btn-outline-primary">Update Password</button>-->
-<!--                        </div>-->
-<!--                    </form>-->
+                    <div class="col-sm-8">
+                        <form class="form-validate" method="post" id="update_password_form" name="update_password_form" action="{% url 'update_password' %}">
+                            {% csrf_token %}
+                            <div class="collapse" id="updatePassword">
+                                <div class="row mt-4" id="sub_update_password_form">
+                                    <div id="error_update_pass">
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label class="form-label" for="password_current">Current Password</label>
+                                        <input class="form-control" type="password" name="password_current" id="password_current" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="password_new">New Password</label>
+                                        <input class="form-control" type="password" name="password_new" id="password_new" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="password_confirm">Confirm Password</label>
+                                        <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-<!--                <script>-->
-<!--                    $('#update_password_form').on('submit', function(event){-->
-<!--                        event.preventDefault();-->
-<!--                        update_password();-->
-<!--                    });-->
-<!--                    function update_password() {-->
-<!--                        var form = new FormData(document.getElementById("update_password_form"));-->
-<!--                        $.ajax({-->
-<!--                            url : "update_password",-->
-<!--                            type : "POST",-->
-<!--                            data : form,-->
-<!--                            processData: false,-->
-<!--                            contentType: false,-->
-<!--                            success : function(json) {-->
-<!--                                $('#error_update_pass').html("");-->
+                <script>
+                    $('body').on('submit', "form[name='update_password_form']",  function(event){
+                        event.preventDefault();
+                        update_password();
+                    });
+                    function update_password() {
+                        var form = new FormData(document.getElementById("update_password_form"));
+                        $.ajax({
+                            url : "update_password",
+                            type : "POST",
+                            data : form,
+                            processData: false,
+                            contentType: false,
+                            success : function(json) {
+                                $('#error_update_pass').html("");
 
-<!--                                var div1 = document.createElement("div");-->
-<!--                                var strong1 = document.createElement("strong");-->
-<!--                                strong1.innerHTML = "Your password has been updated, the page will redirect to login page in 3 seconds.";-->
-<!--                                div1.appendChild(strong1);-->
+                                var div1 = document.createElement("div");
+                                var strong1 = document.createElement("strong");
+                                strong1.innerHTML = "Your password has been updated, the page will redirect to login page in 3 seconds.";
+                                div1.appendChild(strong1);
 
-<!--                                div1.className = "alert alert-success";-->
-<!--                                div1.id = "alert_msg";-->
-<!--                                document.getElementById("error_update_pass").appendChild(div1);-->
+                                div1.className = "alert alert-success";
+                                div1.id = "alert_msg";
+                                document.getElementById("error_update_pass").appendChild(div1);
 
-<!--                                window.setTimeout(function() {-->
-<!--                                    window.location.reload();-->
-<!--                                }, 3000);-->
+                                window.setTimeout(function() {
+                                    window.location.reload();
+                                }, 3000);
 
-<!--                            },-->
-<!--                            error : function(xhr,errmsg,err) {-->
-<!--                                console.log(xhr);-->
-<!--                                $('#error_update_pass').html("");-->
-<!--                                var json = JSON.parse(xhr.responseText);-->
-<!--                                for(i = 0; i < json.errors.length; i++) {-->
-<!--                                    console.log(json.errors[i]);-->
+                            },
+                            error : function(xhr,errmsg,err) {
+                                console.log(xhr);
+                                $('#error_update_pass').html("");
+                                var json = JSON.parse(xhr.responseText);
+                                for(i = 0; i < json.errors.length; i++) {
+                                    console.log(json.errors[i]);
 
-<!--                                    var div1 = document.createElement("div");-->
-<!--                                    var strong1 = document.createElement("strong");-->
-<!--                                    strong1.innerHTML = json.errors[i];-->
-<!--                                    div1.appendChild(strong1);-->
+                                    var div1 = document.createElement("div");
+                                    var strong1 = document.createElement("strong");
+                                    strong1.innerHTML = json.errors[i];
+                                    div1.appendChild(strong1);
 
-<!--                                    div1.className = "alert alert-danger";-->
-<!--                                    div1.id = "alert_msg";-->
-<!--                                    document.getElementById("error_update_pass").appendChild(div1);-->
-<!--                                }-->
+                                    div1.className = "alert alert-danger";
+                                    div1.id = "alert_msg";
+                                    document.getElementById("error_update_pass").appendChild(div1);
+                                }
 
-<!--                            }-->
-<!--                        });-->
-<!--                    };-->
-<!--                </script>-->
+                            }
+                        });
+                    };
+                </script>
                 <div class="text-block">
                     <div class="row mb-3">
                         <div class="col-sm-9">
@@ -177,3 +172,4 @@
         </div>
     </div>
     </body>
+</html>

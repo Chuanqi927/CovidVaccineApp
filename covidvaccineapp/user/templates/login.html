@@ -26,12 +26,12 @@
                            <div class="form-group">
                                {{ field.label_tag }}
                                   {% render_field field class="form-control" %}
-                                    {% if messages%}
-                                      {% for message in messages %}
-                                        <span style="color:red">{{ message }}</span>
-                                      {% endfor %}
-                                     {% endif %}
                          {% endfor %}
+                            {% if messages%}
+                              {% for message in messages %}
+                                <span style="color:red">{{ message }}</span>
+                              {% endfor %}
+                            {% endif %}
                          <br>
                              <input type="submit" value="Login" class="btn btn-block btn-primary">
                            </div>
