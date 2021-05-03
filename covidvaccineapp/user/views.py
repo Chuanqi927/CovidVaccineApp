@@ -13,14 +13,14 @@ from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
 
 
-def register(request):
-    return render(request, "register.html")
+def sign_up(request):
+    return render(request, "signup.html")
 
 
-class PatientRegister(CreateView):
+class PatientSignUp(CreateView):
     model = User
     form_class = PatientSignUpForm
-    template_name = "patient_register.html"
+    template_name = "patient_signup.html"
     form = PatientSignUpForm()
 
     def form_valid(self, form):
@@ -68,7 +68,7 @@ def login_request(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("homepage")
+    return redirect("home")
 
 
 def patient_edit_profile(request):
@@ -188,7 +188,7 @@ def provider_profile(request):
 #     else:
 #         form = UserCreationForm()
 #     return render(
-#         request=request, template_name="register.html", context={"form": form}
+#         request=request, template_name="signup.html", context={"form": form}
 #     )
 #
 #

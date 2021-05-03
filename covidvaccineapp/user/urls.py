@@ -4,9 +4,9 @@ from . import views
 
 
 urlpatterns = [
-    path("register/", views.register, name="register"),
+    path("signup/", views.sign_up, name="signup"),
     path(
-        "patient_register/", views.PatientRegister.as_view(), name="patient_register"
+        "patient_signup/", views.PatientSignUp.as_view(), name="patient_signup"
     ),
     path(
         "provider_register/",
