@@ -9,13 +9,21 @@
           <div class="columns col-8">
             <nav class="main-nav">
               <ul>
-                <li><a class="current" href="{% url 'indexhome' %}">Home</a></li>
+                <li><a class="current" href="{% url 'home' %}">Home</a></li>
                 <li><a href="#">Reviews</a></li>
                 <li><a href="#">Contact</a></li>
                   <li><a href="#">News</a></li>
 
                   {% if user.is_authenticated%}
-                      <li><a href="{% url 'logout' %}">Logout</a></li>
+                     {% if user.is_provider %}
+                         <li><a href="{% url 'provider_profile' %}">{{ user.username }}</a></li>
+                         <li><a href="{% url 'logout' %}">Logout</a></li>
+                         {% endif %}
+                      {% if user.is_patient %}
+                         <li><a href="{% url 'patient_profile' %}">{{ user.first_name }}</a></li>
+                         <li><a href="{% url 'logout' %}">Logout</a></li>
+                         {% endif %}
+
                       {% else %}
                       <li><a href="{% url 'login' %}">Login</a></li>
                       <li><a href="{% url 'signup' %}">Sign up</a></li>
@@ -25,6 +33,7 @@
             </nav>
           </div>
         </div>
+    </header>
 
 {#             <nav class = "white z-depth-0">#}
 {#        <div class="container">#}
