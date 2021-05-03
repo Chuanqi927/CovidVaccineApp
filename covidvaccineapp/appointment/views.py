@@ -28,8 +28,8 @@ def upload(request):
                     return redirect("success")
         else:
             return render(request, "upload_appointments.html")
-    else:
-        return HttpResponse("you are not logged in as provider")
+    return redirect("homepage")
+
 
 
 def success(request):

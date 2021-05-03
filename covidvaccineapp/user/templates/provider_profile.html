@@ -79,57 +79,6 @@
                         </form>
                     </div>
                 </div>
-                <script>
-                    $('body').on('submit', "form[name='update_password_form']",  function(event){
-                        event.preventDefault();
-                        update_password();
-                    });
-                    function update_password() {
-                        var form = new FormData(document.getElementById("update_password_form"));
-                        $.ajax({
-                            url : "update_password",
-                            type : "POST",
-                            data : form,
-                            processData: false,
-                            contentType: false,
-                            success : function(json) {
-                                $('#error_update_pass').html("");
-
-                                var div1 = document.createElement("div");
-                                var strong1 = document.createElement("strong");
-                                strong1.innerHTML = "Your password has been updated, the page will redirect to login page in 3 seconds.";
-                                div1.appendChild(strong1);
-
-                                div1.className = "alert alert-success";
-                                div1.id = "alert_msg";
-                                document.getElementById("error_update_pass").appendChild(div1);
-
-                                window.setTimeout(function() {
-                                    window.location.reload();
-                                }, 3000);
-
-                            },
-                            error : function(xhr,errmsg,err) {
-                                console.log(xhr);
-                                $('#error_update_pass').html("");
-                                var json = JSON.parse(xhr.responseText);
-                                for(i = 0; i < json.errors.length; i++) {
-                                    console.log(json.errors[i]);
-
-                                    var div1 = document.createElement("div");
-                                    var strong1 = document.createElement("strong");
-                                    strong1.innerHTML = json.errors[i];
-                                    div1.appendChild(strong1);
-
-                                    div1.className = "alert alert-danger";
-                                    div1.id = "alert_msg";
-                                    document.getElementById("error_update_pass").appendChild(div1);
-                                }
-
-                            }
-                        });
-                    };
-                </script>
                 <div class="text-block">
                     <div class="row mb-3">
                         <div class="col-sm-9">
@@ -157,7 +106,6 @@
                         </div>
                     </div>
                 </div>
-                <!--favorite restaurants list-->
                 <div class="text-block">
                     <div class="row mb-3">
                         <div class="col-sm-9">
