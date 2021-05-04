@@ -31,6 +31,7 @@
   </head>
   <body>
 
+
 {#    <!-- start: off canvas area -->#}
 {#    <aside class="off-canvas">#}
 {#      <div class="row">#}
@@ -74,7 +75,7 @@
           <div class="columns col-8">
             <nav class="main-nav">
               <ul>
-                <li><a class="current" href="{% url 'indexhome' %}">Home</a></li>
+                <li><a class="current" href="{% url 'index' %}">Home</a></li>
                 <li><a href="#">Reviews</a></li>
                 <li><a href="#">Contact</a></li>
                   <li><a href="#">News</a></li>
@@ -83,10 +84,42 @@
               </ul>
             </nav>
           </div>
-
-
-
+        </div>
       </header>
+
+
+             <div class="row">
+            <div class="columns col-12">
+              <form class="order-form has-payment" novalidate autocomplete="on">
+                <div class="row">
+                  <div class="columns col-5 left-pad">
+                    <h2>Delivery Address</h2>
+                    <div class="row">
+                      <div class="columns col-3 left-pad"><label for="name" class="inline-label">Name:</label></div>
+                      <div class="columns col-9"><input placeholder="John Smith" type="text" /></div>
+                    </div>
+                    <div class="row">
+                      <div class="columns col-3 no-left-pad"><label for="street" class="inline-label">Street:</label></div>
+                      <div class="columns col-9"><input placeholder="Oakland Street" type="text" /></div>
+                    </div>
+                    <div class="row">
+                      <div class="columns col-3 no-left-pad"><label for="city" class="inline-label">City:</label></div>
+                      <div class="columns col-9"><input placeholder="New Jersey" type="text" /></div>
+                    </div>
+                    <div class="row">
+                      <div class="columns col-3 no-left-pad"><label for="phone" class="inline-label">Phone:</label></div>
+                      <div class="columns col-9"><input placeholder="53 565 235 423" type="text" /></div>
+                    </div>
+                    <div class="row">
+                      <div class="columns col-3 no-left-pad"><label for="email" class="inline-label">Email:</label></div>
+                      <div class="columns col-9"><input placeholder="b_jones@gmail.com" type="email" required /></div>
+                    </div>
+                  </div>
+                  <div class="columns col-2">&nbsp;</div>
+                </div>
+              </form>
+            </div>
+     </div>
 
       <div class="main">
         <section class="features-listing">
