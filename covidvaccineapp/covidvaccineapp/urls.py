@@ -21,16 +21,16 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("previoushomepage/", views.homepage, name="homepage"),
-    path("base/", views.base, name="base"),
-    path("index/", views.index, name="indexhome"),
-    path("index2/", views.index2, name="index2"),
+    # path("previoushomepage/", views.homepage, name="homepage"),
+    # path("base/", views.base, name="base"),
+    # path("index/", views.index, name="indexhome"),
+    # path("index2/", views.index2, name="index2"),
     path("admin/", admin.site.urls),
     path("user/", include("user.urls")),
     path("info/", include("staticInfo.urls")),
     path("appointment/", include("appointment.urls")),
 
-    # static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 ]
 
 if settings.DEBUG:
