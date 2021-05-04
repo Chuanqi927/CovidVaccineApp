@@ -80,32 +80,59 @@
                     </div>
                 </div>
                 <div class="text-block">
-                    <div class="row mb-3">
-                        <div class="col-sm-9">
-                            <h3>Account Information</h3>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <h5 id="provider_name"></h5>
-                                <h5 id="provider_providerType"></h5>
-                                <h5 id="provider_address_line1"></h5>
-                                <h5 id="provider_address_line2"></h5>
-                                <h5 id="provider_city"></h5>
-                                <h5 id="provider_country"></h5>
-                                <h5 id="provider_zipcode"></h5>
-                            </div>
-                            <script>
-                                document.getElementById("provider_name").innerHTML = "{{ name | safe}}";
-                                document.getElementById("provider_providerType").innerHTML = "{{ providerType | safe}}";
-                                document.getElementById("provider_address_line1").innerHTML = "{{ address_line1 | safe}}";
-                                document.getElementById("provider_address_line2").innerHTML = "{{ address_line2 | safe}}";
-                                document.getElementById("provider_city").innerHTML = "{{ city | safe}}";
-                                document.getElementById("provider_country").innerHTML = "{{ country | safe}}";
-                                document.getElementById("provider_zipcode").innerHTML = "{{ zipcode | safe}}";
-                            </script>
+                    <h3 class="mb-4">Account Information</h3>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h5>Update Profile</h5>
                         </div>
                     </div>
+                    <div class="col-sm-8">
+                        <form class="form-validate" method="post" id="update_profile_form" name="update_profile_form" >
+                            {% csrf_token %}
+                            <div class="collapse">
+                                <div class="row mt-4">
+                                    <div class="form-group col-12">
+                                        <label class="form-label" for="provider_name">Provider Name</label>
+                                        <input class="form-control" type="text" name="provider_name" id="provider_name" >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="provider_providerType">Provider Type</label>
+                                        <input class="form-control" type="text" name="provider_providerType" id="provider_providerType" >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="provider_address_line1">Address</label>
+                                        <input class="form-control" type="text" name="provider_address_line1" id="provider_address_line1" >
+                                        <br>
+                                        <label class="form-label" for="provider_address_line2"></label>
+                                        <input class="form-control" type="text" name="provider_address_line2" id="provider_address_line2" >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="provider_city">City</label>
+                                        <input class="form-control" type="text" name="provider_city" id="provider_city" >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="provider_country">Country</label>
+                                        <input class="form-control" type="text" name="provider_country" id="provider_country" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="provider_zipcode">Zip Code</label>
+                                        <input class="form-control" type="text" name="provider_zipcode" id="provider_zipcode" required>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+                <script>
+                    document.getElementById("provider_name").placeholder = "{{ name | safe}}";
+                    document.getElementById("provider_providerType").placeholder = "{{ providerType | safe}}";
+                    document.getElementById("provider_address_line1").placeholder = "{{ address_line1 | safe}}";
+                    document.getElementById("provider_address_line2").placeholder = "{{ address_line2 | safe}}";
+                    document.getElementById("provider_city").placeholder = "{{ city | safe}}";
+                    document.getElementById("provider_country").placeholder = "{{ country | safe}}";
+                    document.getElementById("provider_zipcode").placeholder = "{{ zipcode | safe}}";
+                </script>
                 <div class="text-block">
                     <div class="row mb-3">
                         <div class="col-sm-9">
