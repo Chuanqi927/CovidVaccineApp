@@ -5,6 +5,7 @@ from .models import User, Patient, Provider
 from staticInfo.models import PriorityGroup
 from django.core.exceptions import ValidationError
 
+
 class PatientSignUpForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
@@ -95,7 +96,8 @@ class UserUpdateForm(forms.ModelForm):
 class PatientUpdateForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ['phone_number', 'address_line1', 'address_line2', 'city', 'state', 'country', 'zipcode']
+        fields = ['phone_number', 'address_line1', 'address_line2', 'city', 'state',
+                  'country', 'zipcode']
 
 
 class PatientUpdatePreferenceForm(forms.ModelForm):
@@ -119,7 +121,7 @@ class UpdatePasswordForm(forms.Form):
 
     def clean_password_current(self):
         if not self.user.check_password(
-            self.cleaned_data.get("password_current", None)
+                self.cleaned_data.get("password_current", None)
         ):
             raise ValidationError("Current password is incorrect")
 
@@ -136,3 +138,29 @@ class UpdatePasswordForm(forms.Form):
         user.set_password(self.cleaned_data["password_new"])
         user.save()
         return user
+
+
+class ProviderUpdateProfileForm(forms.Form):
+    name = forms.CharField(required=False, label="name")
+    providerType = forms.CharField(required=False, label="providerType")
+    email = forms.CharField(required=False, label="email")
+    address_line1 = forms.CharField(required=False, label="address_line1")
+    address_line2 = forms.CharField(required=False, label="address_line2")
+    city = forms.CharField(required=False, label="city")
+    state = forms.CharField(required=False, label="state")
+    country = forms.CharField(required=False, label="country")
+    zipcode = forms.CharField(required=False, label="zipcode")
+
+    @transaction.atomic
+    def save(self, provider):
+        provider.name = self.cleaned_data.get("name")
+        provider.providerType = self.cleaned_data.get("providerType")
+        provider.email = self.cleaned_data.get("email")
+        provider.address_line1 = self.cleaned_data.get("address_line1")
+        provider.address_line2 = self.cleaned_data.get("address_line2")
+        provider.city = self.cleaned_data.get("city")
+        provider.state = self.cleaned_data.get("state")
+        provider.country = self.cleaned_data.get("country")
+        provider.zipcode = self.cleaned_data.get("zipcode")
+        provider.save()
+        return provider
