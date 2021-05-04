@@ -14,6 +14,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
 
+from appointment.models import Appointment, OfferAppointment
 
 def sign_up(request):
     return render(request, "signup.html")
@@ -141,6 +142,11 @@ def provider_profile(request):
         return redirect("login")
     user = request.user
     provider = Provider.objects.get(user=user)
+    all_uploaded_appointments = Appointment.objects.filter(provider=provider)
+    # print(all_uploaded_appointments.count())
+
+    all_offer_appointments = OfferAppointment.objects.filter(appointment_id__in=all_uploaded_appointments)
+    print(all_offer_appointments)
     parameter_dict = {
         "email": user.email,
         "name": provider.name,
@@ -150,6 +156,8 @@ def provider_profile(request):
         "city": provider.city,
         "country": provider.country,
         "zipcode": provider.zipcode,
+        "all_uploaded_appointments": all_uploaded_appointments,
+        "all_offer_appointments": all_offer_appointments,
     }
 
     return render(request, "provider_profile.html", context=parameter_dict)

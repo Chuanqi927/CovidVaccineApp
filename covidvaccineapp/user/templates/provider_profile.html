@@ -90,15 +90,6 @@
                     </div>
                 </div>
                 <script>
-                    // document.getElementById("provider_email").placeholder = "{{ email | safe}}";
-                    // document.getElementById("provider_name").placeholder = "{{ name | safe}}";
-                    // document.getElementById("provider_providerType").placeholder = "{{ providerType | safe}}";
-                    // document.getElementById("provider_address_line1").placeholder = "{{ address_line1 | safe}}";
-                    // document.getElementById("provider_address_line2").placeholder = "{{ address_line2 | safe}}";
-                    // document.getElementById("provider_city").placeholder = "{{ city | safe}}";
-                    // document.getElementById("provider_country").placeholder = "{{ country | safe}}";
-                    // document.getElementById("provider_zipcode").placeholder = "{{ zipcode | safe}}";
-
                     document.getElementById("email").value = "{{ email | safe}}";
                     document.getElementById("name").value = "{{ name | safe}}";
                     document.getElementById("providerType").value = "{{ providerType | safe}}";
@@ -114,6 +105,73 @@
                             <h3>Upload Available Appointments</h3>
                             <div class="row pt-4">
                                 <button class="btn btn-outline-primary" onclick="location.href='../../appointment/upload'">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-block">
+                    <div class="row mb-3">
+                        <div class="col-sm-9">
+                            <h3>Appointment History Statistics</h3>
+                            <div class="row pt-4">
+                                <h4>You have uploaded &nbsp&nbsp {{ all_uploaded_appointments.count }} &nbsp&nbsp appointments</h4>
+                            </div>
+                            <div class="row pt-4">
+                                <table width="800px">
+                                    <caption>All Uploaded Appointments Information</caption>
+                                    <tr>
+                                        <th>Appointment Time</th>
+                                        <th>Appointment Available Number</th>
+                                        <th>Appointment Remaining Number</th>
+                                    </tr>
+                                    {% for appointment in all_uploaded_appointments %}
+    <!--                                    {% csrf_token %}-->
+                                        <tr>
+                                            <td style="text-align:center" width="200px">
+                                                {{ appointment.appointment_time }}
+                                            </td>
+                                            <td style="text-align:center" width="200px">
+                                                {{ appointment.available_number }}
+                                            </td>
+                                            <td style="text-align:center" width="200px">
+                                                {{ appointment.remaining_number }}
+                                            </td>
+                                        </tr>
+<!--                                        <ul class="list-group">-->
+<!--                                            <li id="{{ appointment.id }}" class="list-group-item">-->
+<!--    &lt;!&ndash;                                            <form name="saved_pref_delete" class="saved_res_remove" onsubmit="return false;" category="{{ pref.category }}" method="POST">&ndash;&gt;-->
+<!--                                                    {{ appointment.id }}&nbsp&nbsp &nbsp&nbsp {{ appointment.available_number }}&nbsp&nbsp {{ appointment.remaining_number }}-->
+<!--    &lt;!&ndash;                                                <button type="submit" class="close" aria-label="Close" data-toggle="tooltip" data-placement="top" data-original-title="Remove from Preference">&ndash;&gt;-->
+<!--    &lt;!&ndash;                                                    <span aria-hidden="true">&times;</span>&ndash;&gt;-->
+<!--    &lt;!&ndash;                                                </button>&ndash;&gt;-->
+<!--    &lt;!&ndash;                                            </form>&ndash;&gt;-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+                                    {% endfor %}
+                                </table>
+                                <br>
+                                <table width="800px">
+                                    <caption>Offered Appointment Status </caption>
+                                    <tr>
+<!--                                        <th>Appointment Time</th>-->
+                                        <th>Sent to Patient</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    {% for offer_appointment in all_offer_appointments %}
+    <!--                                    {% csrf_token %}-->
+                                        <tr>
+<!--                                            <td style="text-align:center">-->
+<!--                                                {{ offer_appointment.patient_id }}-->
+<!--                                            </td>-->
+                                            <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.patient_id }}
+                                            </td>
+                                            <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.status }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
                             </div>
                         </div>
                     </div>
