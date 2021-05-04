@@ -20,7 +20,7 @@ urlpatterns = [
     path("patient_edit_profile/", views.patient_edit_profile, name="patient_edit_profile"),
     path("patient_edit_preference", views.patient_edit_preference, name="patient_edit_preference"),
     path("update_password", views.update_password, name="update_password"),
-
+    path("provider_edit_profile/", views.provider_edit_profile, name="provider_edit_profile"),
 ]
 
 

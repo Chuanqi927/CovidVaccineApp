@@ -8,11 +8,13 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, \
-    PatientUpdateForm, PatientUpdatePreferenceForm, UpdatePasswordForm
+    PatientUpdateForm, PatientUpdatePreferenceForm, UpdatePasswordForm, \
+    ProviderUpdateProfileForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
 
+from appointment.models import Appointment, OfferAppointment
 
 def sign_up(request):
     return render(request, "signup.html")
@@ -140,7 +142,13 @@ def provider_profile(request):
         return redirect("login")
     user = request.user
     provider = Provider.objects.get(user=user)
+    all_uploaded_appointments = Appointment.objects.filter(provider=provider)
+    # print(all_uploaded_appointments.count())
+
+    all_offer_appointments = OfferAppointment.objects.filter(appointment_id__in=all_uploaded_appointments)
+    print(all_offer_appointments)
     parameter_dict = {
+        "email": user.email,
         "name": provider.name,
         "providerType": provider.providerType,
         "address_line1": provider.address_line1,
@@ -148,6 +156,8 @@ def provider_profile(request):
         "city": provider.city,
         "country": provider.country,
         "zipcode": provider.zipcode,
+        "all_uploaded_appointments": all_uploaded_appointments,
+        "all_offer_appointments": all_offer_appointments,
     }
 
     return render(request, "provider_profile.html", context=parameter_dict)
@@ -173,3 +183,21 @@ def update_password(request):
         response = HttpResponse(json.dumps(context), content_type="application/json")
         response.status_code = 400
         return response
+
+
+def provider_edit_profile(request):
+    if request.method == 'POST':
+        form = ProviderUpdateProfileForm(data=request.POST)
+        if form.is_valid():
+            form.save(request.user.provider)
+            messages.success(request, f"Your profile has been updated!")
+            return redirect("provider_profile")
+        error_list = []
+        for field in form:
+            for error in field.errors:
+                error_list.append(error)
+        context = {"status": "400", "errors": error_list}
+        response = HttpResponse(json.dumps(context), content_type="application/json")
+        response.status_code = 400
+        return response
+
