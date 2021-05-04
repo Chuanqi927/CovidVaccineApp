@@ -1,253 +1,396 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+
+{% endblock content %}
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: right;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+</head>
+<body>
+
+   <div class="navbar">
+  <a href={% url 'homepage' %}>Home</a>
+  <a href="#news">News</a>
+  <div class="dropdown">
+    <button class="dropbtn">{{ first_name }} {{ last_name }}
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href={% url 'patient_edit_profile' %}>Edit Profile</a>
+      <a href={% url 'patient_edit_preference' %}>Edit Preference</a>
+      <a href={% url 'logout' %}>Logout</a>
+    </div>
+  </div>
+</div>
+
+{#       <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col1 s6">#}
+{#                <form method="POST" enctype="multipart/form-data">#}
+{#          {% csrf_token %}#}
+{#          <fieldset class="form-group">#}
+{#              <legend class="border-bottom mb-4">Update Info</legend>#}
+{#              {{ u_form.as_p}}#}
+{#              {{ p_form.as_p }}#}
+{#          </fieldset>#}
+{#          <div class="form-group">#}
+{#              <button class="btn btn-outline-info" type="submit">Update</button>#}
+{#          </div>#}
+{#      </form>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+
+
+
+<h3>{{ first_name }} {{ last_name }}</h3>
+<p>Hover over the "Dropdown" link to see the dropdown menu.</p>
+
+</body>
+</html>
+
+
+
+{##}
 {#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Patient</title>#}
+{#    <title>Vaccine</title>#}
+{#    <!-- Compiled and minified CSS -->#}
+{#    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">#}
+{#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
+{#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">#}
+{#    <style type="text/css">#}
+{#	  .brand{#}
+{#	  	background: #cbb09c !important;#}
+{#	  }#}
+{#  	.brand-text{#}
+{#  		color: #cbb09c !important;#}
+{#  	}#}
+{#    form{#}
+{#        max-width:490px;#}
+{#        margin: 20px auto;#}
+{#        padding: 20px;#}
+{#    }#}
+{#    th {#}
+{#    text-align: center;#}
+{#    }#}
+{#    td {#}
+{#    text-align: center;#}
+{#    }#}
+{#    td:empty::before {content: "N/A"}#}
+{##}
+{##}
+{#    body{#}
+{#    margin-top:20px;#}
+{#    color: #1a202c;#}
+{#    text-align: left;#}
+{#    background-color: #e2e8f0;#}
+{#}#}
+{#.main-body {#}
+{#    padding: 15px;#}
+{#}#}
+{#.card {#}
+{#    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);#}
+{#}#}
+{##}
+{#.card {#}
+{#    position: relative;#}
+{#    display: flex;#}
+{#    flex-direction: column;#}
+{#    min-width: 0;#}
+{#    word-wrap: break-word;#}
+{#    background-color: #fff;#}
+{#    background-clip: border-box;#}
+{#    border: 0 solid rgba(0,0,0,.125);#}
+{#    border-radius: .25rem;#}
+{#}#}
+{##}
+{#.card-body {#}
+{#    flex: 1 1 auto;#}
+{#    min-height: 1px;#}
+{#    padding: 1rem;#}
+{#}#}
+{##}
+{#.gutters-sm {#}
+{#    margin-right: -8px;#}
+{#    margin-left: -8px;#}
+{#}#}
+{##}
+{#.gutters-sm>.col, .gutters-sm>[class*=col-] {#}
+{#    padding-right: 8px;#}
+{#    padding-left: 8px;#}
+{#}#}
+{#.mb-3, .my-3 {#}
+{#    margin-bottom: 1rem!important;#}
+{#}#}
+{##}
+{#.bg-gray-300 {#}
+{#    background-color: #e2e8f0;#}
+{#}#}
+{#.h-100 {#}
+{#    height: 100%!important;#}
+{#}#}
+{#.shadow-none {#}
+{#    box-shadow: none!important;#}
+{#}#}
+{##}
+{#    </style>#}
 {#</head>#}
 {#<body>#}
-{#<h1>This is patient profile</h1>#}
+{#<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>#}
+{#<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+{#<div class="dropdown">#}
+{#  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">#}
+{#    Dropdown#}
+{#    <span class="caret"></span>#}
+{#  </button>#}
+{#  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">#}
+{#    <li><a href="#">Action</a></li>#}
+{#    <li><a href="#">Another action</a></li>#}
+{#    <li><a href="#">Something else here</a></li>#}
+{#  </ul>#}
+{#</div>#}
 {#</body>#}
-{#</html>#}
-
-
-
-<head>
-    <title>Vaccine</title>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <style type="text/css">
-	  .brand{
-	  	background: #cbb09c !important;
-	  }
-  	.brand-text{
-  		color: #cbb09c !important;
-  	}
-    form{
-        max-width:490px;
-        margin: 20px auto;
-        padding: 20px;
-    }
-    th {
-    text-align: center;
-    }
-    td {
-    text-align: center;
-    }
-    td:empty::before {content: "N/A"}
-
-
-    body{
-    margin-top:20px;
-    color: #1a202c;
-    text-align: left;
-    background-color: #e2e8f0;
-}
-.main-body {
-    padding: 15px;
-}
-.card {
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
-}
-
-.card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 0 solid rgba(0,0,0,.125);
-    border-radius: .25rem;
-}
-
-.card-body {
-    flex: 1 1 auto;
-    min-height: 1px;
-    padding: 1rem;
-}
-
-.gutters-sm {
-    margin-right: -8px;
-    margin-left: -8px;
-}
-
-.gutters-sm>.col, .gutters-sm>[class*=col-] {
-    padding-right: 8px;
-    padding-left: 8px;
-}
-.mb-3, .my-3 {
-    margin-bottom: 1rem!important;
-}
-
-.bg-gray-300 {
-    background-color: #e2e8f0;
-}
-.h-100 {
-    height: 100%!important;
-}
-.shadow-none {
-    box-shadow: none!important;
-}
-
-    </style>
-</head>
-  <body class="grey lighten-4">
-    <nav class = "white z-depth-0">
-        <div class="container">
-            <a href="index.html" class="brand-logo brand-text">Vaccine</a>
-            <ul id="nav-mobile" class="right hide-on-small-and-down">
-                {% if user.is_authenticated%}
-                <li><a href="{% url 'homepage' %}" class="btn brand z-depth-0">Logout</a></li>
-                    <li><a href="" class="btn brand z-depth-0">Edit Information</a></li>
-                    {% else %}
-                <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>
-                    <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="row">
-            <div class="col1 s6">
-                <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          <fieldset class="form-group">
-              <legend class="border-bottom mb-4">Update Info</legend>
-              {{ u_form.as_p}}
-              {{ p_form.as_p }}
-          </fieldset>
-          <div class="form-group">
-              <button class="btn btn-outline-info" type="submit">Update</button>
-          </div>
-      </form>
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="container">
-    <div class="main-body">
-          <div class="row gutters-sm">
-            <div class="col-md-4 mb-3">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex flex-column align-items-center text-center">
+{##}
+{##}
+{#  <body class="grey lighten-4">#}
+{##}
+{#    <nav class = "white z-depth-0">#}
+{#        <div class="container">#}
+{#            <a href="index.html" class="brand-logo brand-text">Vaccine</a>#}
+{#            <ul id="nav-mobile" class="right hide-on-small-and-down">#}
+{#                {% if user.is_authenticated%}#}
+{##}
+{#                    <li><a href="{% url 'homepage' %}" class="btn brand z-depth-0">{{ first_name }}</a></li>#}
+{##}
+{##}
+{#                <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>#}
+{#                    <li><a href="" class="btn brand z-depth-0">Edit Information</a></li>#}
+{#                    {% else %}#}
+{#                <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>#}
+{#                    <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>#}
+{#                {% endif %}#}
+{#            </ul>#}
+{#        </div>#}
+{#    </nav>#}
+{##}
+{##}
+{##}
+{##}
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col1 s6">#}
+{#                <form method="POST" enctype="multipart/form-data">#}
+{#          {% csrf_token %}#}
+{#          <fieldset class="form-group">#}
+{#              <legend class="border-bottom mb-4">Update Info</legend>#}
+{#              {{ u_form.as_p}}#}
+{#              {{ p_form.as_p }}#}
+{#          </fieldset>#}
+{#          <div class="form-group">#}
+{#              <button class="btn btn-outline-info" type="submit">Update</button>#}
+{#          </div>#}
+{#      </form>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{##}
+{#    </div>#}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#    <div class="container">#}
+{#    <div class="main-body">#}
+{#          <div class="row gutters-sm">#}
+{#            <div class="col-md-4 mb-3">#}
+{#              <div class="card">#}
+{#                <div class="card-body">#}
+{#                  <div class="d-flex flex-column align-items-center text-center">#}
 {#                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">#}
-                    <div class="mt-3">
-                      <h4>{{ first_name }} {{ last_name }} </h4>
-                      <p class="text-secondary mb-1">email</p>
-                        <p class="text-secondary mb-1">phone</p>
-
+{#                    <div class="mt-3">#}
+{#                      <h4>{{ first_name }} {{ last_name }} </h4>#}
+{#                      <p class="text-secondary mb-1">email</p>#}
+{#                        <p class="text-secondary mb-1">phone</p>#}
+{##}
 {#                      <button class="btn btn-primary">Follow</button>#}
 {#                      <button class="btn btn-outline-primary">Message</button>#}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class="col-md-8">
-              <div class="card mb-3">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-1">Max Distance </h6>
-                    </div>
-
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Email</h6>
-                    </div>
-
-                    <div class="col-sm-9 text-secondary">
-                      fip@jukmuh.al
-                    </div>
-                  </div>
-
-
-
-                </div>
-              </div>
-                </div>
-              <div class="row gutters-sm">
-                <div class="col-sm-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
+{#                    </div>#}
+{#                  </div>#}
+{#                </div>#}
+{#              </div>#}
+{##}
+{#            </div>#}
+{#            <div class="col-md-8">#}
+{#              <div class="card mb-3">#}
+{#                <div class="card-body">#}
+{#                  <div class="row">#}
+{#                    <div class="col-sm-3">#}
+{#                      <h6 class="mb-1">Max Distance </h6>#}
+{#                    </div>#}
+{##}
+{#                  </div>#}
+{#                  <hr>#}
+{#                  <div class="row">#}
+{#                    <div class="col-sm-3">#}
+{#                      <h6 class="mb-0">Email</h6>#}
+{#                    </div>#}
+{##}
+{#                    <div class="col-sm-9 text-secondary">#}
+{#                      fip@jukmuh.al#}
+{#                    </div>#}
+{#                  </div>#}
+{##}
+{##}
+{##}
+{#                </div>#}
+{#              </div>#}
+{#                </div>#}
+{#              <div class="row gutters-sm">#}
+{#                <div class="col-sm-6 mb-3">#}
+{#                  <div class="card h-100">#}
+{#                    <div class="card-body">#}
+{#                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>#}
+{#                      <small>Web Design</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>Website Markup</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>One Page</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>Mobile Template</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>Backend API</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                    </div>#}
+{#                  </div>#}
+{#                </div>#}
+{#                <div class="col-sm-6 mb-3">#}
+{#                  <div class="card h-100">#}
+{#                    <div class="card-body">#}
+{#                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>#}
+{#                      <small>Web Design</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>Website Markup</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>One Page</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>Mobile Template</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                      <small>Backend API</small>#}
+{#                      <div class="progress mb-3" style="height: 5px">#}
+{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>#}
+{#                      </div>#}
+{#                    </div>#}
+{#                  </div>#}
+{#                </div>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+{##}
 {#    <div class="container">#}
 {#                <ul class="collapsible">#}
 {#  <li>#}
@@ -266,6 +409,6 @@
 {#  </li>#}
 {#</ul>#}
 {#    </div>#}
-
-</ul>
-    </body>
+{##}
+{#</ul>#}
+{#    </body>#}

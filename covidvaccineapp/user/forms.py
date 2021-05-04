@@ -95,4 +95,10 @@ class UserUpdateForm(forms.ModelForm):
 class PatientUpdateForm(forms.ModelForm):
     class Meta:
         model = Patient
+        fields = ['phone_number', 'address_line1', 'address_line2', 'city', 'state', 'country', 'zipcode']
+
+
+class PatientUpdatePreferenceForm(forms.ModelForm):
+    class Meta:
+        model = Patient
         fields = ['max_distance_preferences']

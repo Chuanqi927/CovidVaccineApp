@@ -7,20 +7,20 @@ from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
-from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, PatientUpdateForm
+from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, PatientUpdateForm, PatientUpdatePreferenceForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
+from staticInfo.models import WeeklyTimeSlot
 
 
+def sign_up(request):
+    return render(request, "signup.html")
 
-def register(request):
-    return render(request, "register.html")
 
-
-class PatientRegister(CreateView):
+class PatientSignUp(CreateView):
     model = User
     form_class = PatientSignUpForm
-    template_name = "patient_register.html"
+    template_name = "patient_signup.html"
     form = PatientSignUpForm()
 
     def form_valid(self, form):
@@ -68,21 +68,10 @@ def login_request(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("homepage")
+    return redirect("home")
 
 
-def patient_profile(request):
-    # def profile(request):
-    #     if request.method == 'POST':
-    #         u_form = UserUpdateForm(request.POST, instance=request.user)
-    #         p_form = ProfileUpdateForm(request.POST,
-    #                                    request.FILES,
-    #                                    instance=request.user.profile)
-    #         if u_form.is_valid() and p_form.is_valid():
-    #             u_form.save()
-    #             p_form.save()
-    #             messages.success(request, f'Your account has been updated!')
-    #             return redirect('profile')
+def patient_edit_profile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = PatientUpdateForm(request.POST, instance=request.user.patient)
@@ -95,6 +84,24 @@ def patient_profile(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = PatientUpdateForm(instance=request.user.patient)
 
+        first_name = request.user.first_name
+        last_name = request.user.last_name
+        username = request.user.username
+        context = {
+            "u_form": u_form,
+            "p_form": p_form,
+            "first_name": first_name,
+            "last_name": last_name,
+            "username": username,
+        }
+
+        return render(request, "patient_edit_profile.html", context)
+
+
+def patient_profile(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
     first_name = request.user.first_name
     last_name = request.user.last_name
     username = request.user.username
@@ -102,10 +109,34 @@ def patient_profile(request):
         "first_name": first_name,
         "last_name": last_name,
         "username": username,
-        "u_form": u_form,
-        "p_form": p_form
+
     }
     return render(request, "patient_profile.html", context)
+
+
+def patient_edit_preference(request):
+    if request.method == 'POST':
+        pp_form = PatientUpdatePreferenceForm(request.POST, instance=request.user.patient)
+        if pp_form.is_valid():
+            pp_form.save()
+            messages.success(request, f"Your preference has been updated!")
+            return redirect("patient_profile")
+    else:
+        pp_form = PatientUpdatePreferenceForm(instance=request.user.patient)
+
+    first_name = request.user.first_name
+    last_name = request.user.last_name
+    username = request.user.username
+
+    context = {
+        "first_name": first_name,
+        "last_name": last_name,
+        "username": username,
+        "pp_form": pp_form,
+
+
+    }
+    return render(request, "patient_edit_preference.html", context)
 
 
 def provider_profile(request):
@@ -157,7 +188,7 @@ def provider_profile(request):
 #     else:
 #         form = UserCreationForm()
 #     return render(
-#         request=request, template_name="register.html", context={"form": form}
+#         request=request, template_name="signup.html", context={"form": form}
 #     )
 #
 #

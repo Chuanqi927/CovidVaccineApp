@@ -1,0 +1,54 @@
+      <header class="header">
+        <div class="row max-inner">
+          <div class="columns col-4">
+            <a href="#" class="toggle-off-canvas"><i class="fa fa-bars"></i></a>
+            <a href="index.html" class="logo">
+              <span class="highlight-color">Got</span>vaccinated
+            </a>
+          </div>
+          <div class="columns col-8">
+            <nav class="main-nav">
+              <ul>
+                <li><a class="current" href="{% url 'home' %}">Home</a></li>
+                <li><a href="#">Reviews</a></li>
+                <li><a href="#">Contact</a></li>
+                  <li><a href="#">News</a></li>
+
+                  {% if user.is_authenticated%}
+                     {% if user.is_provider %}
+                         <li><a href="{% url 'provider_profile' %}">{{ user.username }}</a></li>
+                         <li><a href="{% url 'logout' %}">Logout</a></li>
+                         {% endif %}
+                      {% if user.is_patient %}
+                         <li><a href="{% url 'patient_profile' %}">{{ user.first_name }}</a></li>
+                         <li><a href="{% url 'logout' %}">Logout</a></li>
+                         {% endif %}
+
+                      {% else %}
+                      <li><a href="{% url 'login' %}">Login</a></li>
+                      <li><a href="{% url 'signup' %}">Sign up</a></li>
+                  {% endif %}
+
+              </ul>
+            </nav>
+          </div>
+        </div>
+    </header>
+
+{#             <nav class = "white z-depth-0">#}
+{#        <div class="container">#}
+{#            <a href="{% url 'homepage' %}" class="brand-logo brand-text">Vaccine</a>#}
+{#            <ul id="nav-mobile" class="right hide-on-small-and-down">#}
+{#                {% if user.is_authenticated%}#}
+{#                <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>#}
+{#                    {% else %}#}
+{#                <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>#}
+{#                    <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>#}
+{#                {% endif %}#}
+{#            </ul>#}
+{#        </div>#}
+{#    </nav>#}
+
+
+
+      </header>

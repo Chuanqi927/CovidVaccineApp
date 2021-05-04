@@ -4,9 +4,9 @@ from . import views
 
 
 urlpatterns = [
-    path("register/", views.register, name="register"),
+    path("signup/", views.sign_up, name="signup"),
     path(
-        "patient_register/", views.PatientRegister.as_view(), name="patient_register"
+        "patient_signup/", views.PatientSignUp.as_view(), name="patient_signup"
     ),
     path(
         "provider_register/",
@@ -17,5 +17,7 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("provider_profile/", views.provider_profile, name="provider_profile"),
     path("patient_profile/", views.patient_profile, name="patient_profile"),
+    path("patient_edit_profile/", views.patient_edit_profile, name="patient_edit_profile"),
+    path("patient_edit_preference", views.patient_edit_preference, name="patient_edit_preference"),
 
 ]
