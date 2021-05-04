@@ -2,7 +2,112 @@
 {% load widget_tweaks %}
 
 {% block content %}
+    <li><a href="{% url 'patient_edit_profile' %}">Edit Profile</a></li>
 
+    <div class="row">
+    
+
+    </div>
+
+    <table >
+  <tr>
+    <th>AppointmentID</th>
+    <th>Status</th>
+    <th>Expire Time</th>
+  </tr>
+  <tr>
+      {% for offer in offer_list %}
+    <td>{{ offer.appointment_id_id }}</td>
+    <td>{{ offer.status }}</td>
+    <td>{{ offer.expire_time }}</td>
+       {% endfor %}
+  </tr>
+</table>
+
+
+
+
+    {{ offer.expire_time }}
+
+<div class="row">
+            <div class="columns col-12 faqs">
+
+              <!-- start: Question+Answer -->
+              <div class="faq">
+                <div class="row faq-q">
+                  <div class="columns col-10">
+                    <strong>
+                      <a href="#">
+                        <i class="fa fa-chevron-right"></i>
+                        Edit Basic Information.
+                      </a>
+                    </strong>
+                  </div>
+                  <div class="columns col-2 float-right">
+                    <div class="faq-rating stars-2">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="faq-a" style="display: block;">
+                       <form method="POST" enctype="multipart/form-data">
+            {%  csrf_token %}
+            {{ u_form }}
+            {{ p_form }}
+                           <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Update</button>
+          </div>
+                </form>
+
+                </div>
+              </div>
+                              <div class="faq">
+                <div class="row faq-q">
+                  <div class="columns col-10">
+                    <strong>
+                      <a href="#">
+                        <i class="fa fa-chevron-right"></i>
+                        Edit Preferences.
+                      </a>
+                    </strong>
+                  </div>
+                  <div class="columns col-2 float-right">
+                    <div class="faq-rating stars-2">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="faq-a" style="display: block;">
+                       <form method="POST" enctype="multipart/form-data">
+            {%  csrf_token %}
+            {{ pp_form }}
+                           <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Update</button>
+          </div>
+                </form>
+                </div>
+              </div>
+              <!-- end: Question+Answer -->
+
+
+
+
+
+
+            </div>
+          </div>
+
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
+
+
+    <script>
+      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src='//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
 
 {% endblock content %}
 
