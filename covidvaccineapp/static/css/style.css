@@ -82,6 +82,9 @@ Helper classes
 .no-left-pad {
   padding-left: 0 !important; }
 
+.left-pad {
+  padding: 20% 0; }
+
 .no-right-pad {
   padding-right: 0 !important; }
 
@@ -336,17 +339,25 @@ form textarea.invalid {
 A simple 12 column grid
 ------------------------------------------
 */
+.container {
+  padding: 15px 30px 40px 10px;
+  border: 1px solid;
+}
+
 .row {
   display: table;
   position: relative;
-  width: 100%; }
+  width: 90%;
+  }
   .row .columns {
     float: left;
     width: 100%;
     position: relative;
     width: 100%;
-    padding: 0 15px; }
+    padding: 100px 100px; }
     .row .columns.col-12 {
+      margin-left: 100px;
+      margin-right: 100px;
       width: 100%; }
     .row .columns.col-11 {
       width: 91.66667%; }
@@ -380,8 +391,24 @@ A simple 12 column grid
 Structure
 ------------------------------------------
 */
+table {
+  border-collapse: collapse;
+  width: 100%;}
+
+table .center {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+td {
+  text-align: center;
+}
+
 html, body {
+  margin:10px 20px;
   font-size: 100%; }
+
+
 
 body {
   background: #fff;
@@ -394,7 +421,6 @@ body {
 
 /* 
 ------------------------------------------
-Header + main nav + social links
 ------------------------------------------
 */
 .header {

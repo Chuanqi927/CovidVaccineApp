@@ -6,8 +6,8 @@ from django.http import HttpResponse
 #     return render(request, "homepage.html")
 
 
-# def index(request):
-#     return render(request, "index.html")
+def index(request):
+    return render(request, "index.html")
 #
 #
 # def index2(request):

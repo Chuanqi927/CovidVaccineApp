@@ -24,7 +24,7 @@ urlpatterns = [
     # path("previoushomepage/", views.homepage, name="homepage"),
     # path("base/", views.base, name="base"),
     # path("index/", views.index, name="indexhome"),
-    # path("index2/", views.index2, name="index2"),
+    path("index/", views.index, name="index"),
     path("admin/", admin.site.urls),
     path("user/", include("user.urls")),
     path("info/", include("staticInfo.urls")),

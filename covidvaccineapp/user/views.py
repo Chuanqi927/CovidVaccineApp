@@ -12,7 +12,7 @@ from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, \
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
-from appointment.models import OfferAppointment
+from appointment.models import OfferAppointment, Appointment
 
 
 def sign_up(request):
@@ -98,6 +98,23 @@ def patient_edit_profile(request):
     return render(request, "patient_edit_profile.html", context2)
 
 
+def test(request):
+    a_list = list(Appointment.objects.prefetch_related('provider'))
+    # offer_list = list(OfferAppointment.objects.filter(patient_id=41))
+    offer = OfferAppointment.objects.filter(patient_id=41)
+    appointment = offer.appointment
+    provider = appointment.provider
+    list_para = {
+        "a_list": a_list,
+        "offer_list": list(offer),
+        "appointment_list": list(appointment),
+        "provider_list": list(provider),
+
+    }
+
+    return render(request, "test.html", context=list_para)
+
+
 def patient_profile(request):
     global context
     if not request.user.is_authenticated:
@@ -126,7 +143,16 @@ def patient_profile(request):
         else:
             pp_form = PatientUpdatePreferenceForm(instance=request.user.patient)
 
-    offer_list = list(OfferAppointment.objects.filter(patient_id=request.user.id))
+    offer = OfferAppointment.objects.filter(patient_id=request.user.id)
+    print(offer)
+
+    appointment = Appointment.objects.filter(appointment_id__in=offer)
+    # provider = Provider.objects.filter(provider)
+    offer_list = list(offer)
+    print(offer_list)
+
+    appointment_list = list(appointment)
+    slot_list = list(WeeklyTimeSlot.objects.all())
 
     first_name = request.user.first_name
     last_name = request.user.last_name
@@ -141,7 +167,9 @@ def patient_profile(request):
         "first_name": first_name,
         "last_name": last_name,
         "username": username,
-        "offer_list": offer_list,
+        "offer_list": offer,
+        "appointment_list": appointment_list,
+        "slot_list": slot_list,
     }
 
     return render(request, "patient_profile.html", context)

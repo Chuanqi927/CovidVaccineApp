@@ -4,66 +4,50 @@
 {% block content %}
     <li><a href="{% url 'patient_edit_profile' %}">Edit Profile</a></li>
 
-    <div class="row">
-    
 
-    </div>
-
-    <table >
+    <table class="center">
   <tr>
     <th>AppointmentID</th>
+      <th>Expire Time</th>
     <th>Status</th>
-    <th>Expire Time</th>
+      <th>Time</th>
+
+      <th>Provider</th>
+
+            <th>Your Action</th>
+
+
+
   </tr>
+        {% for offer in offer_list %}
   <tr>
-      {% for offer in offer_list %}
-    <td>{{ offer.appointment_id_id }}</td>
-    <td>{{ offer.status }}</td>
-    <td>{{ offer.expire_time }}</td>
-       {% endfor %}
+      <td>{{ offer.appointment_id }}</td>
+      <td>{{ offer.expire_time }}</td>
+      <td>{{ offer.status }}</td>
+      <td>{{ offer.appointment.appointment_time }}</td>
+      <td>{{ offer.appointment.provider.name }}</td>
+
+
+
+
+
+      <td>  <form><input type = "Submit" /></form></td>
   </tr>
+        {% endfor %}
+
 </table>
 
 
 
 
-    {{ offer.expire_time }}
+
+
 
 <div class="row">
-            <div class="columns col-12 faqs">
-
-              <!-- start: Question+Answer -->
-              <div class="faq">
-                <div class="row faq-q">
-                  <div class="columns col-10">
-                    <strong>
-                      <a href="#">
-                        <i class="fa fa-chevron-right"></i>
-                        Edit Basic Information.
-                      </a>
-                    </strong>
-                  </div>
-                  <div class="columns col-2 float-right">
-                    <div class="faq-rating stars-2">
-                      <span></span><span></span><span></span><span></span><span></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="faq-a" style="display: block;">
-                       <form method="POST" enctype="multipart/form-data">
-            {%  csrf_token %}
-            {{ u_form }}
-            {{ p_form }}
-                           <div class="form-group">
-              <button class="btn btn-outline-info" type="submit">Update</button>
-          </div>
-                </form>
-
-                </div>
-              </div>
+            <div class="columns col-12 faqs left-pad">
                               <div class="faq">
                 <div class="row faq-q">
-                  <div class="columns col-10">
+                  <div class="columns col-10 left-pad">
                     <strong>
                       <a href="#">
                         <i class="fa fa-chevron-right"></i>
@@ -72,21 +56,74 @@
                     </strong>
                   </div>
                   <div class="columns col-2 float-right">
-                    <div class="faq-rating stars-2">
+                    <div class="faq-rating stars-5">
                       <span></span><span></span><span></span><span></span><span></span>
                     </div>
                   </div>
                 </div>
-                <div class="faq-a" style="display: block;">
+                <div class="faq-a" >
                        <form method="POST" enctype="multipart/form-data">
             {%  csrf_token %}
+
             {{ pp_form }}
                            <div class="form-group">
               <button class="btn btn-outline-info" type="submit">Update</button>
           </div>
                 </form>
+
+                </div>
+                                  <table>
+                        <tr>
+                            <th>weekday</th>
+                            <th>start time</th>
+                            <th>end time</th>
+
+                        </tr>
+                        {% for slot in slot_list %}
+                            <tr>
+                            <td>{{ slot.weekday }}</td>
+                                <td>{{ slot.start_time}}</td>
+                                <td>{{ slot.end_time }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+              </div>
+
+
+
+
+
+                <div class="faq">
+                <div class="row faq-q">
+                  <div class="columns col-10">
+                    <strong>
+                      <a href="#">
+                        <i class="fa fa-chevron-right"></i>
+                        Edit Profile.
+                      </a>
+                    </strong>
+                  </div>
+                  <div class="columns col-2 float-right">
+                    <div class="faq-rating stars-2">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="faq-a" >
+                    <form method="POST" enctype="multipart/form-data">
+                            {%  csrf_token %}
+                            {{ u_form }}
+                            {{ p_form }}
+                           <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Update</button>
+                    </div>
+                </form>
+
                 </div>
               </div>
+
+              <!-- start: Question+Answer -->
+
               <!-- end: Question+Answer -->
 
 

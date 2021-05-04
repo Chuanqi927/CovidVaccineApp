@@ -19,16 +19,43 @@
       <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" />
       <link href="{% static 'css/flexslider.css' %}" rel="stylesheet" />
       <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-{#    <link rel="stylesheet" href="css/normalize-and-boilerplate.css" />#}
-{#    <link rel="stylesheet" href="css/font-awesome.css" />#}
-{#    <link rel="stylesheet" href="css/flexslider.css" />#}
-{#    <link rel="stylesheet" href="css/style.css" />#}
+{#      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">#}
+
 
     <link href='http://fonts.googleapis.com/css?family=Bree+Serif|Pacifico' rel='stylesheet' type='text/css' />
 
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
   </head>
 <body>
+
+<aside class="off-canvas">
+      <div class="row">
+        <div class="columns col-17">
+          <nav class="main-nav">
+            <ul>
+              <li><a class="current" href="index.html">Home</a></li>
+              <li><a href="reviews.html">Reviews</a></li>
+              <li><a href="buy-it-now.html">Buy it now</a></li>
+              <li><a href="help-desk.html">Help desk</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="columns col-12">
+          <div class="social-links">
+            <a href="#" title="Like us on Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+            <a href="#" title="Follow us on Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+
+
 <div class="on-canvas">
       <div class="canvas-overlay"></div>
         {% include 'navbar.html' %}
