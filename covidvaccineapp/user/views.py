@@ -8,7 +8,8 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, \
-    PatientUpdateForm, PatientUpdatePreferenceForm, UpdatePasswordForm
+    PatientUpdateForm, PatientUpdatePreferenceForm, UpdatePasswordForm, \
+    ProviderUpdateProfileForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
@@ -141,6 +142,7 @@ def provider_profile(request):
     user = request.user
     provider = Provider.objects.get(user=user)
     parameter_dict = {
+        "email": user.email,
         "name": provider.name,
         "providerType": provider.providerType,
         "address_line1": provider.address_line1,
@@ -173,3 +175,21 @@ def update_password(request):
         response = HttpResponse(json.dumps(context), content_type="application/json")
         response.status_code = 400
         return response
+
+
+def provider_edit_profile(request):
+    if request.method == 'POST':
+        form = ProviderUpdateProfileForm(data=request.POST)
+        if form.is_valid():
+            form.save(request.user.provider)
+            messages.success(request, f"Your profile has been updated!")
+            return redirect("provider_profile")
+        error_list = []
+        for field in form:
+            for error in field.errors:
+                error_list.append(error)
+        context = {"status": "400", "errors": error_list}
+        response = HttpResponse(json.dumps(context), content_type="application/json")
+        response.status_code = 400
+        return response
+

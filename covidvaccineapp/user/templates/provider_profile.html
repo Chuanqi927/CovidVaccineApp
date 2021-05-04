@@ -48,51 +48,65 @@
                         </div>
                     </div>
                     <div class="col-sm-8">
-                        <form class="form-validate" method="post" id="update_profile_form" name="update_profile_form" >
+                        <form class="form-validate" method="post" id="ProviderUpdateProfileForm" name="ProviderUpdateProfileForm" action="{% url 'provider_edit_profile' %}">
                             {% csrf_token %}
                             <div class="collapse">
                                 <div class="row mt-4">
                                     <div class="form-group col-12">
-                                        <label class="form-label" for="provider_name">Provider Name</label>
-                                        <input class="form-control" type="text" name="provider_name" id="provider_name" >
+                                        <label class="form-label" for="email">Account Email</label>
+                                        <input class="form-control" type="email" name="email" id="email" >
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label class="form-label" for="name">Provider Name</label>
+                                        <input class="form-control" type="text" name="name" id="name" >
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="provider_providerType">Provider Type</label>
-                                        <input class="form-control" type="text" name="provider_providerType" id="provider_providerType" >
+                                        <label class="form-label" for="providerType">Provider Type</label>
+                                        <input class="form-control" type="text" name="providerType" id="providerType" >
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="provider_address_line1">Address</label>
-                                        <input class="form-control" type="text" name="provider_address_line1" id="provider_address_line1" >
+                                        <label class="form-label" for="address_line1">Address</label>
+                                        <input class="form-control" type="text" name="address_line1" id="address_line1" >
                                         <br>
-                                        <label class="form-label" for="provider_address_line2"></label>
-                                        <input class="form-control" type="text" name="provider_address_line2" id="provider_address_line2" >
+                                        <label class="form-label" for="address_line2"></label>
+                                        <input class="form-control" type="text" name="address_line2" id="address_line2" >
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="provider_city">City</label>
-                                        <input class="form-control" type="text" name="provider_city" id="provider_city" >
+                                        <label class="form-label" for="city">City</label>
+                                        <input class="form-control" type="text" name="city" id="city" >
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="provider_country">Country</label>
-                                        <input class="form-control" type="text" name="provider_country" id="provider_country" required>
+                                        <label class="form-label" for="country">Country</label>
+                                        <input class="form-control" type="text" name="country" id="country">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="provider_zipcode">Zip Code</label>
-                                        <input class="form-control" type="text" name="provider_zipcode" id="provider_zipcode" required>
+                                        <label class="form-label" for="zipcode">Zip Code</label>
+                                        <input class="form-control" type="text" name="zipcode" id="zipcode">
                                     </div>
                                 </div>
-                                <button class="btn btn-outline-primary">Submit</button>
+                                <button class="btn btn-outline-primary" type="submit">Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
                 <script>
-                    document.getElementById("provider_name").placeholder = "{{ name | safe}}";
-                    document.getElementById("provider_providerType").placeholder = "{{ providerType | safe}}";
-                    document.getElementById("provider_address_line1").placeholder = "{{ address_line1 | safe}}";
-                    document.getElementById("provider_address_line2").placeholder = "{{ address_line2 | safe}}";
-                    document.getElementById("provider_city").placeholder = "{{ city | safe}}";
-                    document.getElementById("provider_country").placeholder = "{{ country | safe}}";
-                    document.getElementById("provider_zipcode").placeholder = "{{ zipcode | safe}}";
+                    // document.getElementById("provider_email").placeholder = "{{ email | safe}}";
+                    // document.getElementById("provider_name").placeholder = "{{ name | safe}}";
+                    // document.getElementById("provider_providerType").placeholder = "{{ providerType | safe}}";
+                    // document.getElementById("provider_address_line1").placeholder = "{{ address_line1 | safe}}";
+                    // document.getElementById("provider_address_line2").placeholder = "{{ address_line2 | safe}}";
+                    // document.getElementById("provider_city").placeholder = "{{ city | safe}}";
+                    // document.getElementById("provider_country").placeholder = "{{ country | safe}}";
+                    // document.getElementById("provider_zipcode").placeholder = "{{ zipcode | safe}}";
+
+                    document.getElementById("email").value = "{{ email | safe}}";
+                    document.getElementById("name").value = "{{ name | safe}}";
+                    document.getElementById("providerType").value = "{{ providerType | safe}}";
+                    document.getElementById("address_line1").value = "{{ address_line1 | safe}}";
+                    document.getElementById("address_line2").value = "{{ address_line2 | safe}}";
+                    document.getElementById("city").value = "{{ city | safe}}";
+                    document.getElementById("country").value = "{{ country | safe}}";
+                    document.getElementById("zipcode").value = "{{ zipcode | safe}}";
                 </script>
                 <div class="text-block">
                     <div class="row mb-3">
