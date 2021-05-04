@@ -82,9 +82,6 @@ Helper classes
 .no-left-pad {
   padding-left: 0 !important; }
 
-.left-pad {
-  padding: 20% 0; }
-
 .no-right-pad {
   padding-right: 0 !important; }
 
@@ -100,7 +97,7 @@ Helper classes
   width: 100%;
   max-width: 1170px; }
 
-/* 
+/*
 ------------------------------------------
 Headings
 ------------------------------------------
@@ -123,7 +120,7 @@ h1, h2, h3, h4, h5, h6 {
 h2 {
   font-size: 30px; }
 
-/* 
+/*
 ------------------------------------------
 Blockquotes
 ------------------------------------------
@@ -140,7 +137,7 @@ blockquote {
     font-style: normal;
     font-size: 16px; }
 
-/* 
+/*
 ------------------------------------------
 Paragraphs
 ------------------------------------------
@@ -152,7 +149,7 @@ p code {
   padding: 1px;
   line-height: 100%; }
 
-/* 
+/*
 ------------------------------------------
 code
 ------------------------------------------
@@ -160,7 +157,7 @@ code
 code {
   font-family: "Courier New",Courier,monospace; }
 
-/* 
+/*
 ------------------------------------------
 Forms and inputs
 ------------------------------------------
@@ -334,30 +331,22 @@ form textarea.invalid {
   content: "\f023";
   /* font awesome: fa-credit-card */ }
 
-/* 
+/*
 ------------------------------------------
 A simple 12 column grid
 ------------------------------------------
 */
-.container {
-  padding: 15px 30px 40px 10px;
-  border: 1px solid;
-}
-
 .row {
   display: table;
   position: relative;
-  width: 90%;
-  }
+  width: 100%; }
   .row .columns {
     float: left;
     width: 100%;
     position: relative;
     width: 100%;
-    padding: 100px 100px; }
+    padding: 0 15px; }
     .row .columns.col-12 {
-      margin-left: 100px;
-      margin-right: 100px;
       width: 100%; }
     .row .columns.col-11 {
       width: 91.66667%; }
@@ -386,29 +375,13 @@ A simple 12 column grid
       float: none;
       margin: auto; }
 
-/* 
+/*
 ------------------------------------------
 Structure
 ------------------------------------------
 */
-table {
-  border-collapse: collapse;
-  width: 100%;}
-
-table .center {
-    margin-right: auto;
-    margin-left: auto;
-}
-
-td {
-  text-align: center;
-}
-
 html, body {
-  margin:10px 20px;
   font-size: 100%; }
-
-
 
 body {
   background: #fff;
@@ -419,8 +392,9 @@ body {
   padding: 0;
   position: relative; }
 
-/* 
+/*
 ------------------------------------------
+Header + main nav + social links
 ------------------------------------------
 */
 .header {
@@ -437,9 +411,6 @@ body {
     font: normal 30px/100% "Pacifico", cursive;
     float: left;
     margin: 7px 0 5px 0; }
-  .header .main-nav {
-    text-align: right;
-  }
   .header .main-nav ul {
     margin: 0;
     padding: 0;
@@ -462,10 +433,9 @@ body {
         border-top-right-radius: 25px;
         border-bottom-left-radius: 25px;
         border-bottom-right-radius: 25px; }
-
-
-
-
+        .header .main-nav ul li a:hover, .header .main-nav ul li a:active, .header .main-nav ul li a.current {
+          background: #53b380;
+          color: #fff; }
   .header .social-links {
     text-align: right; }
     .header .social-links a {
