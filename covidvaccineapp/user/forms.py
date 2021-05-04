@@ -3,7 +3,7 @@ from django import forms
 from django.db import transaction
 from .models import User, Patient, Provider
 from staticInfo.models import PriorityGroup
-
+from django.core.exceptions import ValidationError
 
 class PatientSignUpForm(UserCreationForm):
     first_name = forms.CharField(required=True)
@@ -102,3 +102,37 @@ class PatientUpdatePreferenceForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['max_distance_preferences']
+
+
+class UpdatePasswordForm(forms.Form):
+    password_current = forms.CharField(
+        label="password_current", widget=forms.PasswordInput
+    )
+    password_new = forms.CharField(label="password_new", widget=forms.PasswordInput)
+    password_confirm = forms.CharField(
+        label="password_confirm", widget=forms.PasswordInput
+    )
+
+    def __init__(self, user, data=None):
+        self.user = user
+        super(UpdatePasswordForm, self).__init__(data=data)
+
+    def clean_password_current(self):
+        if not self.user.check_password(
+            self.cleaned_data.get("password_current", None)
+        ):
+            raise ValidationError("Current password is incorrect")
+
+    def clean_password_confirm(self):
+        password1 = self.cleaned_data.get("password_new")
+        password2 = self.cleaned_data.get("password_confirm")
+
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("New passwords don't match")
+
+        return self.cleaned_data["password_confirm"]
+
+    def save(self, user, commit=True):
+        user.set_password(self.cleaned_data["password_new"])
+        user.save()
+        return user

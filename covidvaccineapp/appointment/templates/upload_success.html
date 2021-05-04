@@ -1,12 +1,54 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Success!</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style type="text/css">
+	  .brand{
+	  	background: #cbb09c !important;
+	  }
+  	.brand-text{
+  		color: #cbb09c !important;
+  	}
+    form{
+        max-width:490px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    th {
+    text-align: center;
+    }
+    td {
+    text-align: center;
+    }
+    td:empty::before {content: "N/A"}
+    </style>
 </head>
 <body>
-  You have successfully uploaded your vaccine appointment!
-  <br>
-  Want to upload another?
+  <h2>You have successfully uploaded your vaccine appointment!</h2>
+  <div class="text-block">
+        <div style="text-align: center;">
+        <h4>You have successfully uploaded your vaccine appointment!</h4>
+          <br>
+            <img src="{% static '/images/upload_success.png' %}" alt="Upload Success" width="256" height="256">
+            <div class="text-block">
+                <div class="row mb-3">
+                    <div class="col-sm-9">
+                        <h4>Want to upload another?</h4>
+                        <div class="row pt-4">
+                            <button class="btn btn-outline-primary" onclick="location.href='../appointment/upload'">Upload</button>
+                        </div>
+                        <br>
+                        <div class="row pt-4">
+                            <button class="btn btn-outline-primary" onclick="location.href='../../user/provider_profile'">Back to Account Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
