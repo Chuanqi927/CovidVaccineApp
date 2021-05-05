@@ -106,6 +106,10 @@ class PatientUpdatePreferenceForm(forms.ModelForm):
         fields = ['max_distance_preferences']
 
 
+# class PatientUpdateTimeSlotForm(forms.Form):
+
+
+
 class UpdatePasswordForm(forms.Form):
     password_current = forms.CharField(
         label="password_current", widget=forms.PasswordInput

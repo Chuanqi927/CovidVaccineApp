@@ -5,6 +5,13 @@
 <!--    <li><a href="{% url 'patient_edit_profile' %}">Edit Profile</a></li>-->
 <div class="row">
     <div class="columns col-12 faqs left-pad">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         <div class="faq" id="check_offer_appointment">
             <div class="row faq-q" >
               <div class="columns col-10 left-pad">
@@ -20,21 +27,21 @@
             <div class="faq-a">
                 <table class="center">
                     <tr>
-                        <th>AppointmentID</th>
-                        <th>Expire Time</th>
-                        <th>Status</th>
-                        <th>Time</th>
-                        <th>Provider</th>
-                        <th>Your Action</th>
+                        <th style="text-align:center">AppointmentID</th>
+                        <th style="text-align:center">Expire Time</th>
+                        <th style="text-align:center">Status</th>
+                        <th style="text-align:center">Time</th>
+                        <th style="text-align:center">Provider</th>
+                        <th style="text-align:center">Your Action</th>
                     </tr>
                 {% for offer in offer_list %}
                     <tr>
-                        <td>{{ offer.appointment_id }}</td>
-                        <td>{{ offer.expire_time }}</td>
-                        <td>{{ offer.status }}</td>
-                        <td>{{ offer.appointment.appointment_time }}</td>
-                        <td>{{ offer.appointment.provider.name }}</td>
-                        <td>  <form><input type = "Submit" /></form></td>
+                        <td style="text-align:center">{{ offer.appointment_id }}</td>
+                        <td style="text-align:center">{{ offer.expire_time }}</td>
+                        <td style="text-align:center">{{ offer.status }}</td>
+                        <td style="text-align:center">{{ offer.appointment.appointment_time }}</td>
+                        <td style="text-align:center">{{ offer.appointment.provider.name }}</td>
+                        <td style="text-align:center">  <form><input type = "Submit" /></form></td>
                    </tr>
                 {% endfor %}
                 </table>
@@ -73,20 +80,89 @@
               </div>
             </div>
             <div class="faq-a" >
-                <table>
-                    <tr>
-                        <th>weekday</th>
-                        <th>start time</th>
-                        <th>end time</th>
-                    </tr>
-                    {% for slot in slot_list %}
+                <form action="{% url 'patient_edit_timepref' %}" method="post">
+                    {% csrf_token %}
+                    <table id="SlotPreferenceTable" cellpadding="2" cellspacing="2" border="1">
+                        <caption>Mark Your Preferred Time Slots</caption>
                         <tr>
-                            <td>{{ slot.weekday }}</td>
-                            <td>{{ slot.start_time}}</td>
-                            <td>{{ slot.end_time }}</td>
+                            <th>Slot id</th>
+                            <th style="text-align:center">Weekday</th>
+                            <th style="text-align:center">Start Time</th>
+                            <th style="text-align:center">End Time</th>
+                            <th style="text-align:center">Check to Save</th>
                         </tr>
-                    {% endfor %}
-                </table>
+                        {% for time_slot in all_time_slots_info %}
+                        <tr>
+                            <td style="text-align:center" id="slot_id"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="checks" id="check"/></td>
+                        </tr>
+
+                        {% endfor %}
+                    </table>
+                    <button type="submit">Submit</button>
+                </form>
+                <script>
+                    var all_time_slots = {{ all_time_slots_info | safe}};
+                    var saved_slots = {{ saved_slots | safe }}
+                    function get_slot_info(time_slot){
+                        console.log(temp_dict.slot_id);
+                    }
+                    console.log(saved_slots);
+                    console.log(typeof saved_slots);
+                    function ConvertWeekdayToString(temp_dict){
+                        switch(temp_dict.weekday){
+                            case 1:
+                                return "Monday";
+                            case 2:
+                                return "Tuesday";
+                            case 3:
+                                return "Wednesday";
+                            case 4:
+                                return "Thursday";
+                            case 5:
+                                return "Friday";
+                            case 6:
+                                return "Saturday";
+                            case 7:
+                                return "Sunday";
+                        }
+                    }
+                    function ModifySlotTable(all_time_slots, saved_slots) {
+                        var table = document.getElementById("SlotPreferenceTable");
+                        for(var i = 0, row; row = table.rows[i+1]; i++) {
+                            var temp_dict = all_time_slots[i];
+                            for(var j = 0, col; col = row.cells[j]; j++) {
+                                if(j==0){
+                                    col.innerHTML = temp_dict.slot_id;
+                                    if(i<Object.keys(saved_slots).length) {
+                                        if (temp_dict.slot_id == saved_slots[i]["slot_id"]) {
+                                            console.log(saved_slots[i]["slot_id"])
+                                            document.getElementById("check").checked = true;
+                                        }
+                                    }
+                                }
+                                if(j==1){
+                                    col.innerHTML = ConvertWeekdayToString(temp_dict);
+                                }
+                                if(j==2){
+                                    col.innerHTML = temp_dict.start_time;
+                                }
+                                if(j==3){
+                                    col.innerHTML = temp_dict.end_time;
+                                }
+                                // var checkbox = document.getElementById("check");
+                                // checkbox.addEventListener("change",function(){
+                                //  this.value = this.checked ? temp_dict.slot_id : 0;
+                                // });
+                            }
+                        }
+                    }
+                    ModifySlotTable(all_time_slots, saved_slots);
+                </script>
+
             </div>
         </div>
         <div class="faq" id="edit_profile">
@@ -250,288 +326,298 @@ body {
 
 
 
-{##}
-{#<head>#}
-{#    <title>Vaccine</title>#}
-{#    <!-- Compiled and minified CSS -->#}
-{#    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">#}
-{#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
-{#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">#}
-{#    <style type="text/css">#}
-{#	  .brand{#}
-{#	  	background: #cbb09c !important;#}
-{#	  }#}
-{#  	.brand-text{#}
-{#  		color: #cbb09c !important;#}
-{#  	}#}
-{#    form{#}
-{#        max-width:490px;#}
-{#        margin: 20px auto;#}
-{#        padding: 20px;#}
-{#    }#}
-{#    th {#}
-{#    text-align: center;#}
-{#    }#}
-{#    td {#}
-{#    text-align: center;#}
-{#    }#}
-{#    td:empty::before {content: "N/A"}#}
-{##}
-{##}
-{#    body{#}
-{#    margin-top:20px;#}
-{#    color: #1a202c;#}
-{#    text-align: left;#}
-{#    background-color: #e2e8f0;#}
-{#}#}
-{#.main-body {#}
-{#    padding: 15px;#}
-{#}#}
-{#.card {#}
-{#    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);#}
-{#}#}
-{##}
-{#.card {#}
-{#    position: relative;#}
-{#    display: flex;#}
-{#    flex-direction: column;#}
-{#    min-width: 0;#}
-{#    word-wrap: break-word;#}
-{#    background-color: #fff;#}
-{#    background-clip: border-box;#}
-{#    border: 0 solid rgba(0,0,0,.125);#}
-{#    border-radius: .25rem;#}
-{#}#}
-{##}
-{#.card-body {#}
-{#    flex: 1 1 auto;#}
-{#    min-height: 1px;#}
-{#    padding: 1rem;#}
-{#}#}
-{##}
-{#.gutters-sm {#}
-{#    margin-right: -8px;#}
-{#    margin-left: -8px;#}
-{#}#}
-{##}
-{#.gutters-sm>.col, .gutters-sm>[class*=col-] {#}
-{#    padding-right: 8px;#}
-{#    padding-left: 8px;#}
-{#}#}
-{#.mb-3, .my-3 {#}
-{#    margin-bottom: 1rem!important;#}
-{#}#}
-{##}
-{#.bg-gray-300 {#}
-{#    background-color: #e2e8f0;#}
-{#}#}
-{#.h-100 {#}
-{#    height: 100%!important;#}
-{#}#}
-{#.shadow-none {#}
-{#    box-shadow: none!important;#}
-{#}#}
-{##}
-{#    </style>#}
-{#</head>#}
-{#<body>#}
-{#<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>#}
-{#<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
-{#<div class="dropdown">#}
-{#  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">#}
-{#    Dropdown#}
-{#    <span class="caret"></span>#}
-{#  </button>#}
-{#  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">#}
-{#    <li><a href="#">Action</a></li>#}
-{#    <li><a href="#">Another action</a></li>#}
-{#    <li><a href="#">Something else here</a></li>#}
-{#  </ul>#}
-{#</div>#}
-{#</body>#}
-{##}
-{##}
-{#  <body class="grey lighten-4">#}
-{##}
-{#    <nav class = "white z-depth-0">#}
-{#        <div class="container">#}
-{#            <a href="index.html" class="brand-logo brand-text">Vaccine</a>#}
-{#            <ul id="nav-mobile" class="right hide-on-small-and-down">#}
-{#                {% if user.is_authenticated%}#}
-{##}
-{#                    <li><a href="{% url 'homepage' %}" class="btn brand z-depth-0">{{ first_name }}</a></li>#}
-{##}
-{##}
-{#                <li><a href="{% url 'logout' %}" class="btn brand z-depth-0">Logout</a></li>#}
-{#                    <li><a href="" class="btn brand z-depth-0">Edit Information</a></li>#}
-{#                    {% else %}#}
-{#                <li><a href= "{% url 'login' %}" class="btn brand z-depth-0">Login</a></li>#}
-{#                    <li><a href= "{% url 'register' %}" class="btn brand z-depth-0">Register</a></li>#}
-{#                {% endif %}#}
-{#            </ul>#}
-{#        </div>#}
-{#    </nav>#}
-{##}
-{##}
-{##}
-{##}
-{#    <div class="container">#}
-{#        <div class="row">#}
-{#            <div class="col1 s6">#}
-{#                <form method="POST" enctype="multipart/form-data">#}
-{#          {% csrf_token %}#}
-{#          <fieldset class="form-group">#}
-{#              <legend class="border-bottom mb-4">Update Info</legend>#}
-{#              {{ u_form.as_p}}#}
-{#              {{ p_form.as_p }}#}
-{#          </fieldset>#}
-{#          <div class="form-group">#}
-{#              <button class="btn btn-outline-info" type="submit">Update</button>#}
-{#          </div>#}
-{#      </form>#}
-{#            </div>#}
-{##}
-{#        </div>#}
-{##}
-{##}
-{#    </div>#}
-{##}
-{##}
-{##}
-{##}
-{##}
-{##}
-{##}
-{##}
-{##}
-{##}
-{##}
-{##}
-{#    <div class="container">#}
-{#    <div class="main-body">#}
-{#          <div class="row gutters-sm">#}
-{#            <div class="col-md-4 mb-3">#}
-{#              <div class="card">#}
-{#                <div class="card-body">#}
-{#                  <div class="d-flex flex-column align-items-center text-center">#}
-{#                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">#}
-{#                    <div class="mt-3">#}
-{#                      <h4>{{ first_name }} {{ last_name }} </h4>#}
-{#                      <p class="text-secondary mb-1">email</p>#}
-{#                        <p class="text-secondary mb-1">phone</p>#}
-{##}
-{#                      <button class="btn btn-primary">Follow</button>#}
-{#                      <button class="btn btn-outline-primary">Message</button>#}
-{#                    </div>#}
-{#                  </div>#}
-{#                </div>#}
-{#              </div>#}
-{##}
-{#            </div>#}
-{#            <div class="col-md-8">#}
-{#              <div class="card mb-3">#}
-{#                <div class="card-body">#}
-{#                  <div class="row">#}
-{#                    <div class="col-sm-3">#}
-{#                      <h6 class="mb-1">Max Distance </h6>#}
-{#                    </div>#}
-{##}
-{#                  </div>#}
-{#                  <hr>#}
-{#                  <div class="row">#}
-{#                    <div class="col-sm-3">#}
-{#                      <h6 class="mb-0">Email</h6>#}
-{#                    </div>#}
-{##}
-{#                    <div class="col-sm-9 text-secondary">#}
-{#                      fip@jukmuh.al#}
-{#                    </div>#}
-{#                  </div>#}
-{##}
-{##}
-{##}
-{#                </div>#}
-{#              </div>#}
-{#                </div>#}
-{#              <div class="row gutters-sm">#}
-{#                <div class="col-sm-6 mb-3">#}
-{#                  <div class="card h-100">#}
-{#                    <div class="card-body">#}
-{#                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>#}
-{#                      <small>Web Design</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>Website Markup</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>One Page</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>Mobile Template</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>Backend API</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                    </div>#}
-{#                  </div>#}
-{#                </div>#}
-{#                <div class="col-sm-6 mb-3">#}
-{#                  <div class="card h-100">#}
-{#                    <div class="card-body">#}
-{#                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>#}
-{#                      <small>Web Design</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>Website Markup</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>One Page</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>Mobile Template</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                      <small>Backend API</small>#}
-{#                      <div class="progress mb-3" style="height: 5px">#}
-{#                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>#}
-{#                      </div>#}
-{#                    </div>#}
-{#                  </div>#}
-{#                </div>#}
-{#              </div>#}
-{#            </div>#}
-{#          </div>#}
-{#        </div>#}
-{##}
-{##}
-{#    <div class="container">#}
-{#                <ul class="collapsible">#}
-{#  <li>#}
-{#    <div class="collapsible-header">#}
-{#      <i class="material-icons">filter_drama</i>#}
-{#      First#}
-{#      <span class="new badge">4</span></div>#}
-{#    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>#}
-{#  </li>#}
-{#  <li>#}
-{#    <div class="collapsible-header">#}
-{#      <i class="material-icons">place</i>#}
-{#      Second#}
-{#      <span class="badge">1</span></div>#}
-{#    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>#}
-{#  </li>#}
-{#</ul>#}
-{#    </div>#}
-{##}
-{#</ul>#}
-{#    </body>#}
+<tr>
+                            <td style="text-align:center" id="slot_id1"></td>
+                            <td style="text-align:center" id="weekday1"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check1" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id2"></td>
+                            <td style="text-align:center" id="weekday2"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check2" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id3"></td>
+                            <td style="text-align:center" id="weekday3"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check3" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id4"></td>
+                            <td style="text-align:center" id="weekday4"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check4" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id5"></td>
+                            <td style="text-align:center" id="weekday5"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check5" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id6"></td>
+                            <td style="text-align:center" id="weekday6"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check6" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id7"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check7" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id8"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check8" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id9"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check9" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id10"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check10" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id11"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check11" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id12"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check12" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id13"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check13" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id14"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check14" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id15"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check15" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id16"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check16" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id17"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check17" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id18"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check18" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id19"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check19" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id20"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check20" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id21"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check21" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id22"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check22" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id23"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check23" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id24"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check24" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id25"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check25" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id26"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check26" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id27"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check27" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id28"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check28" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id29"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check29" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id30"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check30" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id31"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check31" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id32"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check32" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id33"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check33" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id34"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check34" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id35"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check35" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id36"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check36" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id37"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check37" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id38"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check38" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id39"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check39" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id40"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check40" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id41"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check41" />&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center" id="slot_id42"></td>
+                            <td style="text-align:center">{{ time_slot.weekday }}</td>
+                            <td style="text-align:center">{{ time_slot.start_time }}</td>
+                            <td style="text-align:center">{{ time_slot.end_time }}</td>
+                            <td style="text-align:center"><input type="checkbox" name="check" id="check42" />&nbsp;</td>
+                        </tr>
+                    </table>

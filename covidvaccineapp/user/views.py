@@ -17,6 +17,9 @@ from appointment.models import OfferAppointment, Appointment
 
 from appointment.models import Appointment, OfferAppointment
 
+from staticInfo.utils import get_time_slot_info
+
+
 def sign_up(request):
     return render(request, "signup.html")
 
@@ -128,7 +131,6 @@ def patient_profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-
             messages.success(request, f"Your information has been updated!")
             return redirect("patient_profile")
     else:
@@ -146,15 +148,22 @@ def patient_profile(request):
             pp_form = PatientUpdatePreferenceForm(instance=request.user.patient)
 
     offer = OfferAppointment.objects.filter(patient_id=request.user.id)
-    print(offer)
+    # print(offer)
 
     appointment = Appointment.objects.filter(appointment_id__in=offer)
     # provider = Provider.objects.filter(provider)
     offer_list = list(offer)
-    print(offer_list)
-
+    # print(offer_list)
     appointment_list = list(appointment)
-    slot_list = list(WeeklyTimeSlot.objects.all())
+
+    all_time_slots_info = get_time_slot_info()
+    # print(all_time_slots_info)
+    patient = Patient.objects.get(user=request.user)
+    saved_slots = list(WeeklyTimeSlot.objects.filter(patient=patient).values())
+    for i in range(len(saved_slots)):
+        saved_slots[i]["start_time"] = saved_slots[i]["start_time"].strftime("%H:%M:%S")
+        saved_slots[i]["end_time"] = saved_slots[i]["end_time"].strftime("%H:%M:%S")
+    print(saved_slots)
 
     first_name = request.user.first_name
     last_name = request.user.last_name
@@ -171,7 +180,8 @@ def patient_profile(request):
         "username": username,
         "offer_list": offer,
         "appointment_list": appointment_list,
-        "slot_list": slot_list,
+        "all_time_slots_info": all_time_slots_info,
+        "saved_slots": saved_slots,
     }
 
     return render(request, "patient_profile.html", context)
@@ -197,6 +207,13 @@ def patient_edit_preference(request):
 
     }
     return render(request, "patient_edit_preference.html", contextpp)
+
+
+def patient_edit_timepref(request):
+    if request.method == "POST":
+        check_list = request.POST.getlist("checks")
+        print(check_list)
+    return HttpResponse("in edit time pref")
 
 
 def provider_profile(request):
@@ -241,8 +258,8 @@ def update_password(request):
         for field in form:
             for error in field.errors:
                 error_list.append(error)
-        context = {"status": "400", "errors": error_list}
-        response = HttpResponse(json.dumps(context), content_type="application/json")
+        error_context = {"status": "400", "errors": error_list}
+        response = HttpResponse(json.dumps(error_context), content_type="application/json")
         response.status_code = 400
         return response
 
@@ -258,8 +275,8 @@ def provider_edit_profile(request):
         for field in form:
             for error in field.errors:
                 error_list.append(error)
-        context = {"status": "400", "errors": error_list}
-        response = HttpResponse(json.dumps(context), content_type="application/json")
+        error_context = {"status": "400", "errors": error_list}
+        response = HttpResponse(json.dumps(error_context), content_type="application/json")
         response.status_code = 400
         return response
 
