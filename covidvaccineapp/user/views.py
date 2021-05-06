@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, \
     PatientUpdateForm, PatientUpdatePreferenceForm, UpdatePasswordForm, \
-    ProviderUpdateProfileForm
+    ProviderUpdateProfileForm, PatientUpdateTimePrefForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
@@ -163,7 +163,7 @@ def patient_profile(request):
     for i in range(len(saved_slots)):
         saved_slots[i]["start_time"] = saved_slots[i]["start_time"].strftime("%H:%M:%S")
         saved_slots[i]["end_time"] = saved_slots[i]["end_time"].strftime("%H:%M:%S")
-    print(saved_slots)
+    # print(saved_slots)
 
     first_name = request.user.first_name
     last_name = request.user.last_name
@@ -211,9 +211,13 @@ def patient_edit_preference(request):
 
 def patient_edit_timepref(request):
     if request.method == "POST":
-        check_list = request.POST.getlist("checks")
-        print(check_list)
-    return HttpResponse("in edit time pref")
+        form = PatientUpdateTimePrefForm(data=request.POST)
+        # print(form)
+        if form.is_valid():
+            # print(form.cleaned_data)
+            form.save(request.user.patient)
+            messages.success(request, "time preference saved!")
+    return redirect('patient_profile')
 
 
 def provider_profile(request):
