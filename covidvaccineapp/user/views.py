@@ -13,9 +13,10 @@ from .forms import PatientSignUpForm, ProviderSignUpForm, UserUpdateForm, \
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
-from appointment.models import OfferAppointment, Appointment
 
 from appointment.models import Appointment, OfferAppointment
+from appointment.forms import AppointmentStatusForm
+
 
 def sign_up(request):
     return render(request, "signup.html")
@@ -146,7 +147,8 @@ def patient_profile(request):
             pp_form = PatientUpdatePreferenceForm(instance=request.user.patient)
 
     offer = OfferAppointment.objects.filter(patient_id=request.user.id)
-    print(offer)
+
+    appointment_status_form = AppointmentStatusForm()
 
     appointment = Appointment.objects.filter(appointment_id__in=offer)
     # provider = Provider.objects.filter(provider)
@@ -172,6 +174,7 @@ def patient_profile(request):
         "offer_list": offer,
         "appointment_list": appointment_list,
         "slot_list": slot_list,
+        "appointment_status_form": appointment_status_form,
     }
 
     return render(request, "patient_profile.html", context)
@@ -262,4 +265,3 @@ def provider_edit_profile(request):
         response = HttpResponse(json.dumps(context), content_type="application/json")
         response.status_code = 400
         return response
-

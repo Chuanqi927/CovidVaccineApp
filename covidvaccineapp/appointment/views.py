@@ -1,4 +1,3 @@
-
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from user.models import User, Patient, Provider
@@ -7,7 +6,6 @@ from django.contrib.auth import authenticate, login as auth_login
 
 
 # Create your views here.
-
 
 
 def upload(request):

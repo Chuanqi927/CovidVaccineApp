@@ -6,36 +6,38 @@
 
 
     <table class="center">
-  <tr>
-    <th>AppointmentID</th>
-      <th>Expire Time</th>
-    <th>Status</th>
-      <th>Time</th>
-
-      <th>Provider</th>
-
-            <th>Your Action</th>
-
-
-
-  </tr>
+	    <tr>
+		    <th>AppointmentID</th>
+		    <th>Expire Time</th>
+		    <th>Status</th>
+		    <th>Time</th>
+		    <th>Provider</th>
+		    <th>Your Action</th>
+	    </tr>
         {% for offer in offer_list %}
-  <tr>
-      <td>{{ offer.appointment_id }}</td>
-      <td>{{ offer.expire_time }}</td>
-      <td>{{ offer.status }}</td>
-      <td>{{ offer.appointment.appointment_time }}</td>
-      <td>{{ offer.appointment.provider.name }}</td>
+	        <tr>
+		        <td>{{ offer.appointment_id }}</td>
+                <td>{{ offer.expire_time}}</td>
+                <td>{{ offer.status }}</td>
+                <td>{{ offer.appointment.appointment_time }}</td>
+                <td>{{ offer.appointment.provider.name }}</td>
 
+		        <td>
+                                        <label class="form-label" for="providerType">Inpute Status</label>
+                                        <input class="form-control" type="text" name="providerType" id="providerType" >
+		        </td>
 
-
-
-
-      <td>  <form><input type = "Submit" /></form></td>
-  </tr>
+	        </tr>
         {% endfor %}
 
-</table>
+
+
+
+    </table>
+	    <button class="btn btn-outline-primary" type="submit">Submit</button>
+	<script>
+                    document.getElementById("providerType").value = "{{ providerType | safe}}";
+                </script>
 
 
 
@@ -72,7 +74,7 @@
                 </form>
 
                 </div>
-                                  <table>
+	                              <table>
                         <tr>
                             <th>weekday</th>
                             <th>start time</th>
