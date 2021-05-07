@@ -22,7 +22,7 @@
                          <li><a class="current" href="{% url 'patient_profile' %}">{{ user.username }}</a></li>
                          <li><a href="{% url 'logout' %}">Logout</a></li>
                         {% else %}
-                        <li><a class="current">{{ user.username }}</a></li>
+                        <li><a class="current" href="{% url 'admin_profile' %}">{{ user.username }}</a></li>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% endif %}
                    {% else %}
