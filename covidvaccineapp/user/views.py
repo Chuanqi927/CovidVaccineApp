@@ -286,9 +286,4 @@ def provider_edit_profile(request):
         return response
 
 
-def admin_profile(request):
-    if not request.user.is_authenticated:
-        return redirect("login")
-    user = request.user
-    admin = User.objects.get(user=user)
-    return render(request, "admin_profile.html")
+

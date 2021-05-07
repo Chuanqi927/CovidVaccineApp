@@ -23,7 +23,6 @@ urlpatterns = [
     path("patient_edit_timepref/", views.patient_edit_timepref, name="patient_edit_timepref"),
     path("update_password/", views.update_password, name="update_password"),
     path("provider_edit_profile/", views.provider_edit_profile, name="provider_edit_profile"),
-    path("admin_profile/", views.admin_profile, name="admin_profile"),
 ]
 
 
