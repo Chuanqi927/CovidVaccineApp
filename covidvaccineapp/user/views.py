@@ -152,7 +152,8 @@ def patient_profile(request):
             offer_list[i]["expire_time"] = datetime.now()
         offer_list[i]["expire_time"] = offer_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
     for i in range(len(offered_appointment)):
-        offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
+        offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime(
+            "%Y-%m-%d %H:%M:%S")
     print(offer_list)
     print(offered_appointment)
 
@@ -284,3 +285,10 @@ def provider_edit_profile(request):
         response.status_code = 400
         return response
 
+
+def admin_profile(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    user = request.user
+    admin = User.objects.get(user=user)
+    return render(request, "admin_profile.html")
