@@ -76,9 +76,14 @@
                                         <input class="form-control" type="text" name="city" id="city" >
                                     </div>
                                     <div class="form-group col-md-6">
+                                        <label class="form-label" for="state">State</label>
+                                        <input class="form-control" type="text" name="state" id="state">
+                                    </div>
+                                    <div class="form-group col-md-6">
                                         <label class="form-label" for="country">Country</label>
                                         <input class="form-control" type="text" name="country" id="country">
                                     </div>
+
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="zipcode">Zip Code</label>
                                         <input class="form-control" type="text" name="zipcode" id="zipcode">
@@ -96,6 +101,7 @@
                     document.getElementById("address_line1").value = "{{ address_line1 | safe}}";
                     document.getElementById("address_line2").value = "{{ address_line2 | safe}}";
                     document.getElementById("city").value = "{{ city | safe}}";
+                    document.getElementById("state").value = "{{ state | safe}}";
                     document.getElementById("country").value = "{{ country | safe}}";
                     document.getElementById("zipcode").value = "{{ zipcode | safe}}";
                 </script>

@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.db import transaction
 from .models import User, Patient, Provider
-from staticInfo.models import PriorityGroup
+from staticInfo.models import WeeklyTimeSlot, PriorityGroup
 from django.core.exceptions import ValidationError
 
 
@@ -85,25 +85,101 @@ class ProviderSignUpForm(UserCreationForm):
         return user
 
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField
-
-    class Meta:
-        model = User
-        fields = ['username', 'email']
-
-
-class PatientUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Patient
-        fields = ['phone_number', 'address_line1', 'address_line2', 'city', 'state',
-                  'country', 'zipcode']
-
-
+# class UserUpdateForm(forms.ModelForm):
+#     email = forms.EmailField
+#
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email']
+#
+#
+# class PatientUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = Patient
+#         fields = ['phone_number', 'address_line1', 'address_line2', 'city', 'state',
+#                   'country', 'zipcode']
+#
+#
 class PatientUpdatePreferenceForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['max_distance_preferences']
+
+
+class PatientUpdateProfileForm(forms.Form):
+    email = forms.CharField(required=False, label="email")
+    phone_number = forms.CharField(required=False, label="phone_number")
+    address_line1 = forms.CharField(required=False, label="address_line1")
+    address_line2 = forms.CharField(required=False, label="address_line2")
+    city = forms.CharField(required=False, label="city")
+    state = forms.CharField(required=False, label="state")
+    country = forms.CharField(required=False, label="country")
+    zipcode = forms.CharField(required=False, label="zipcode")
+
+    @transaction.atomic
+    def save(self, user):
+        user.email = self.cleaned_data.get("email")
+        user.phone_number = self.cleaned_data.get("phone_number")
+        user.patient.address_line1 = self.cleaned_data.get("address_line1")
+        user.patient.address_line2 = self.cleaned_data.get("address_line2")
+        user.patient.city = self.cleaned_data.get("city")
+        user.patient.state = self.cleaned_data.get("state")
+        user.patient.country = self.cleaned_data.get("country")
+        user.patient.zipcode = self.cleaned_data.get("zipcode")
+        user.patient.save()
+        return user
+
+class PatientUpdateTimePrefForm(forms.Form):
+    check1 = forms.BooleanField(required=False, label='check1')
+    check2 = forms.BooleanField(required=False)
+    check3 = forms.BooleanField(required=False)
+    check4 = forms.BooleanField(required=False)
+    check5 = forms.BooleanField(required=False)
+    check6 = forms.BooleanField(required=False)
+    check7 = forms.BooleanField(required=False)
+    check8 = forms.BooleanField(required=False)
+    check9 = forms.BooleanField(required=False)
+    check10 = forms.BooleanField(required=False)
+    check11 = forms.BooleanField(required=False)
+    check12 = forms.BooleanField(required=False)
+    check13 = forms.BooleanField(required=False)
+    check14 = forms.BooleanField(required=False)
+    check15 = forms.BooleanField(required=False)
+    check16 = forms.BooleanField(required=False)
+    check17 = forms.BooleanField(required=False)
+    check18 = forms.BooleanField(required=False)
+    check19 = forms.BooleanField(required=False)
+    check20 = forms.BooleanField(required=False)
+    check21 = forms.BooleanField(required=False)
+    check22 = forms.BooleanField(required=False)
+    check23 = forms.BooleanField(required=False)
+    check24 = forms.BooleanField(required=False)
+    check25 = forms.BooleanField(required=False)
+    check26 = forms.BooleanField(required=False)
+    check27 = forms.BooleanField(required=False)
+    check28 = forms.BooleanField(required=False)
+    check29 = forms.BooleanField(required=False)
+    check30 = forms.BooleanField(required=False)
+    check31 = forms.BooleanField(required=False)
+    check32 = forms.BooleanField(required=False)
+    check33 = forms.BooleanField(required=False)
+    check34 = forms.BooleanField(required=False)
+    check35 = forms.BooleanField(required=False)
+    check36 = forms.BooleanField(required=False)
+    check37 = forms.BooleanField(required=False)
+    check38 = forms.BooleanField(required=False)
+    check39 = forms.BooleanField(required=False)
+    check40 = forms.BooleanField(required=False)
+    check41 = forms.BooleanField(required=False)
+    check42 = forms.BooleanField(required=False)
+
+    def save(self, patient):
+        for i in range(42):
+            slot_object = WeeklyTimeSlot.objects.get(slot_id=int(i+1))
+            check_str = "check" + str(i+1)
+            slot_object.patient.add(patient) if self.cleaned_data.get(
+                check_str) else slot_object.patient.remove(patient)
+        return patient
 
 
 class UpdatePasswordForm(forms.Form):
