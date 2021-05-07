@@ -16,6 +16,7 @@ urlpatterns = [
     ),
     path("login/", views.login_request, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    path("admin_profile/", views.admin_profile, name="admin_profile"),
     path("provider_profile/", views.provider_profile, name="provider_profile"),
     path("patient_profile/", views.patient_profile, name="patient_profile"),
     path("patient_edit_profile/", views.patient_edit_profile, name="patient_edit_profile"),
