@@ -25,26 +25,73 @@
               </div>
             </div>
             <div class="faq-a">
-                <table class="center">
+                <table class="center" cellpadding="2" cellspacing="2" border="1" id="offered_app_table">
+                    <caption>Track Your Appointment Offers</caption>
                     <tr>
                         <th style="text-align:center">AppointmentID</th>
-                        <th style="text-align:center">Expire Time</th>
                         <th style="text-align:center">Status</th>
-                        <th style="text-align:center">Time</th>
+                        <th style="text-align:center">Expire Time</th>
+                        <th style="text-align:center">Appointment Time</th>
                         <th style="text-align:center">Provider</th>
-                        <th style="text-align:center">Your Action</th>
+<!--                        <th style="text-align:center">Your Action</th>-->
                     </tr>
-                {% for offer in offer_list %}
-                    <tr>
-                        <td style="text-align:center">{{ offer.appointment_id }}</td>
-                        <td style="text-align:center">{{ offer.expire_time }}</td>
-                        <td style="text-align:center">{{ offer.status }}</td>
-                        <td style="text-align:center">{{ offer.appointment.appointment_time }}</td>
-                        <td style="text-align:center">{{ offer.appointment.provider.name }}</td>
-                        <td style="text-align:center">  <form><input type = "Submit" /></form></td>
-                   </tr>
-                {% endfor %}
+                    <script>
+                    var offer_list = {{ offer_list | safe}};
+                    var offered_appointment = {{ appointment_list | safe}};
+                    console.log(offer_list);
+                    console.log(offered_appointment);
+                    var table = document.getElementById("offered_app_table");
+
+                    for(var i=0; i<Object.keys(offer_list).length; i++){
+                        var tr = document.createElement('tr');
+                        var curr_dict1 = offer_list[i];
+                        // console.log(curr_dict1);
+                        for(var j=0; j<5; j++){
+                            // if (i == Object.keys(offer_list).length-1  && j == 4) {
+                            //     break
+                            // } else {
+                                var td = document.createElement('td');
+                                td.style="text-align:center";
+                                for(var k=0; k<Object.keys(offered_appointment).length; k++){
+                                    var curr_dict2 = offered_appointment[k];
+                                    // console.log(curr_dict2);
+                                    if(curr_dict1["appointment_id"]==curr_dict2["appointment_id"]){
+                                        if(j==0){
+                                            td.innerHTML = curr_dict1["appointment_id"];
+                                        }
+                                        if(j==1){
+                                            td.innerHTML = curr_dict1["status"];
+                                        }
+                                        if(j==2){
+                                            td.innerHTML = curr_dict1["expire_time"];
+                                        }
+                                        if(j==3){
+                                            td.innerHTML = curr_dict2["appointment_time"];
+                                        }
+                                        if(j==4){
+                                            td.innerHTML = curr_dict2["provider_id"];
+                                        }
+                                        tr.appendChild(td)
+                                    }
+                                // }
+                            }
+                        }
+                        table.appendChild(tr);
+
+                    }
+                </script>
+<!--                {% for offer in offer_list %}-->
+<!--                    <tr>-->
+<!--                        <td style="text-align:center">{{ offer.appointment_id }}</td>-->
+<!--                        <td style="text-align:center">{{ offer.expire_time }}</td>-->
+<!--                        <td style="text-align:center">{{ offer.status }}</td>-->
+<!--                        <td style="text-align:center">{{ offer.appointment.appointment_time }}</td>-->
+<!--                        <td style="text-align:center">{{ offer.appointment.provider.name }}</td>-->
+<!--                        <td style="text-align:center"> </td>-->
+<!--                    </tr>-->
+<!--                {% endfor %}-->
                 </table>
+
             </div>
         </div>
         <div class="faq" id="edit_distance_pref">
@@ -400,9 +447,6 @@
                 <script>
                     var all_time_slots = {{ all_time_slots_info | safe}};
                     var saved_slots = {{ saved_slots | safe }}
-                    function get_slot_info(time_slot){
-                        console.log(temp_dict.slot_id);
-                    }
                     // console.log(saved_slots);
                     // console.log(typeof saved_slots);
                     function ConvertWeekdayToString(temp_dict){
@@ -434,7 +478,7 @@
                                     // slot_id_input.type = "text";
                                     col.innerHTML = temp_dict.slot_id;
                                     // col.innerHTML.value = temp_dict.slot_id;
-                                    console.log(i)
+                                    // console.log(i)
                                     var saved_slots_list = []
                                     for(var k=0; k<Object.keys(saved_slots).length; k++){
                                         // console.log(saved_slots[k]["slot_id"])
@@ -478,14 +522,88 @@
               </div>
             </div>
             <div class="faq-a" >
-                <form method="POST" enctype="multipart/form-data">
-                        {%  csrf_token %}
-                        {{ u_form }}
-                        {{ p_form }}
-                       <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Update</button>
-                </div>
-            </form>
+                <form class="form-validate" method="post" id="ProviderUpdateProfileForm" name="ProviderUpdateProfileForm" action="{% url 'patient_profile' %}">
+                    {% csrf_token %}
+                    <div class="collapse">
+                        <div class="row mt-4">
+                            <div class="form-group col-12">
+                                <label class="form-label" for="email">Account Email</label>
+                                <input class="form-control" type="email" name="email" id="email" >
+                            </div>
+                            <div class="form-group col-12">
+                                <label class="form-label" for="phone_number">Phone Number</label>
+                                <input class="form-control" type="text" name="phone_number" id="phone_number" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="address_line1">Address</label>
+                                <input class="form-control" type="text" name="address_line1" id="address_line1" >
+                                <br>
+                                <label class="form-label" for="address_line2"></label>
+                                <input class="form-control" type="text" name="address_line2" id="address_line2" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="city">City</label>
+                                <input class="form-control" type="text" name="city" id="city" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="state">State</label>
+                                <input class="form-control" type="text" name="state" id="state" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="country">Country</label>
+                                <input class="form-control" type="text" name="country" id="country">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="zipcode">Zip Code</label>
+                                <input class="form-control" type="text" name="zipcode" id="zipcode">
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+                <script>
+                    document.getElementById("email").value = "{{ email | safe}}";
+                    document.getElementById("phone_number").value = "{{ phone_number | safe}}";
+                    document.getElementById("address_line1").value = "{{ address_line1 | safe}}";
+                    document.getElementById("address_line2").value = "{{ address_line2 | safe}}";
+                    document.getElementById("city").value = "{{ city | safe}}";
+                    document.getElementById("country").value = "{{ country | safe}}";
+                    document.getElementById("zipcode").value = "{{ zipcode | safe}}";
+                </script>
+            </div>
+      </div>
+        <div class="faq" id="update_password">
+            <div class="row faq-q">
+              <div class="columns col-10">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right"></i>
+                    Update Password
+                  </a>
+                </strong>
+              </div>
+            </div>
+            <div class="faq-a" >
+                <form class="form-validate" method="post" id="update_password_form" name="update_password_form" action="{% url 'update_password' %}">
+                    {% csrf_token %}
+                    <div class="collapse" id="updatePassword">
+                        <div class="row mt-4" id="sub_update_password_form">
+                            <div class="form-group col-12">
+                                <label class="form-label" for="password_current">Current Password</label>
+                                <input class="form-control" type="password" name="password_current" id="password_current" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="password_new">New Password</label>
+                                <input class="form-control" type="password" name="password_new" id="password_new" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="password_confirm">Confirm Password</label>
+                                <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary">Submit</button>
+                    </div>
+                </form>
             </div>
       </div>
     </div>
@@ -626,6 +744,3 @@ body {
 </html>
 
 
-
-
-                    </table>

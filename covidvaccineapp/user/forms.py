@@ -85,26 +85,49 @@ class ProviderSignUpForm(UserCreationForm):
         return user
 
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField
-
-    class Meta:
-        model = User
-        fields = ['username', 'email']
-
-
-class PatientUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Patient
-        fields = ['phone_number', 'address_line1', 'address_line2', 'city', 'state',
-                  'country', 'zipcode']
-
-
+# class UserUpdateForm(forms.ModelForm):
+#     email = forms.EmailField
+#
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email']
+#
+#
+# class PatientUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = Patient
+#         fields = ['phone_number', 'address_line1', 'address_line2', 'city', 'state',
+#                   'country', 'zipcode']
+#
+#
 class PatientUpdatePreferenceForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['max_distance_preferences']
 
+
+class PatientUpdateProfileForm(forms.Form):
+    email = forms.CharField(required=False, label="email")
+    phone_number = forms.CharField(required=False, label="phone_number")
+    address_line1 = forms.CharField(required=False, label="address_line1")
+    address_line2 = forms.CharField(required=False, label="address_line2")
+    city = forms.CharField(required=False, label="city")
+    state = forms.CharField(required=False, label="state")
+    country = forms.CharField(required=False, label="country")
+    zipcode = forms.CharField(required=False, label="zipcode")
+
+    @transaction.atomic
+    def save(self, user):
+        user.email = self.cleaned_data.get("email")
+        user.phone_number = self.cleaned_data.get("phone_number")
+        user.patient.address_line1 = self.cleaned_data.get("address_line1")
+        user.patient.address_line2 = self.cleaned_data.get("address_line2")
+        user.patient.city = self.cleaned_data.get("city")
+        user.patient.state = self.cleaned_data.get("state")
+        user.patient.country = self.cleaned_data.get("country")
+        user.patient.zipcode = self.cleaned_data.get("zipcode")
+        user.patient.save()
+        return user
 
 class PatientUpdateTimePrefForm(forms.Form):
     check1 = forms.BooleanField(required=False, label='check1')
