@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>This is home page</h1>
+
 
 
     <div class="main">
@@ -15,7 +16,7 @@
                   <!-- start: slide -->
                   <li>
                     <div class="columns col-7 feature-image">
-                      <img src="images/apple-devices.png" alt="Professional interface" />
+                      <img src="{% static 'images/1.jpeg' %}" >
                     </div>
                     <div class="columns col-5 feature-desc">
                       <h2>Got Vaccinated! Why?</h2>
