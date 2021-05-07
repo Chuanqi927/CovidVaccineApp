@@ -1,7 +1,9 @@
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms import model_to_dict
+
 from datetime import datetime
 import json
 from django.contrib.auth import login, logout, authenticate
@@ -149,6 +151,8 @@ def patient_respond(request, offer_app_id, status):
         messages.error(request, "You are not authorized")
         return redirect("home")
     target_offer.status = status
+    if target_offer.expire_time is None:
+        target_offer.expire_time = datetime.now() + relativedelta(years=+10)
     target_offer.save()
     messages.success(request, "Your response has been saved")
     return redirect("patient_profile")
