@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
 <h1>This is home page</h1>
+
 
 
     <div class="main">
@@ -24,7 +27,7 @@
                     </ul>
                     {% endif %}
                     <div class="columns col-7 feature-image">
-                      <img src="images/apple-devices.png" alt="Professional interface" />
+                      <img src="{% static 'images/1.jpeg' %}" >
                     </div>
                     <div class="columns col-5 feature-desc">
                       <h2>Got Vaccinated! Why?</h2>

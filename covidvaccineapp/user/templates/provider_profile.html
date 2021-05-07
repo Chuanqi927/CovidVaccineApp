@@ -47,19 +47,57 @@
                         <div class="col-sm-9">
 
                             <div class="row pt-4">
-                                <p>You have uploaded &nbsp&nbsp {{ all_uploaded_appointments.count }} &nbsp&nbsp appointments</p>
+                                <p>You have uploaded &nbsp&nbsp {{ all_uploaded_appointments.count }} &nbsp&nbsp  different appointments</p>
                             </div>
                             <div class="row pt-4">
                                 <table width="800px">
+                                    <caption>Accepted Appointment Status </caption>
+                                    <tr>
+<!--                                        <th>Appointment Time</th>-->
+	                                    <th>Appointment ID</th>
+	                                    <th>Appointment Time</th>
+                                        <th>Sent to Patient</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    {% for offer_appointment in all_offer_appointments %}
+    <!--                                    {% csrf_token %}-->
+	                                    {% if offer_appointment.status == "accepted"%}
+                                        <tr>
+<!--                                            <td style="text-align:center">-->
+<!--                                                {{ offer_appointment.patient_id }}-->
+<!--                                            </td>-->
+	                                        <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.appointment_id }}
+                                            </td>
+	                                        <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.appointment.appointment_time }}
+                                            </td>
+                                            <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.patient_id }}
+                                            </td>
+                                            <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.status }}
+                                            </td>
+                                        </tr>
+	                                    {% endif %}
+                                    {% endfor %}
+                                </table>
+                                <br>
+                                <br>
+                                <table width="800px">
                                     <caption>All Uploaded Appointments Information</caption>
                                     <tr>
+	                                    <th>Appointment ID</th>
                                         <th>Appointment Time</th>
-                                        <th>Appointment Available Number</th>
-                                        <th>Appointment Remaining Number</th>
+                                        <th>Available Number</th>
+                                        <th>Remaining Number</th>
                                     </tr>
                                     {% for appointment in all_uploaded_appointments %}
     <!--                                    {% csrf_token %}-->
                                         <tr>
+                                            <td style="text-align:center" width="200px">
+                                                {{ appointment.appointment_id }}
+                                            </td>
                                             <td style="text-align:center" width="200px">
                                                 {{ appointment.appointment_time }}
                                             </td>
@@ -83,19 +121,30 @@
                                     {% endfor %}
                                 </table>
                                 <br>
+
+                                <br>
                                 <table width="800px">
-                                    <caption>Offered Appointment Status </caption>
+                                    <caption>Other Appointment Status </caption>
                                     <tr>
 <!--                                        <th>Appointment Time</th>-->
+	                                    <th>Appointment ID</th>
+	                                    <th>Appointment Time</th>
                                         <th>Sent to Patient</th>
                                         <th>Status</th>
                                     </tr>
                                     {% for offer_appointment in all_offer_appointments %}
     <!--                                    {% csrf_token %}-->
+	                                    {% if offer_appointment.status != "accepted"%}
                                         <tr>
 <!--                                            <td style="text-align:center">-->
 <!--                                                {{ offer_appointment.patient_id }}-->
 <!--                                            </td>-->
+	                                        <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.appointment_id }}
+                                            </td>
+	                                        <td style="text-align:center" width="400px">
+                                                {{ offer_appointment.appointment.appointment_time }}
+                                            </td>
                                             <td style="text-align:center" width="400px">
                                                 {{ offer_appointment.patient_id }}
                                             </td>
@@ -103,6 +152,7 @@
                                                 {{ offer_appointment.status }}
                                             </td>
                                         </tr>
+	                                    {% endif %}
                                     {% endfor %}
                                 </table>
                             </div>
