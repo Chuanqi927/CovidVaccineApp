@@ -107,8 +107,8 @@ def patient_profile(request):
         offer_list[i]["expire_time"] = offer_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
     for i in range(len(offered_appointment)):
         offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
-    print(offer_list)
-    print(offered_appointment)
+    # print(offer_list)
+    # print(offered_appointment)
 
     all_time_slots_info = get_time_slot_info()
     # print(all_time_slots_info)
