@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <div class="columns col-12 faqs left-pad">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="faq" id="check_offer_appointment">
+            <div class="row faq-q" >
+              <div class="columns col-10 left-pad">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right">
+                    </i>
+                    Assign Patient Priority
+                  </a>
+                </strong>
+              </div>
+            </div>
+            <div class="faq-a">
+                <table class="center" cellpadding="2" cellspacing="2" border="1" id="assign_priority_table">
+                    <caption>Assign Patient To Priority Groups</caption>
+                    <tr>
+                        <th style="text-align:center">Patient ID</th>
+                        <th style="text-align:center">Patient Username</th>
+                        <th style="text-align:center">Patient First Name</th>
+                        <th style="text-align:center">Patient Last Name</th>
+                        <th style="text-align:center">Patient Date of Birth</th>
+                    </tr>
+                    <script>
+                    var patient_list = {{ patient_list | safe}};
+                    var user_list = {{ user_list | safe}};
+                    console.log(patient_list);
+                    console.log(user_list);
+                    var table = document.getElementById("assign_priority_table");
+
+                    for(var i=0; i<Object.keys(patient_list).length; i++){
+                        var tr = document.createElement('tr');
+                        var curr_dict1 = patient_list[i];
+                        // console.log(curr_dict1);
+                        for(var j=0; j<5; j++){
+                            var td = document.createElement('td');
+                            td.style="text-align:center";
+                            for(var k=0; k<Object.keys(user_list).length; k++) {
+                                var curr_dict2 = user_list[k];
+                                // console.log(curr_dict2);
+                                if(curr_dict1["user_id"]==curr_dict2["id"]){
+                                    if(j==0){
+                                      td.innerHTML = curr_dict1["user_id"];
+                                    }
+                                    if(j==1){
+                                        td.innerHTML = curr_dict2["username"];
+                                    }
+                                    if(j==2){
+                                        td.innerHTML = curr_dict2["first_name"];
+                                    }
+                                    if(j==3){
+                                        td.innerHTML = curr_dict2["last_name"];
+                                    }
+                                    if(j==4){
+                                        td.innerHTML = curr_dict1["dob"];
+                                    }
+                                    tr.appendChild(td)
+                                }
+                            }
+                        }
+                        table.appendChild(tr);
+                    }
+                </script>
+                </table>
+            </div>
+        </div>
+        <div class="faq" id="run_offer_algo">
+            <div class="row faq-q" >
+              <div class="columns col-10 left-pad">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right">
+                    </i>
+                    Assign Available Appointments
+                  </a>
+                </strong>
+              </div>
+            </div>
+            <div class="faq-a">
+                <br>
+                <button>Start</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
+<script>
+  var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src='//www.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+{% endblock content %}

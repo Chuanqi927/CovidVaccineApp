@@ -14,10 +14,7 @@ from .forms import PatientSignUpForm, ProviderSignUpForm, PatientUpdateProfileFo
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot
-from appointment.models import OfferAppointment, Appointment
-
 from appointment.models import Appointment, OfferAppointment
-
 from staticInfo.utils import get_time_slot_info
 
 
@@ -61,6 +58,8 @@ def login_request(request):
                     return redirect("patient_profile")
                 elif user.is_provider:
                     return redirect("provider_profile")
+                elif user.is_superuser:
+                    return redirect("admin_profile")
                 else:
                     return redirect("home")
         messages.error(request, "Invalid username or password")
@@ -72,53 +71,6 @@ def login_request(request):
 def logout_view(request):
     logout(request)
     return redirect("home")
-
-
-def patient_edit_profile(request):
-    # if request.method == 'POST':
-    #     u_form = UserUpdateForm(request.POST, instance=request.user)
-    #     p_form = PatientUpdateForm(request.POST, instance=request.user.patient)
-    #     if u_form.is_valid() and p_form.is_valid():
-    #         u_form.save()
-    #         p_form.save()
-    #         messages.success(request, f"Your information has been updated!")
-    #         return redirect("patient_profile")
-    # else:
-    #     u_form = UserUpdateForm(instance=request.user)
-    #     p_form = PatientUpdateForm(instance=request.user.patient)
-    #
-    # first_name = request.user.first_name
-    # last_name = request.user.last_name
-    # username = request.user.username
-    #
-    # u_form = UserUpdateForm(instance=request.user)
-    # p_form = PatientUpdateForm(instance=request.user)
-    # context2 = {
-    #     "first_name": first_name,
-    #     "last_name": last_name,
-    #     "username": username,
-    #     "u_form": u_form,
-    #     "p_form": p_form,
-    # }
-
-    return render(request, "patient_edit_profile.html")
-
-
-def test(request):
-    a_list = list(Appointment.objects.prefetch_related('provider'))
-    # offer_list = list(OfferAppointment.objects.filter(patient_id=41))
-    offer = OfferAppointment.objects.filter(patient_id=41)
-    appointment = offer.appointment
-    provider = appointment.provider
-    list_para = {
-        "a_list": a_list,
-        "offer_list": list(offer),
-        "appointment_list": list(appointment),
-        "provider_list": list(provider),
-
-    }
-
-    return render(request, "test.html", context=list_para)
 
 
 def patient_profile(request):
@@ -187,28 +139,6 @@ def patient_profile(request):
     return render(request, "patient_profile.html", context)
 
 
-def patient_edit_preference(request):
-    # if request.method == 'POST':
-    #     pp_form = PatientUpdatePreferenceForm(request.POST, instance=request.user.patient)
-    #     if pp_form.is_valid():
-    #         pp_form.save()
-    #         messages.success(request, f"Your preference has been updated!")
-    #         return redirect("patient_profile")
-    # else:
-    #     pp_form = PatientUpdatePreferenceForm(instance=request.user.patient)
-
-    first_name = request.user.first_name
-    last_name = request.user.last_name
-    username = request.user.username
-    contextpp = {
-        "first_name": first_name,
-        "last_name": last_name,
-        "username": username,
-
-    }
-    return render(request, "patient_edit_preference.html", contextpp)
-
-
 def patient_edit_timepref(request):
     if request.method == "POST":
         form = PatientUpdateTimePrefForm(data=request.POST)
@@ -269,6 +199,46 @@ def update_password(request):
         return response
 
 
+def admin_profile(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not admin")
+    patients = Patient.objects.all().values()
+    patient_list = list(patients)
+    patient_user_list = list(User.objects.filter(is_patient=True).values())
+    for i in range(len(patient_list)):
+        patient_list[i]["dob"] = patient_list[i]["dob"].strftime("%Y-%m-%d")
+        if patient_list[i]["longitude"] is None or patient_list[i]["latitude"] is None:
+            # assign 6 MetroTech Center's longitude and latitude
+            patient_list[i]["longitude"] = "40.693710"
+            patient_list[i]["latitude"] = "-73.987221"
+    for i in range(len(patient_user_list)):
+        patient_user_list[i]["last_login"] = patient_user_list[i]["last_login"].strftime("%Y-%m-%d %H:%M:%S")
+        patient_user_list[i]["date_joined"] = patient_user_list[i]["date_joined"].strftime("%Y-%m-%d")
+        patient_user_list[i]["is_superuser"] = "false"
+        patient_user_list[i]["is_staff"] = "false"
+        patient_user_list[i]["is_active"] = "true"
+        patient_user_list[i]["is_patient"] = "true"
+        patient_user_list[i]["is_provider"] = "false"
+    print(patient_list)
+    print(patient_user_list)
+    parameter_dict = {
+        "patient_list": patient_list,
+        "user_list": patient_user_list,
+    }
+    return render(request, "admin_profile.html", context=parameter_dict)
+
+
+
+
+
+
+
+
+
+
+
 def provider_edit_profile(request):
     if request.method == 'POST':
         form = ProviderUpdateProfileForm(data=request.POST)
@@ -286,4 +256,72 @@ def provider_edit_profile(request):
         return response
 
 
+
+def patient_edit_preference(request):
+    # if request.method == 'POST':
+    #     pp_form = PatientUpdatePreferenceForm(request.POST, instance=request.user.patient)
+    #     if pp_form.is_valid():
+    #         pp_form.save()
+    #         messages.success(request, f"Your preference has been updated!")
+    #         return redirect("patient_profile")
+    # else:
+    #     pp_form = PatientUpdatePreferenceForm(instance=request.user.patient)
+
+    first_name = request.user.first_name
+    last_name = request.user.last_name
+    username = request.user.username
+    contextpp = {
+        "first_name": first_name,
+        "last_name": last_name,
+        "username": username,
+
+    }
+    return render(request, "patient_edit_preference.html", contextpp)
+
+
+def patient_edit_profile(request):
+    # if request.method == 'POST':
+    #     u_form = UserUpdateForm(request.POST, instance=request.user)
+    #     p_form = PatientUpdateForm(request.POST, instance=request.user.patient)
+    #     if u_form.is_valid() and p_form.is_valid():
+    #         u_form.save()
+    #         p_form.save()
+    #         messages.success(request, f"Your information has been updated!")
+    #         return redirect("patient_profile")
+    # else:
+    #     u_form = UserUpdateForm(instance=request.user)
+    #     p_form = PatientUpdateForm(instance=request.user.patient)
+    #
+    # first_name = request.user.first_name
+    # last_name = request.user.last_name
+    # username = request.user.username
+    #
+    # u_form = UserUpdateForm(instance=request.user)
+    # p_form = PatientUpdateForm(instance=request.user)
+    # context2 = {
+    #     "first_name": first_name,
+    #     "last_name": last_name,
+    #     "username": username,
+    #     "u_form": u_form,
+    #     "p_form": p_form,
+    # }
+
+    return render(request, "patient_edit_profile.html")
+
+
+def test(request):
+    a_list = list(Appointment.objects.prefetch_related('provider'))
+    # offer_list = list(OfferAppointment.objects.filter(patient_id=41))
+    offer = OfferAppointment.objects.filter(patient_id=41)
+    appointment = offer.appointment
+    provider = appointment.provider
+    list_para = {
+        "a_list": a_list,
+        "offer_list": list(offer),
+        "appointment_list": list(appointment),
+        "provider_list": list(provider),
+
+    }
+
+    return render(request, "test.html", context=list_para)
 
