@@ -16,6 +16,7 @@ from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot, PriorityGroup
 from appointment.models import Appointment, OfferAppointment
 from staticInfo.utils import get_time_slot_info
+from appointment.utils import check_expiration
 
 
 def sign_up(request):
@@ -95,6 +96,7 @@ def patient_profile(request):
                 messages.success(request, f"Your preference has been updated!")
                 return redirect("patient_profile")
 
+    check_expiration()
     offer = OfferAppointment.objects.filter(patient_id=request.user.id)
     # print(offer)
     offered_appointment = list(Appointment.objects.filter(appointment_id__in=offer.values_list('appointment')).values())
@@ -105,8 +107,8 @@ def patient_profile(request):
         offer_list[i]["expire_time"] = offer_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
     for i in range(len(offered_appointment)):
         offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
-    # print(offer_list)
-    # print(offered_appointment)
+    print(offer_list)
+    print(offered_appointment)
 
     all_time_slots_info = get_time_slot_info()
     # print(all_time_slots_info)
@@ -136,6 +138,20 @@ def patient_profile(request):
         "pp_form": pp_form,
     }
     return render(request, "patient_profile.html", context)
+
+
+def patient_respond(request, offer_app_id, status):
+    if not request.user.is_patient or not Patient.objects.filter(user_id=int(request.user.id)).exists():
+        messages.error(request, "You are not authorized")
+        return redirect("home")
+    target_offer = OfferAppointment.objects.get(id=offer_app_id)
+    if target_offer.patient_id != request.user.id:
+        messages.error(request, "You are not authorized")
+        return redirect("home")
+    target_offer.status = status
+    target_offer.save()
+    messages.success(request, "Your response has been saved")
+    return redirect("patient_profile")
 
 
 def patient_edit_timepref(request):
@@ -231,6 +247,9 @@ def admin_profile(request):
 
 
 def assign_priority(request, patient_id, group_number):
+    if not request.user.is_superuser:
+        messages.error(request, "You are not admin")
+        return redirect("home")
     if Patient.objects.filter(user_id=int(patient_id)).exists():
         target = Patient.objects.get(user_id=patient_id)
         # print(target)

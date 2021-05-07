@@ -2,7 +2,8 @@
 {% load widget_tweaks %}
 
 {% block content %}
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
 <div class="row">
     <div class="columns col-12 faqs left-pad">
         {% if messages %}
@@ -33,48 +34,107 @@
                         <th style="text-align:center">Expire Time</th>
                         <th style="text-align:center">Appointment Time</th>
                         <th style="text-align:center">Provider</th>
-<!--                        <th style="text-align:center">Your Action</th>-->
+                        <th style="text-align:center">Accept</th>
+                        <th style="text-align:center">Decline</th>
+                        <th style="text-align:center">Cancel</th>
                     </tr>
                     <script>
                     var offer_list = {{ offer_list | safe}};
                     var offered_appointment = {{ appointment_list | safe}};
-                    console.log(offer_list);
-                    console.log(offered_appointment);
+                    // console.log(offer_list);
+                    // console.log(offered_appointment);
                     var table = document.getElementById("offered_app_table");
+                    var offer_app_id_list = [];
 
+                    function SubmitResponse(offer_app_id, response_code) {
+                        var response_status;
+                        if(response_code==1){
+                            response_status = "accepted";
+                        }else if(response_code==2){
+                            response_status = "declined";
+                        }else if(response_code==3){
+                            response_status = "cancelled";
+                        }
+                        console.log(offer_app_id)
+                        console.log(response_status)
+                        window.location.href = "../patient_respond/" + offer_app_id + "/" + response_status + "/";
+                    }
                     for(var i=0; i<Object.keys(offer_list).length; i++){
                         var tr = document.createElement('tr');
                         var curr_dict1 = offer_list[i];
                         // console.log(curr_dict1);
-                        for(var j=0; j<5; j++){
-                            // if (i == Object.keys(offer_list).length-1  && j == 4) {
-                            //     break
-                            // } else {
-                                var td = document.createElement('td');
-                                td.style="text-align:center";
-                                for(var k=0; k<Object.keys(offered_appointment).length; k++){
-                                    var curr_dict2 = offered_appointment[k];
-                                    // console.log(curr_dict2);
-                                    if(curr_dict1["appointment_id"]==curr_dict2["appointment_id"]){
-                                        if(j==0){
-                                            td.innerHTML = curr_dict1["appointment_id"];
-                                        }
-                                        if(j==1){
-                                            td.innerHTML = curr_dict1["status"];
-                                        }
-                                        if(j==2){
-                                            td.innerHTML = curr_dict1["expire_time"];
-                                        }
-                                        if(j==3){
-                                            td.innerHTML = curr_dict2["appointment_time"];
-                                        }
-                                        if(j==4){
-                                            td.innerHTML = curr_dict2["provider_id"];
-                                        }
-                                        tr.appendChild(td)
+                        offer_app_id_list.push(curr_dict1["id"]);
+                        for(var j=0; j<8; j++){
+                            var td = document.createElement('td');
+                            td.style="text-align:center";
+                            for(var k=0; k<Object.keys(offered_appointment).length; k++){
+                                var curr_dict2 = offered_appointment[k];
+                                // console.log(curr_dict2);
+                                if(curr_dict1["appointment_id"]==curr_dict2["appointment_id"]){
+                                    if(j==0){
+                                        td.innerHTML = curr_dict1["appointment_id"];
                                     }
-                                // }
+                                    if(j==1){
+                                        td.innerHTML = curr_dict1["status"];
+                                    }
+                                    if(j==2){
+                                        td.innerHTML = curr_dict1["expire_time"];
+                                    }
+                                    if(j==3){
+                                        td.innerHTML = curr_dict2["appointment_time"];
+                                    }
+                                    if(j==4){
+                                        td.innerHTML = curr_dict2["provider_id"];
+                                    }
+                                    if(j==5){
+                                        // accept button
+                                        if(curr_dict1["status"]== "pending" ){
+                                            var button = document.createElement('input');
+                                            button.type = "button";
+                                            button.name = "respond_button";
+                                            button.className = "btn";
+                                            button.onclick = function(){
+                                                SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 1)
+                                            }
+                                            td.appendChild(button);
+                                        }else{
+                                            td.innerHTML = "";
+                                        }
+                                    }
+                                    if(j==6){
+                                        // decline button
+                                        if(curr_dict1["status"]== "pending" ){
+                                            var button = document.createElement('input');
+                                            button.type = "button";
+                                            button.name = "respond_button";
+                                            button.className = "btn";
+                                            button.onclick = function(){
+                                                SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 2)
+                                            }
+                                            td.appendChild(button);
+                                        }else{
+                                            td.innerHTML = "";
+                                        }
+                                    }
+                                    if(j==7){
+                                        // cancel button
+                                        if(curr_dict1["status"]== "accepted" ){
+                                            var button = document.createElement('input');
+                                            button.type = "button";
+                                            button.name = "respond_button";
+                                            button.className = "btn";
+                                            button.onclick = function(){
+                                                SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 3)
+                                            }
+                                            td.appendChild(button);
+                                        }else{
+                                            td.innerHTML = "";
+                                        }
+                                    }
+
+                                }
                             }
+                                tr.appendChild(td)
                         }
                         table.appendChild(tr);
 
@@ -610,11 +670,6 @@
 </div>
 
 
-
-
-{#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>#}
-
-
 <script>
   var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
   (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
@@ -717,28 +772,6 @@ body {
   </div>
 </div>
 
-{#       <div class="container">#}
-{#        <div class="row">#}
-{#            <div class="col1 s6">#}
-{#                <form method="POST" enctype="multipart/form-data">#}
-{#          {% csrf_token %}#}
-{#          <fieldset class="form-group">#}
-{#              <legend class="border-bottom mb-4">Update Info</legend>#}
-{#              {{ u_form.as_p}}#}
-{#              {{ p_form.as_p }}#}
-{#          </fieldset>#}
-{#          <div class="form-group">#}
-{#              <button class="btn btn-outline-info" type="submit">Update</button>#}
-{#          </div>#}
-{#      </form>#}
-{#            </div>#}
-{##}
-{#        </div>#}
-
-
-
-<h3>{{ first_name }} {{ last_name }}</h3>
-<p>Hover over the "Dropdown" link to see the dropdown menu.</p>
 
 </body>
 </html>
