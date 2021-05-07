@@ -13,7 +13,7 @@ from .forms import PatientSignUpForm, ProviderSignUpForm, PatientUpdateProfileFo
     PatientUpdatePreferenceForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
-from staticInfo.models import WeeklyTimeSlot
+from staticInfo.models import WeeklyTimeSlot, PriorityGroup
 from appointment.models import Appointment, OfferAppointment
 from staticInfo.utils import get_time_slot_info
 
@@ -104,10 +104,9 @@ def patient_profile(request):
             offer_list[i]["expire_time"] = datetime.now()
         offer_list[i]["expire_time"] = offer_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
     for i in range(len(offered_appointment)):
-        offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime(
-            "%Y-%m-%d %H:%M:%S")
-    print(offer_list)
-    print(offered_appointment)
+        offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
+    # print(offer_list)
+    # print(offered_appointment)
 
     all_time_slots_info = get_time_slot_info()
     # print(all_time_slots_info)
@@ -159,7 +158,7 @@ def provider_profile(request):
     # print(all_uploaded_appointments.count())
 
     all_offer_appointments = OfferAppointment.objects.filter(appointment_id__in=all_uploaded_appointments)
-    print(all_offer_appointments)
+    # print(all_offer_appointments)
     parameter_dict = {
         "email": user.email,
         "name": provider.name,
@@ -221,16 +220,26 @@ def admin_profile(request):
         patient_user_list[i]["is_active"] = "true"
         patient_user_list[i]["is_patient"] = "true"
         patient_user_list[i]["is_provider"] = "false"
-    print(patient_list)
-    print(patient_user_list)
+    # print(patient_list)
+    # print(patient_user_list)
     parameter_dict = {
         "patient_list": patient_list,
         "user_list": patient_user_list,
+        "curr_user": request.user,
     }
     return render(request, "admin_profile.html", context=parameter_dict)
 
 
-
+def assign_priority(request, patient_id, group_number):
+    if Patient.objects.filter(user_id=int(patient_id)).exists():
+        target = Patient.objects.get(user_id=patient_id)
+        # print(target)
+        group = PriorityGroup.objects.get(group_number=group_number)
+        # print(group)
+        target.group_number = group
+        target.save()
+        messages.success(request, "Priority Assigned Successfully!")
+    return redirect("admin_profile")
 
 
 
@@ -254,7 +263,6 @@ def provider_edit_profile(request):
         response = HttpResponse(json.dumps(error_context), content_type="application/json")
         response.status_code = 400
         return response
-
 
 
 def patient_edit_preference(request):
@@ -324,4 +332,3 @@ def test(request):
     }
 
     return render(request, "test.html", context=list_para)
-
