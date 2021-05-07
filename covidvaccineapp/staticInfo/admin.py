@@ -10,3 +10,4 @@ from .models import (
 
 admin.site.register(WeeklyTimeSlot)
 admin.site.register(PriorityGroup)
+

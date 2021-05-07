@@ -104,7 +104,8 @@ def patient_profile(request):
             offer_list[i]["expire_time"] = datetime.now()
         offer_list[i]["expire_time"] = offer_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
     for i in range(len(offered_appointment)):
-        offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
+        offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime(
+            "%Y-%m-%d %H:%M:%S")
     print(offer_list)
     print(offered_appointment)
 
@@ -255,6 +256,7 @@ def provider_edit_profile(request):
         return response
 
 
+
 def patient_edit_preference(request):
     # if request.method == 'POST':
     #     pp_form = PatientUpdatePreferenceForm(request.POST, instance=request.user.patient)
@@ -322,3 +324,4 @@ def test(request):
     }
 
     return render(request, "test.html", context=list_para)
+
