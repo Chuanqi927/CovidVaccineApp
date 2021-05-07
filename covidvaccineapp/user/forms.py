@@ -129,6 +129,7 @@ class PatientUpdateProfileForm(forms.Form):
         user.patient.save()
         return user
 
+
 class PatientUpdateTimePrefForm(forms.Form):
     check1 = forms.BooleanField(required=False, label='check1')
     check2 = forms.BooleanField(required=False)
