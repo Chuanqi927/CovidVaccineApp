@@ -3,124 +3,50 @@
 {% load widget_tweaks %}
 
 {% block content %}
-     <div class="container">
-        <h1 class="hero-heading mb-0">Account Profile</h1>
-        <p class="text-muted mb-5">Manage your Account Details and Settings here.</p>
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="text-block">
-                    <h3 class="mb-4">Credentials</h3>
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <h5>Update Password</h5>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <form class="form-validate" method="post" id="update_password_form" name="update_password_form" action="{% url 'update_password' %}">
-                            {% csrf_token %}
-                            <div class="collapse" id="updatePassword">
-                                <div class="row mt-4" id="sub_update_password_form">
-                                    <div id="error_update_pass">
-                                    </div>
-                                    <div class="form-group col-12">
-                                        <label class="form-label" for="password_current">Current Password</label>
-                                        <input class="form-control" type="password" name="password_current" id="password_current" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="password_new">New Password</label>
-                                        <input class="form-control" type="password" name="password_new" id="password_new" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="password_confirm">Confirm Password</label>
-                                        <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>
-                                    </div>
-                                </div>
-                                <button class="btn btn-outline-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="text-block">
-                    <h3 class="mb-4">Account Information</h3>
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <h5>Update Profile</h5>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <form class="form-validate" method="post" id="ProviderUpdateProfileForm" name="ProviderUpdateProfileForm" action="{% url 'provider_edit_profile' %}">
-                            {% csrf_token %}
-                            <div class="collapse">
-                                <div class="row mt-4">
-                                    <div class="form-group col-12">
-                                        <label class="form-label" for="email">Account Email</label>
-                                        <input class="form-control" type="email" name="email" id="email" >
-                                    </div>
-                                    <div class="form-group col-12">
-                                        <label class="form-label" for="name">Provider Name</label>
-                                        <input class="form-control" type="text" name="name" id="name" >
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="providerType">Provider Type</label>
-                                        <input class="form-control" type="text" name="providerType" id="providerType" >
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="address_line1">Address</label>
-                                        <input class="form-control" type="text" name="address_line1" id="address_line1" >
-                                        <br>
-                                        <label class="form-label" for="address_line2"></label>
-                                        <input class="form-control" type="text" name="address_line2" id="address_line2" >
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="city">City</label>
-                                        <input class="form-control" type="text" name="city" id="city" >
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="state">State</label>
-                                        <input class="form-control" type="text" name="state" id="state">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="country">Country</label>
-                                        <input class="form-control" type="text" name="country" id="country">
-                                    </div>
+	<div class="row">
+    <div class="columns col-12 faqs left-pad">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="faq" id="upload">
+	        <div class="row faq-q">
+		        <div class="columns col-10">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right"></i>
+                    Upload appointments
+                  </a>
+                </strong>
+              </div>
+	        </div>
+	        <div class="faq-a">
+		         <button class="btn btn-outline-primary" onclick="location.href='../../appointment/upload'">Upload</button>
 
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="zipcode">Zip Code</label>
-                                        <input class="form-control" type="text" name="zipcode" id="zipcode">
-                                    </div>
-                                </div>
-                                <button class="btn btn-outline-primary" type="submit">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <script>
-                    document.getElementById("email").value = "{{ email | safe}}";
-                    document.getElementById("name").value = "{{ name | safe}}";
-                    document.getElementById("providerType").value = "{{ providerType | safe}}";
-                    document.getElementById("address_line1").value = "{{ address_line1 | safe}}";
-                    document.getElementById("address_line2").value = "{{ address_line2 | safe}}";
-                    document.getElementById("city").value = "{{ city | safe}}";
-                    document.getElementById("state").value = "{{ state | safe}}";
-                    document.getElementById("country").value = "{{ country | safe}}";
-                    document.getElementById("zipcode").value = "{{ zipcode | safe}}";
-                </script>
-                <div class="text-block">
+	        </div>
+        </div>
+
+        <div class="faq" id="upload">
+	        <div class="row faq-q">
+		        <div class="columns col-10">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right"></i>
+                    Check Appointment History Statistics
+                  </a>
+                </strong>
+              </div>
+	        </div>
+	        <div class="faq-a">
+		        <div class="text-block">
                     <div class="row mb-3">
                         <div class="col-sm-9">
-                            <h3>Upload Available Appointments</h3>
+
                             <div class="row pt-4">
-                                <button class="btn btn-outline-primary" onclick="location.href='../../appointment/upload'">Upload</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-block">
-                    <div class="row mb-3">
-                        <div class="col-sm-9">
-                            <h3>Appointment History Statistics</h3>
-                            <div class="row pt-4">
-                                <h4>You have uploaded &nbsp&nbsp {{ all_uploaded_appointments.count }} &nbsp&nbsp appointments</h4>
+                                <p>You have uploaded &nbsp&nbsp {{ all_uploaded_appointments.count }} &nbsp&nbsp appointments</p>
                             </div>
                             <div class="row pt-4">
                                 <table width="800px">
@@ -182,8 +108,353 @@
                         </div>
                     </div>
                 </div>
-            </div>
+	        </div>
         </div>
+
+        <div class="faq" id="update_password">
+            <div class="row faq-q">
+              <div class="columns col-10">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right"></i>
+                    Update Password
+                  </a>
+                </strong>
+              </div>
+            </div>
+            <div class="faq-a" >
+                <form class="form-validate" method="post" id="update_password_form" name="update_password_form" action="{% url 'update_password' %}">
+                    {% csrf_token %}
+                    <div class="collapse" id="updatePassword">
+                        <div class="row mt-4" id="sub_update_password_form">
+                            <div class="form-group col-12">
+                                <label class="form-label" for="password_current">Current Password</label>
+                                <input class="form-control" type="password" name="password_current" id="password_current" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="password_new">New Password</label>
+                                <input class="form-control" type="password" name="password_new" id="password_new" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="password_confirm">Confirm Password</label>
+                                <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+      </div>
+
+
+
+        <div class="faq" id="edit_profile">
+            <div class="row faq-q">
+              <div class="columns col-10">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right"></i>
+                    Edit Profile
+                  </a>
+                </strong>
+              </div>
+            </div>
+            <div class="faq-a" >
+                <form class="form-validate" method="post" id="ProviderUpdateProfileForm" name="ProviderUpdateProfileForm" action="{% url 'provider_edit_profile' %}">
+                    {% csrf_token %}
+                    <div class="collapse">
+                        <div class="row mt-4">
+                            <div class="form-group col-12">
+                                <label class="form-label" for="email">Account Email</label>
+                                <input class="form-control" type="email" name="email" id="email" >
+                            </div>
+	                        <div class="form-group col-12">
+                                <label class="form-label" for="name">Provider Name</label>
+                                <input class="form-control" type="text" name="name" id="name" >
+                            </div>
+	                        <div class="form-group col-md-6">
+		                        <label class="form-label" for="providerType">Provider Type</label>
+		                        <input class="form-control" type="text" name="providerType" id="providerType" >
+	                        </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="address_line1">Address</label>
+                                <input class="form-control" type="text" name="address_line1" id="address_line1" >
+                                <br>
+                                <label class="form-label" for="address_line2"></label>
+                                <input class="form-control" type="text" name="address_line2" id="address_line2" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="city">City</label>
+                                <input class="form-control" type="text" name="city" id="city" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="state">State</label>
+                                <input class="form-control" type="text" name="state" id="state" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="country">Country</label>
+                                <input class="form-control" type="text" name="country" id="country">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="zipcode">Zip Code</label>
+                                <input class="form-control" type="text" name="zipcode" id="zipcode">
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+                <script>
+                    document.getElementById("email").value = "{{ email | safe}}";
+                    document.getElementById("name").value = "{{ name | safe}}";
+                    document.getElementById("providerType").value = "{{ providerType | safe}}";
+                    document.getElementById("address_line1").value = "{{ address_line1 | safe}}";
+                    document.getElementById("address_line2").value = "{{ address_line2 | safe}}";
+                    document.getElementById("city").value = "{{ city | safe}}";
+                    document.getElementById("state").value = "{{ state | safe}}";
+                    document.getElementById("country").value = "{{ country | safe}}";
+                    document.getElementById("zipcode").value = "{{ zipcode | safe}}";
+                </script>
+            </div>
+      </div>
+        <div class="faq" id="update_password">
+            <div class="row faq-q">
+              <div class="columns col-10">
+                <strong>
+                  <a href="#">
+                    <i class="fa fa-chevron-right"></i>
+                    Update Password
+                  </a>
+                </strong>
+              </div>
+            </div>
+            <div class="faq-a" >
+                <form class="form-validate" method="post" id="update_password_form" name="update_password_form" action="{% url 'update_password' %}">
+                    {% csrf_token %}
+                    <div class="collapse" id="updatePassword">
+                        <div class="row mt-4" id="sub_update_password_form">
+                            <div class="form-group col-12">
+                                <label class="form-label" for="password_current">Current Password</label>
+                                <input class="form-control" type="password" name="password_current" id="password_current" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="password_new">New Password</label>
+                                <input class="form-control" type="password" name="password_new" id="password_new" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="password_confirm">Confirm Password</label>
+                                <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+      </div>
+
     </div>
+
+	</div>
+
+
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
+
+
+    <script>
+      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src='//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
+
+
+
+
+{#{% endblock content %}#}
+
+
+
+
+{##}
+{#     <div class="container">#}
+{#        <div class="row">#}
+{#            <div class="col-lg-7">#}
+{#                <div class="text-block">#}
+{#                    <h3 class="mb-4">Credentials</h3>#}
+{#                    <div class="row">#}
+{#                        <div class="col-sm-8">#}
+{#                            <h5>Update Password</h5>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-8">#}
+{#                        <form class="form-validate" method="post" id="update_password_form" name="update_password_form" action="{% url 'update_password' %}">#}
+{#                            {% csrf_token %}#}
+{#                            <div class="collapse" id="updatePassword">#}
+{#                                <div class="row mt-4" id="sub_update_password_form">#}
+{#                                    <div id="error_update_pass">#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-12">#}
+{#                                        <label class="form-label" for="password_current">Current Password</label>#}
+{#                                        <input class="form-control" type="password" name="password_current" id="password_current" required>#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="password_new">New Password</label>#}
+{#                                        <input class="form-control" type="password" name="password_new" id="password_new" required>#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="password_confirm">Confirm Password</label>#}
+{#                                        <input class="form-control" type="password" name="password_confirm" id="password_confirm" required>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <button class="btn btn-outline-primary">Submit</button>#}
+{#                            </div>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="text-block">#}
+{#                    <h3 class="mb-4">Account Information</h3>#}
+{#                    <div class="row">#}
+{#                        <div class="col-sm-8">#}
+{#                            <h5>Update Profile</h5>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-8">#}
+{#                        <form class="form-validate" method="post" id="ProviderUpdateProfileForm" name="ProviderUpdateProfileForm" action="{% url 'provider_edit_profile' %}">#}
+{#                            {% csrf_token %}#}
+{#                            <div class="collapse">#}
+{#                                <div class="row mt-4">#}
+{#                                    <div class="form-group col-12">#}
+{#                                        <label class="form-label" for="email">Account Email</label>#}
+{#                                        <input class="form-control" type="email" name="email" id="email" >#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-12">#}
+{#                                        <label class="form-label" for="name">Provider Name</label>#}
+{#                                        <input class="form-control" type="text" name="name" id="name" >#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="providerType">Provider Type</label>#}
+{#                                        <input class="form-control" type="text" name="providerType" id="providerType" >#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="address_line1">Address</label>#}
+{#                                        <input class="form-control" type="text" name="address_line1" id="address_line1" >#}
+{#                                        <br>#}
+{#                                        <label class="form-label" for="address_line2"></label>#}
+{#                                        <input class="form-control" type="text" name="address_line2" id="address_line2" >#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="city">City</label>#}
+{#                                        <input class="form-control" type="text" name="city" id="city" >#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="state">State</label>#}
+{#                                        <input class="form-control" type="text" name="state" id="state">#}
+{#                                    </div>#}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="country">Country</label>#}
+{#                                        <input class="form-control" type="text" name="country" id="country">#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-group col-md-6">#}
+{#                                        <label class="form-label" for="zipcode">Zip Code</label>#}
+{#                                        <input class="form-control" type="text" name="zipcode" id="zipcode">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <button class="btn btn-outline-primary" type="submit">Submit</button>#}
+{#                            </div>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <script>#}
+{#                    document.getElementById("email").value = "{{ email | safe}}";#}
+{#                    document.getElementById("name").value = "{{ name | safe}}";#}
+{#                    document.getElementById("providerType").value = "{{ providerType | safe}}";#}
+{#                    document.getElementById("address_line1").value = "{{ address_line1 | safe}}";#}
+{#                    document.getElementById("address_line2").value = "{{ address_line2 | safe}}";#}
+{#                    document.getElementById("city").value = "{{ city | safe}}";#}
+{#                    document.getElementById("state").value = "{{ state | safe}}";#}
+{#                    document.getElementById("country").value = "{{ country | safe}}";#}
+{#                    document.getElementById("zipcode").value = "{{ zipcode | safe}}";#}
+{#                </script>#}
+{#                <div class="text-block">#}
+{#                    <div class="row mb-3">#}
+{#                        <div class="col-sm-9">#}
+{#                            <h3>Upload Available Appointments</h3>#}
+{#                            <div class="row pt-4">#}
+{#                                <button class="btn btn-outline-primary" onclick="location.href='../../appointment/upload'">Upload</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="text-block">#}
+{#                    <div class="row mb-3">#}
+{#                        <div class="col-sm-9">#}
+{#                            <h3>Appointment History Statistics</h3>#}
+{#                            <div class="row pt-4">#}
+{#                                <h4>You have uploaded &nbsp&nbsp {{ all_uploaded_appointments.count }} &nbsp&nbsp appointments</h4>#}
+{#                            </div>#}
+{#                            <div class="row pt-4">#}
+{#                                <table width="800px">#}
+{#                                    <caption>All Uploaded Appointments Information</caption>#}
+{#                                    <tr>#}
+{#                                        <th>Appointment Time</th>#}
+{#                                        <th>Appointment Available Number</th>#}
+{#                                        <th>Appointment Remaining Number</th>#}
+{#                                    </tr>#}
+{#                                    {% for appointment in all_uploaded_appointments %}#}
+{#    <!--                                    {% csrf_token %}-->#}
+{#                                        <tr>#}
+{#                                            <td style="text-align:center" width="200px">#}
+{#                                                {{ appointment.appointment_time }}#}
+{#                                            </td>#}
+{#                                            <td style="text-align:center" width="200px">#}
+{#                                                {{ appointment.available_number }}#}
+{#                                            </td>#}
+{#                                            <td style="text-align:center" width="200px">#}
+{#                                                {{ appointment.remaining_number }}#}
+{#                                            </td>#}
+{#                                        </tr>#}
+{#<!--                                        <ul class="list-group">-->#}
+{#<!--                                            <li id="{{ appointment.id }}" class="list-group-item">-->#}
+{#<!--    &lt;!&ndash;                                            <form name="saved_pref_delete" class="saved_res_remove" onsubmit="return false;" category="{{ pref.category }}" method="POST">&ndash;&gt;-->#}
+{#<!--                                                    {{ appointment.id }}&nbsp&nbsp &nbsp&nbsp {{ appointment.available_number }}&nbsp&nbsp {{ appointment.remaining_number }}-->#}
+{#<!--    &lt;!&ndash;                                                <button type="submit" class="close" aria-label="Close" data-toggle="tooltip" data-placement="top" data-original-title="Remove from Preference">&ndash;&gt;-->#}
+{#<!--    &lt;!&ndash;                                                    <span aria-hidden="true">&times;</span>&ndash;&gt;-->#}
+{#<!--    &lt;!&ndash;                                                </button>&ndash;&gt;-->#}
+{#<!--    &lt;!&ndash;                                            </form>&ndash;&gt;-->#}
+{#<!--                                            </li>-->#}
+{#<!--                                        </ul>-->#}
+{#                                    {% endfor %}#}
+{#                                </table>#}
+{#                                <br>#}
+{#                                <table width="800px">#}
+{#                                    <caption>Offered Appointment Status </caption>#}
+{#                                    <tr>#}
+{#<!--                                        <th>Appointment Time</th>-->#}
+{#                                        <th>Sent to Patient</th>#}
+{#                                        <th>Status</th>#}
+{#                                    </tr>#}
+{#                                    {% for offer_appointment in all_offer_appointments %}#}
+{#    <!--                                    {% csrf_token %}-->#}
+{#                                        <tr>#}
+{#<!--                                            <td style="text-align:center">-->#}
+{#<!--                                                {{ offer_appointment.patient_id }}-->#}
+{#<!--                                            </td>-->#}
+{#                                            <td style="text-align:center" width="400px">#}
+{#                                                {{ offer_appointment.patient_id }}#}
+{#                                            </td>#}
+{#                                            <td style="text-align:center" width="400px">#}
+{#                                                {{ offer_appointment.status }}#}
+{#                                            </td>#}
+{#                                        </tr>#}
+{#                                    {% endfor %}#}
+{#                                </table>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
 {% endblock content %}

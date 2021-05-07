@@ -340,6 +340,9 @@ A simple 12 column grid
   display: table;
   position: relative;
   width: 100%; }
+.row .columns_center {
+  text-align: center;
+}
   .row .columns {
     float: left;
     width: 100%;
