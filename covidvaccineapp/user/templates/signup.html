@@ -2,30 +2,54 @@
 
 {% block content %}
 
-          <section>
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6 mx-auto">
-              <div class="card">
-                <div class="card-header text-black">
-                  <h2>Registration</h2>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                       <div class="col-lg-6">
-                        <a type="button" class="btn btn-block" href="{% url 'patient_signup' %}">I am a patient</a>
-                       </div>
-                       <div class="col-lg-6">
-                        <a type="button" class="btn btn-block" href="{% url 'provider_register' %}">I am a provider</a>
-                       </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+	<div class="row">
+		<div class="columns_center col-12">
+			<div class="columns col-6">
+				 <p><a href="{% url 'patient_signup' %}" class="btn">I am a patient</a></p>
+			</div>
+		</div>
+	<br>
+	<br>
+	</div>
+	<div class="row">
+		<div class="columns_center col-12">
+			<div class="columns col-6">
+				 <p><a href="{% url 'provider_register' %}" class="btn">I am a provider</a></p>
+			</div>
+
+		</div>
+	<br>
+	<br>
+	</div>
+{#	<a type="button" class="btn btn-block" href="{% url 'patient_signup' %}">I am a patient</a>#}
+{#	<a type="button" class="btn btn-block" href="{% url 'provider_register' %}">I am a provider</a>#}
+{##}
+{#	</div>#}
+{##}
+{#          <section>#}
+{#        <div class="container">#}
+{#          <div class="row">#}
+{#            <div class="col-md-6 mx-auto">#}
+{#              <div class="card">#}
+{#                <div class="card-header text-black">#}
+{#                  <h2>Registration</h2>#}
+{#                </div>#}
+{#                <div class="card-body">#}
+{#                    <div class="row">#}
+{#                       <div class="col-lg-6">#}
+{#                        <a type="button" class="btn btn-block" href="{% url 'patient_signup' %}">I am a patient</a>#}
+{#                       </div>#}
+{#                       <div class="col-lg-6">#}
+{#                        <a type="button" class="btn btn-block" href="{% url 'provider_register' %}">I am a provider</a>#}
+{#                       </div>#}
+{#                    </div>#}
+{#                  </form>#}
+{#                </div>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </section>#}
 
 
 

@@ -10,9 +10,10 @@
             <nav class="main-nav">
               <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="#">Reviews</a></li>
-                <li><a href="#">Contact</a></li>
+
                   <li><a href="#">News</a></li>
+                    <li><a href="https://www.google.com/search?q=how+do+you+feel+after+second+covid+vaccine&rlz=1C5CHFA_enUS916US916&oq=how+do+you+feel+after+&aqs=chrome.2.69i57j0j0i20i263j0l7.9051j0j9&sourceid=chrome&ie=UTF-8">Reviews</a></li>
+	              <li><a href="#">Contact</a></li>
 
                   {% if user.is_authenticated%}
                      {% if user.is_provider %}
