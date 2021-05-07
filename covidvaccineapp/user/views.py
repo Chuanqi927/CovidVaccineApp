@@ -151,8 +151,6 @@ def patient_respond(request, offer_app_id, status):
         messages.error(request, "You are not authorized")
         return redirect("home")
     target_offer.status = status
-    if target_offer.expire_time is None:
-        target_offer.expire_time = datetime.now() + relativedelta(years=+10)
     target_offer.save()
     messages.success(request, "Your response has been saved")
     return redirect("patient_profile")
