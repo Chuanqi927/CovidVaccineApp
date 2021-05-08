@@ -2,8 +2,10 @@
 {% load widget_tweaks %}
 
 {% block content %}
+<div style="margin-left: 150px; margin-right: 200px">
+<br/>
         <section>
-        <div class="container">
+
           <div class="row">
             <div class="col-md-6 mx-auto">
               <div class="card">
@@ -21,6 +23,7 @@
                                       <span style="color:red">{{ error }}</span>
                                     {% endfor %}
                          {% endfor %}
+                    <br/>
                              <input type="submit" value="Register" class="btn btn-block btn-primary">
                            </div>
                     </form>
@@ -28,9 +31,12 @@
                     </div>
                 </div>
               </div>
-            </div>
-        </div>
+
+
       </section>
+<br>
+<br>
+</div>
 
 {% endblock content %}
 

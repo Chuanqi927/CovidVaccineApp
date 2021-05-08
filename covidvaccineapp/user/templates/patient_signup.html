@@ -2,13 +2,16 @@
 {% load widget_tweaks %}
 
 {% block content %}
-        <section>
-        <div class="container">
-          <div class="row">
+
+<div style="margin-left: 150px; margin-right: 200px">
+<br/>
+	<section>
+
+        <div class="row">
             <div class="col-md-6 mx-auto">
               <div class="card">
                 <div class="card-header text-black">
-                  <h2>Patient Register</h2>
+                  <h2>Patient  SignUp</h2>
                 </div>
                 <div class="card-body">
                     <form action="{% url 'patient_signup' %}" method="POST" novalidate>
@@ -22,16 +25,20 @@
                                       <span style="color:red">{{ error }}</span>
                                     {% endfor %}
                          {% endfor %}
-                             <input type="submit" value="Register" class="btn btn-block btn-grey">
+                    <br/>
+                             <input type="submit" value="Sign Up" class="btn btn-block btn-grey">
                            </div>
                     </form>
                  </div>
                     </div>
                 </div>
-              </div>
-            </div>
-        </div>
-      </section>
+          </div>
+
+
+	</section>
+<br>
+<br/>
+</div>
 
 {% endblock content %}
 

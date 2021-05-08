@@ -1,4 +1,16 @@
-/* 
+
+/*
+------------------------------------------
+Container for all elements
+------------------------------------------
+*/
+.container{
+  margin-left: 100px;
+  margin-right: 200px;
+}
+
+
+/*
 ------------------------------------------
 Natural box-sizing for all elements
 ------------------------------------------
@@ -337,6 +349,7 @@ A simple 12 column grid
 ------------------------------------------
 */
 .row {
+  text-align: center;
   display: table;
   position: relative;
   width: 100%; }
@@ -347,8 +360,11 @@ A simple 12 column grid
     width: 100%;
     padding: 0 15px; }
     .row .columns.col-12 {
+      display:inline-block;
       width: 100%; }
     .row .columns.col-11 {
+      display:inline-block;
+      display:inline-block;
       width: 91.66667%; }
     .row .columns.col-10 {
       width: 83.33333%; }
