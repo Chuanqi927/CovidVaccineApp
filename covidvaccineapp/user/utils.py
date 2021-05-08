@@ -50,18 +50,18 @@ def get_eligible_patients_id():
     # 1. eligible for vaccine
     # 2. have not received vaccine
     # 3. have not expired/canceled/miss for more than 2 times
-    print("-------------------------eligible patients-------------------------")
+    # print("-------------------------eligible patients-------------------------")
     valid_groups = PriorityGroup.objects.filter(
         eligible_date__lte=datetime.now().date())
-    print(list(valid_groups.values()))
+    # print(list(valid_groups.values()))
     patient_in_eligible_group = Patient.objects.filter(group_number__in=valid_groups)
-    print(list(patient_in_eligible_group.values()))
+    # print(list(patient_in_eligible_group.values()))
     patient_eligible_and_not_received_vaccine = patient_in_eligible_group.filter(
         ~Exists(
             OfferAppointment.objects.filter(patient_id__in=patient_in_eligible_group,
                                             status__in=["accepted", "finished"])))
     output = list(patient_eligible_and_not_received_vaccine.values())
-    print(output)
+    # print(output)
 
     for patient_dict in output:
         if OfferAppointment.objects.filter(status__in=["expired", "canceled", "miss"],
@@ -97,7 +97,8 @@ def get_low_priority_patients_id():
                                            patient_id=patient.user_id).count() <= 3:
             patient_eligible_but_bad.exclude(user_id=patient.user_id)
     # print(patient_eligible_but_bad)
-    output = (patients_not_received_vaccine_and_not_eligible | patient_eligible_but_bad).distinct()
+    union_of_two = (patients_not_received_vaccine_and_not_eligible | patient_eligible_but_bad).distinct()
+    output = list(union_of_two.values())
     # print(output)
 
     return output
@@ -170,7 +171,7 @@ def notify(patient_id, appointment_id):
 # number is the maximum number of appointment sent to one patient
 # find the number of matched appointments of each patient, first assign patient with fewest matches (starting from 1)
 def send_invitation(available_app, patient_list, preference_flag, number):
-    print("-------------------------send invitation-------------------------")
+    # print("-------------------------send invitation-------------------------")
     if preference_flag:
         # meaning we are considering the eligible group of patients
         patient_match_count = {}
@@ -190,7 +191,7 @@ def send_invitation(available_app, patient_list, preference_flag, number):
             # patient_match_count = sorted(patient_match_count, key=itemgetter('match_count'))
             patient_match_count[patient_dict["user_id"]] = count
             dict(sorted(patient_match_count.items(), key=lambda item: item[1]))
-            print(patient_match_count)
+            # print(patient_match_count)
 
         # initialize patient_received_offer_count to 0 for each patient
         for patient_dict in patient_list:
@@ -202,7 +203,7 @@ def send_invitation(available_app, patient_list, preference_flag, number):
             # patient_received_offer_count = sorted(patient_received_offer_count, key=itemgetter('received_offer'))
             patient_received_offer_count[patient_dict["user_id"]] = 0
             dict(sorted(patient_received_offer_count.items(), key=lambda item: item[1]))
-            print(patient_received_offer_count)
+            # print(patient_received_offer_count)
 
         # start to sending offers, if have the patient has received offers < number, send
         for appointment_dict in available_app:
@@ -253,5 +254,5 @@ def offer():
     print(low_priority_patients)
 
     send_invitation(available_app, eligible_patients, 1, 3)
-    # available_app = get_available_app()
-    # send_invitation(available_app, low_priority_patients, 0, 3)
+    available_app = get_available_app()
+    send_invitation(available_app, low_priority_patients, 0, 3)
