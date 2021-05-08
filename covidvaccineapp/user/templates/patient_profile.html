@@ -4,7 +4,14 @@
 {% block content %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
-<div class="row">
+<div style="margin-left: 140px; margin-right: 200px">
+<br>
+<h2> Welcome, {{ user.username }}</h2>
+</div>
+<div style="margin-left: 120px; margin-right: 200px">
+
+
+<div class="row" >
     <div class="columns col-12 faqs left-pad">
         {% if messages %}
         <ul class="messages">
@@ -627,6 +634,7 @@
                     document.getElementById("address_line1").value = "{{ address_line1 | safe}}";
                     document.getElementById("address_line2").value = "{{ address_line2 | safe}}";
                     document.getElementById("city").value = "{{ city | safe}}";
+                    document.getElementById("state").value = "{{ state | safe}}";
                     document.getElementById("country").value = "{{ country | safe}}";
                     document.getElementById("zipcode").value = "{{ zipcode | safe}}";
                 </script>
@@ -670,6 +678,13 @@
 </div>
 
 
+<br>
+<br>
+</div>
+
+
+
+
 <script>
   var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
   (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
@@ -679,101 +694,5 @@
 
 {% endblock content %}
 
-
-
-
-
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.navbar {
-  overflow: hidden;
-  background-color: #333;
-}
-
-.navbar a {
-  float: left;
-  font-size: 16px;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.dropdown {
-  float: right;
-  overflow: hidden;
-}
-
-.dropdown .dropbtn {
-  font-size: 16px;
-  border: none;
-  outline: none;
-  color: white;
-  padding: 14px 16px;
-  background-color: inherit;
-  font-family: inherit;
-  margin: 0;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: red;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  float: none;
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-</style>
-</head>
-<body>
-
-<div class="navbar">
-  <a href={% url 'homepage' %}>Home</a>
-  <a href="#news">News</a>
-  <div class="dropdown">
-    <button class="dropbtn">{{ first_name }} {{ last_name }}
-      <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-content">
-      <a href={% url 'patient_edit_profile' %}>Edit Profile</a>
-      <a href={% url 'patient_edit_preference' %}>Edit Preference</a>
-      <a href={% url 'logout' %}>Logout</a>
-    </div>
-  </div>
-</div>
-
-
-</body>
-</html>
 
 
