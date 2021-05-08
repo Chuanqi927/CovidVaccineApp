@@ -174,10 +174,35 @@ def provider_profile(request):
     user = request.user
     provider = Provider.objects.get(user=user)
     all_uploaded_appointments = Appointment.objects.filter(provider=provider)
-    # print(all_uploaded_appointments.count())
-
+    total_upload_count = all_uploaded_appointments.count()
+    # print(all_uploaded_appointments)
+    all_uploaded_appointments_list = list(all_uploaded_appointments.values())
     all_offer_appointments = OfferAppointment.objects.filter(appointment_id__in=all_uploaded_appointments)
     # print(all_offer_appointments)
+    all_offer_appointments_list = list(all_offer_appointments.values())
+    all_accepted_appointments = all_offer_appointments.filter(status="accepted")
+    # print(all_accepted_appointments)
+    all_accepted_appointments_list = list(all_accepted_appointments.values())
+
+    for i in range(len(all_uploaded_appointments_list)):
+        all_uploaded_appointments_list[i]["appointment_time"] = all_uploaded_appointments_list[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
+    for i in range(len(all_offer_appointments_list)):
+        if all_offer_appointments_list[i]["expire_time"] is None:
+            all_offer_appointments_list[i]["expire_time"] = datetime.now()
+        all_offer_appointments_list[i]["expire_time"] = all_offer_appointments_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
+    for i in range(len(all_accepted_appointments_list)):
+        if all_accepted_appointments_list[i]["expire_time"] is None:
+            all_accepted_appointments_list[i]["expire_time"] = datetime.now()
+        all_accepted_appointments_list[i]["expire_time"] = all_accepted_appointments_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
+
+    acceptance = all_offer_appointments.filter(status__in=["accepted", "finished"])
+    acceptance_rate = 100 * float(acceptance.count()) / float(total_upload_count)
+    offer_rate = 100*float(all_offer_appointments.count()) / float(total_upload_count)
+    # print(float(acceptance.count()))
+    # print(float(all_offer_appointments.count()))
+    # print(float(total_upload_count))
+    offer_rate = round(offer_rate, 2)
+    acceptance_rate = round(acceptance_rate, 2)
     parameter_dict = {
         "email": user.email,
         "name": provider.name,
@@ -188,12 +213,32 @@ def provider_profile(request):
         "state": provider.state,
         "country": provider.country,
         "zipcode": provider.zipcode,
-        "all_uploaded_appointments": all_uploaded_appointments,
-        "all_offer_appointments": all_offer_appointments,
-        "user": user
+        "all_uploaded_appointments": all_uploaded_appointments_list,
+        "all_offer_appointments": all_offer_appointments_list,
+        "all_accepted_appointments": all_accepted_appointments_list,
+        "user": user,
+        "total_upload_count": total_upload_count,
+        "offer_rate": offer_rate,
+        "acceptance_rate": acceptance_rate,
     }
 
     return render(request, "provider_profile.html", context=parameter_dict)
+
+
+def provider_respond(request, offer_app_id, status):
+    if not request.user.is_provider or not Provider.objects.filter(user_id=int(request.user.id)).exists():
+        messages.error(request, "You are not authorized")
+        return redirect("home")
+    target_offer = OfferAppointment.objects.get(id=offer_app_id)
+    target_appointment = Appointment.objects.get(appointment_id=target_offer.appointment_id)
+
+    if target_appointment.provider_id != request.user.id:
+        messages.error(request, "You are not authorized")
+        return redirect("home")
+    target_offer.status = status
+    target_offer.save()
+    messages.success(request, "Your response has been saved")
+    return redirect("provider_profile")
 
 
 def update_password(request):

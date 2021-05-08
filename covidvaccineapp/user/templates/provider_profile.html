@@ -11,9 +11,7 @@
 </div>
 <div style="margin-left: 120px; margin-right: 200px">
 
-
-
-	<div class="row">
+<div class="row">
     <div class="columns col-12 faqs left-pad">
         {% if messages %}
         <ul class="messages">
@@ -23,8 +21,8 @@
         </ul>
         {% endif %}
         <div class="faq" id="upload">
-	        <div class="row faq-q">
-		        <div class="columns col-10">
+            <div class="row faq-q">
+                <div class="columns col-10">
                 <strong>
                   <a href="#">
                     <i class="fa fa-chevron-right"></i>
@@ -32,16 +30,16 @@
                   </a>
                 </strong>
               </div>
-	        </div>
-	        <div class="faq-a">
+            </div>
+            <div class="faq-a">
                  <br>
-		         <button class="btn btn-outline-primary" onclick="location.href='../../appointment/upload'">Upload</button>
-	        </div>
+                 <button class="btn btn-outline-primary" onclick="location.href='../../appointment/upload'">Upload</button>
+            </div>
         </div>
 
-        <div class="faq" id="upload">
-	        <div class="row faq-q">
-		        <div class="columns col-10">
+        <div class="faq">
+            <div class="row faq-q">
+                <div class="columns col-10">
                 <strong>
                   <a href="#">
                     <i class="fa fa-chevron-right"></i>
@@ -49,60 +47,127 @@
                   </a>
                 </strong>
               </div>
-	        </div>
-	        <div class="faq-a">
-		        <div class="text-block">
+            </div>
+            <div class="faq-a">
+                <div class="text-block">
                     <div class="row mb-3">
                         <div class="col-sm-9">
-
                             <div class="row pt-4">
-                                <p>You have uploaded &nbsp&nbsp {{ all_uploaded_appointments.count }} &nbsp&nbsp  different appointments</p>
+                                <p>You have uploaded &nbsp&nbsp {{ total_upload_count }} &nbsp&nbsp  different appointments</p>
+                                <br>
+
+                                <p>The acceptance rate is {{acceptance_rate}} %</p>
+                                <p>The percentage indicating how many of the offered appointments from you are accepted/finished</p>
+                                <br>
+                                <p>The offer rate is {{offer_rate}} %</p>
+                                <p>The percentage indicating how many the appointment from you are offered to patients</p>
+                                <br>
                             </div>
                             <div class="row pt-4">
-                                <table width="800px">
-                                    <caption>Accepted Appointment Status </caption>
+                                <table class="center" cellpadding="2" cellspacing="2" border="1" id="respond_accept_table">
+                                    <caption>All Offered Appointment Status</caption>
                                     <tr>
-<!--                                        <th>Appointment Time</th>-->
-	                                    <th>Appointment ID</th>
-	                                    <th>Appointment Time</th>
-                                        <th>Sent to Patient</th>
-                                        <th>Status</th>
+                                        <th style="text-align:center">AppointmentID</th>
+                                        <th style="text-align:center">Appointment Time</th>
+                                        <th style="text-align:center">Sent to Patient</th>
+                                        <th style="text-align:center">Status</th>
+                                        <th style="text-align:center">Finished?</th>
+                                        <th style="text-align:center">Patient Missing?</th>
                                     </tr>
-                                    {% for offer_appointment in all_offer_appointments %}
-    <!--                                    {% csrf_token %}-->
-	                                    {% if offer_appointment.status == "accepted"%}
-                                        <tr>
-<!--                                            <td style="text-align:center">-->
-<!--                                                {{ offer_appointment.patient_id }}-->
-<!--                                            </td>-->
-	                                        <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.appointment_id }}
-                                            </td>
-	                                        <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.appointment.appointment_time }}
-                                            </td>
-                                            <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.patient_id }}
-                                            </td>
-                                            <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.status }}
-                                            </td>
-                                        </tr>
-	                                    {% endif %}
-                                    {% endfor %}
+                                    <script>
+                                        var all_uploaded_appointments = {{ all_uploaded_appointments | safe}};
+                                        var all_offer_appointments = {{ all_offer_appointments | safe}};
+                                        var all_accepted_appointments = {{ all_accepted_appointments | safe}};
+                                        // console.log(all_uploaded_appointments);
+                                        // console.log(all_offer_appointments);
+                                        // console.log(all_accepted_appointments);
+                                        var table = document.getElementById("respond_accept_table");
+                                        var accepted_offer_id_list = [];
+
+                                        function SubmitResponse(offer_app_id, response_code) {
+                                            var response_status;
+                                            if(response_code==1){
+                                                response_status = "finished";
+                                            }else if(response_code==2){
+                                                response_status = "miss";
+                                            }
+                                            console.log(offer_app_id)
+                                            console.log(response_status)
+                                            window.location.href = "../provider_respond/" + offer_app_id + "/" + response_status + "/";
+                                        }
+                                        for(var i=0; i<Object.keys(all_offer_appointments).length; i++){
+                                            var tr = document.createElement('tr');
+                                            var curr_dict1 = all_offer_appointments[i];
+                                            // console.log(curr_dict1);
+                                            accepted_offer_id_list.push(curr_dict1["id"]);
+                                            for(var j=0; j<6; j++){
+                                                var td = document.createElement('td');
+                                                td.style="text-align:center";
+                                                for(var k=0; k<Object.keys(all_uploaded_appointments).length; k++){
+                                                    var curr_dict2 = all_uploaded_appointments[k];
+                                                    // console.log(curr_dict2);
+                                                    if(curr_dict1["appointment_id"]==curr_dict2["appointment_id"]){
+                                                        if(j==0){
+                                                            td.innerHTML = curr_dict1["appointment_id"];
+                                                        }
+                                                        if(j==1){
+                                                            td.innerHTML = curr_dict2["appointment_time"];
+                                                        }
+                                                        if(j==2){
+                                                            td.innerHTML = curr_dict1["patient_id"];
+                                                        }
+                                                        if(j==3){
+                                                            td.innerHTML = curr_dict1["status"];
+                                                        }
+                                                        if(j==4){
+                                                            // finish button
+                                                            if(curr_dict1["status"]== "accepted" ){
+                                                                var button = document.createElement('input');
+                                                                button.type = "button";
+                                                                button.name = "respond_button";
+                                                                button.className = "btn";
+                                                                button.onclick = function(){
+                                                                    SubmitResponse(accepted_offer_id_list[this.parentNode.parentNode.rowIndex-1], 1)
+                                                                }
+                                                                td.appendChild(button);
+                                                            }else{
+                                                                td.innerHTML = "";
+                                                            }
+                                                        }
+                                                        if(j==5){
+                                                            // miss button
+                                                            if(curr_dict1["status"]== "accepted" ){
+                                                                var button = document.createElement('input');
+                                                                button.type = "button";
+                                                                button.name = "respond_button";
+                                                                button.className = "btn";
+                                                                button.onclick = function(){
+                                                                    SubmitResponse(accepted_offer_id_list[this.parentNode.parentNode.rowIndex-1], 2)
+                                                                }
+                                                                td.appendChild(button);
+                                                            }else{
+                                                                td.innerHTML = "";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                    tr.appendChild(td)
+                                            }
+                                            table.appendChild(tr);
+                                        }
+                                    </script>
                                 </table>
                                 <br>
                                 <br>
-                                <table width="800px">
+                                <table class="center" cellpadding="2" cellspacing="2" border="1" >
                                     <caption>All Uploaded Appointments Information</caption>
                                     <tr>
-	                                    <th>Appointment ID</th>
+                                        <th>Appointment ID</th>
                                         <th>Appointment Time</th>
                                         <th>Available Number</th>
                                         <th>Remaining Number</th>
                                     </tr>
                                     {% for appointment in all_uploaded_appointments %}
-    <!--                                    {% csrf_token %}-->
                                         <tr>
                                             <td style="text-align:center" width="200px">
                                                 {{ appointment.appointment_id }}
@@ -117,58 +182,77 @@
                                                 {{ appointment.remaining_number }}
                                             </td>
                                         </tr>
-<!--                                        <ul class="list-group">-->
-<!--                                            <li id="{{ appointment.id }}" class="list-group-item">-->
-<!--    &lt;!&ndash;                                            <form name="saved_pref_delete" class="saved_res_remove" onsubmit="return false;" category="{{ pref.category }}" method="POST">&ndash;&gt;-->
-<!--                                                    {{ appointment.id }}&nbsp&nbsp &nbsp&nbsp {{ appointment.available_number }}&nbsp&nbsp {{ appointment.remaining_number }}-->
-<!--    &lt;!&ndash;                                                <button type="submit" class="close" aria-label="Close" data-toggle="tooltip" data-placement="top" data-original-title="Remove from Preference">&ndash;&gt;-->
-<!--    &lt;!&ndash;                                                    <span aria-hidden="true">&times;</span>&ndash;&gt;-->
-<!--    &lt;!&ndash;                                                </button>&ndash;&gt;-->
-<!--    &lt;!&ndash;                                            </form>&ndash;&gt;-->
-<!--                                            </li>-->
-<!--                                        </ul>-->
                                     {% endfor %}
                                 </table>
                                 <br>
-
                                 <br>
-                                <table width="800px">
-                                    <caption>Other Appointment Status </caption>
-                                    <tr>
+<!--                                <table class="center" cellpadding="2" cellspacing="2" border="1" id="other_offered_app_table">-->
+<!--                                    <caption>Other Offered Appointment Status </caption>-->
+<!--                                    <tr>-->
+<!--                                        <th>Appointment ID</th>-->
 <!--                                        <th>Appointment Time</th>-->
-	                                    <th>Appointment ID</th>
-	                                    <th>Appointment Time</th>
-                                        <th>Sent to Patient</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    {% for offer_appointment in all_offer_appointments %}
-    <!--                                    {% csrf_token %}-->
-	                                    {% if offer_appointment.status != "accepted"%}
-                                        <tr>
-<!--                                            <td style="text-align:center">-->
-<!--                                                {{ offer_appointment.patient_id }}-->
-<!--                                            </td>-->
-	                                        <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.appointment_id }}
-                                            </td>
-	                                        <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.appointment.appointment_time }}
-                                            </td>
-                                            <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.patient_id }}
-                                            </td>
-                                            <td style="text-align:center" width="400px">
-                                                {{ offer_appointment.status }}
-                                            </td>
-                                        </tr>
-	                                    {% endif %}
-                                    {% endfor %}
-                                </table>
+<!--                                        <th>Sent to Patient</th>-->
+<!--                                        <th>Status</th>-->
+<!--                                    </tr>-->
+<!--                                    <script>-->
+<!--                                        var all_uploaded_appointments = {{ all_uploaded_appointments | safe}};-->
+<!--                                        var all_offer_appointments = {{ all_offer_appointments | safe}};-->
+<!--                                        var all_accepted_appointments = {{ all_accepted_appointments | safe}};-->
+<!--                                        var table = document.getElementById("other_offered_app_table");-->
+<!--                                        for(var i=0; i<Object.keys(all_offer_appointments).length; i++){-->
+<!--                                            var curr_dict1 = all_offer_appointments[i];-->
+<!--                                            for(var k=0; k<Object.keys(all_uploaded_appointments).length; k++) {-->
+<!--                                                var curr_dict2 = all_uploaded_appointments[k];-->
+<!--                                                if(curr_dict1["id"]==curr_dict2["appointment_id"] && curr_dict1["status"]!=="accepted") {-->
+<!--                                                    // console.log(curr_dict1["status"]!="accepted")-->
+<!--                                                    var tr = document.createElement('tr');-->
+<!--                                                    for (var j = 0; j < 4; j++) {-->
+<!--                                                        var td = document.createElement('td');-->
+<!--                                                        td.style = "text-align:center";-->
+<!--                                                        if(j==0){-->
+<!--                                                            td.innerHTML = curr_dict1["id"];-->
+<!--                                                        }-->
+<!--                                                        if(j==1){-->
+<!--                                                            td.innerHTML = curr_dict2["appointment_time"];-->
+<!--                                                        }-->
+<!--                                                        if(j==2){-->
+<!--                                                            td.innerHTML = curr_dict1["patient_id"];-->
+<!--                                                        }-->
+<!--                                                        if(j==3){-->
+<!--                                                            td.innerHTML = curr_dict1["status"];-->
+<!--                                                        }-->
+<!--                                                        tr.appendChild(td);-->
+<!--                                                    }-->
+<!--                                                }-->
+<!--                                                table.appendChild(tr);-->
+<!--                                            }-->
+<!--                                        }-->
+
+<!--                                    </script>-->
+<!--&lt;!&ndash;                                    {% for offer_appointment in all_offer_appointments %}&ndash;&gt;-->
+<!--&lt;!&ndash;                                        {% if offer_appointment.status != "accepted"%}&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <td style="text-align:center" width="400px">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                {{ offer_appointment.appointment_id }}&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <td style="text-align:center" width="400px">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                {{ offer_appointment.appointment.appointment_time }}&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <td style="text-align:center" width="400px">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                {{ offer_appointment.patient_id }}&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <td style="text-align:center" width="400px">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                {{ offer_appointment.status }}&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;                                    {% endfor %}&ndash;&gt;-->
+<!--                                </table>-->
                             </div>
                         </div>
                     </div>
                 </div>
-	        </div>
+            </div>
         </div>
 
         <div class="faq" id="update_password">
@@ -206,8 +290,6 @@
             </div>
       </div>
 
-
-
         <div class="faq" id="edit_profile">
             <div class="row faq-q">
               <div class="columns col-10">
@@ -228,14 +310,14 @@
                                 <label class="form-label" for="email">Account Email</label>
                                 <input class="form-control" type="email" name="email" id="email" >
                             </div>
-	                        <div class="form-group col-12">
+                            <div class="form-group col-12">
                                 <label class="form-label" for="name">Provider Name</label>
                                 <input class="form-control" type="text" name="name" id="name" >
                             </div>
-	                        <div class="form-group col-md-6">
-		                        <label class="form-label" for="providerType">Provider Type</label>
-		                        <input class="form-control" type="text" name="providerType" id="providerType" >
-	                        </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="providerType">Provider Type</label>
+                                <input class="form-control" type="text" name="providerType" id="providerType" >
+                            </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="address_line1">Address</label>
                                 <input class="form-control" type="text" name="address_line1" id="address_line1" >
@@ -279,8 +361,7 @@
 
 
     </div>
-
-	</div>
+</div>
 <br>
 </div>
 
@@ -289,12 +370,12 @@
 
 
 
-    <script>
-      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src='//www.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
+<script>
+  var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src='//www.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
 
 
 {% endblock content %}
