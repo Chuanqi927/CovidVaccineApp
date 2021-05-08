@@ -4,6 +4,11 @@
 {% block content %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
+	<div style="margin-left: 140px; margin-right: 200px">
+<br>
+<h2> Welcome, {{ user.username }}</h2>
+</div>
+<div style="margin-left: 120px; margin-right: 200px">
 <div class="row">
     <div class="columns col-12 faqs left-pad">
         {% if messages %}
@@ -174,6 +179,9 @@
             </div>
         </div>
     </div>
+</div>
+
+<br>
 </div>
 
 <script>

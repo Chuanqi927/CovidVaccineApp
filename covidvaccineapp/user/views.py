@@ -138,6 +138,7 @@ def patient_profile(request):
         "all_time_slots_info": all_time_slots_info,
         "saved_slots": saved_slots,
         "pp_form": pp_form,
+        "user": user
     }
     return render(request, "patient_profile.html", context)
 
@@ -189,6 +190,7 @@ def provider_profile(request):
         "zipcode": provider.zipcode,
         "all_uploaded_appointments": all_uploaded_appointments,
         "all_offer_appointments": all_offer_appointments,
+        "user": user
     }
 
     return render(request, "provider_profile.html", context=parameter_dict)
