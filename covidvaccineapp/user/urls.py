@@ -26,6 +26,7 @@ urlpatterns = [
     path("provider_edit_profile/", views.provider_edit_profile, name="provider_edit_profile"),
     path("assign_priority/<patient_id>/<group_number>/", views.assign_priority, name="assign_priority"),
     path("patient_respond/<offer_app_id>/<status>/", views.patient_respond, name="patient_response"),
+    path("start_offer/", views.start_offer, name="start_offer"),
 ]
 
 

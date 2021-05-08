@@ -19,7 +19,7 @@ from staticInfo.models import WeeklyTimeSlot, PriorityGroup
 from appointment.models import Appointment, OfferAppointment
 from staticInfo.utils import get_time_slot_info
 from appointment.utils import check_expiration
-
+from .utils import offer
 
 def sign_up(request):
     return render(request, "signup.html")
@@ -263,7 +263,14 @@ def assign_priority(request, patient_id, group_number):
     return redirect("admin_profile")
 
 
-
+def start_offer(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not admin")
+    offer()
+    messages.success(request, "You have turned on offer algorithm to sending available appointments!")
+    return redirect("admin_profile")
 
 
 
