@@ -227,7 +227,7 @@ def provider_profile(request):
         acceptance_rate = round(acceptance_rate, 2)
 
     patient_user = User.objects.filter(id__in=all_offer_appointments.values_list('patient_id'))
-    print(patient_user)
+    # print(patient_user)
     patient_user_list = list(patient_user.values())
     for i in range(len(patient_user_list)):
         patient_user_list[i]["last_login"] = patient_user_list[i]["last_login"].strftime("%Y-%m-%d %H:%M:%S")

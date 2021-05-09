@@ -259,9 +259,9 @@ def offer():
     eligible_patients = get_eligible_patients_id()
     low_priority_patients = get_low_priority_patients_id()
 
-    print(available_app)
-    print(eligible_patients)
-    print(low_priority_patients)
+    # print(available_app)
+    # print(eligible_patients)
+    # print(low_priority_patients)
 
     send_invitation(available_app, eligible_patients, 1, 3)
     available_app = get_available_app()
