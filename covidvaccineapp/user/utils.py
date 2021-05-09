@@ -232,7 +232,7 @@ def send_invitation(available_app, patient_list, preference_flag, number):
         for patient_dict in patient_list:
             patient_received_offer_count[patient_dict["user_id"]] = 0
             dict(sorted(patient_received_offer_count.items(), key=lambda item: item[1]))
-            print(patient_received_offer_count)
+            # print(patient_received_offer_count)
 
         # start to sending offers, if have the patient has received offers < number, send
         for appointment_dict in available_app:
