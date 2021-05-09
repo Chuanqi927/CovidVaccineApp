@@ -57,13 +57,13 @@ def get_eligible_patients_id():
         eligible_date__lte=datetime.now().date())
     # print(list(valid_groups.values()))
     patient_in_eligible_group = Patient.objects.filter(group_number__in=valid_groups)
-    print(list(patient_in_eligible_group.values()))
+    # print(list(patient_in_eligible_group.values()))
     patient_eligible_and_not_received_vaccine = patient_in_eligible_group.filter(
         ~Exists(
             OfferAppointment.objects.filter(patient_id__in=patient_in_eligible_group,
                                             status__in=["accepted", "finished"])))
     output = list(patient_eligible_and_not_received_vaccine.values())
-    print(output)
+    # print(output)
 
     for patient_dict in output:
         if OfferAppointment.objects.filter(status__in=["expired", "canceled", "miss"],
