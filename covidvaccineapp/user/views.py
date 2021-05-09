@@ -3,7 +3,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms import model_to_dict
-
+from django.core.mail import send_mail
+from covidvaccineapp.settings import EMAIL_HOST_USER
 from datetime import datetime
 import json
 from django.contrib.auth import login, logout, authenticate
@@ -277,6 +278,8 @@ def admin_profile(request):
             # assign 6 MetroTech Center's longitude and latitude
             patient_list[i]["longitude"] = "40.693710"
             patient_list[i]["latitude"] = "-73.987221"
+        patient_list[i]["longitude"] = str(patient_list[i]["longitude"])
+        patient_list[i]["latitude"] = str(patient_list[i]["latitude"])
     for i in range(len(patient_user_list)):
         patient_user_list[i]["last_login"] = patient_user_list[i]["last_login"].strftime("%Y-%m-%d %H:%M:%S")
         patient_user_list[i]["date_joined"] = patient_user_list[i]["date_joined"].strftime("%Y-%m-%d")
@@ -318,9 +321,6 @@ def start_offer(request):
     offer()
     messages.success(request, "You have turned on offer algorithm to sending available appointments!")
     return redirect("admin_profile")
-
-
-
 
 
 def provider_edit_profile(request):

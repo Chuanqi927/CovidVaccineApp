@@ -6,11 +6,13 @@ from django.db.models import Exists
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django import template
 from .models import User, Patient, Provider
 from appointment.models import Appointment, OfferAppointment
 from staticInfo.models import WeeklyTimeSlot, PriorityGroup
+
+from covidvaccineapp.settings import EMAIL_HOST_USER
 
 
 def send_reset_password_email(request, email):
@@ -55,18 +57,17 @@ def get_eligible_patients_id():
         eligible_date__lte=datetime.now().date())
     # print(list(valid_groups.values()))
     patient_in_eligible_group = Patient.objects.filter(group_number__in=valid_groups)
-    # print(list(patient_in_eligible_group.values()))
+    print(list(patient_in_eligible_group.values()))
     patient_eligible_and_not_received_vaccine = patient_in_eligible_group.filter(
         ~Exists(
             OfferAppointment.objects.filter(patient_id__in=patient_in_eligible_group,
                                             status__in=["accepted", "finished"])))
     output = list(patient_eligible_and_not_received_vaccine.values())
-    # print(output)
+    print(output)
 
     for patient_dict in output:
         if OfferAppointment.objects.filter(status__in=["expired", "canceled", "miss"],
-                                           patient_id=patient_dict[
-                                               "user_id"]).count() > 2:
+                                           patient_id=patient_dict["user_id"]).count() > 2:
             output.remove(patient_dict)
     return output
 
@@ -165,6 +166,13 @@ def notify(patient_id, appointment_id):
         appointment.remaining_number -= 1
         appointment.save()
         print("have sent appointment ", appointment_id, " to ", patient_id)
+
+        # send notification
+        user = User.objects.get(id=patient_id)
+        subject = 'Thanks for choosing EasyVaccine'
+        message = 'You have received an offer for COVID vaccine appointment. Login to your account to checkout!'
+        receiver = user.email
+        send_mail(subject, message, EMAIL_HOST_USER, [receiver], fail_silently=False)
 
 
 # preference_flag is a int variable: 1->consider patients' preference; 0->otherwise
