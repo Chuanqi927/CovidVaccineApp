@@ -221,6 +221,19 @@ def provider_profile(request):
     # print(float(total_upload_count))
     offer_rate = round(offer_rate, 2)
     acceptance_rate = round(acceptance_rate, 2)
+
+    patient_user = User.objects.filter(id__in=all_offer_appointments.values_list('patient_id'))
+    print(patient_user)
+    patient_user_list = list(patient_user.values())
+    for i in range(len(patient_user_list)):
+        patient_user_list[i]["last_login"] = patient_user_list[i]["last_login"].strftime("%Y-%m-%d %H:%M:%S")
+        patient_user_list[i]["date_joined"] = patient_user_list[i]["date_joined"].strftime("%Y-%m-%d")
+        patient_user_list[i]["is_superuser"] = "false"
+        patient_user_list[i]["is_staff"] = "false"
+        patient_user_list[i]["is_active"] = "true"
+        patient_user_list[i]["is_patient"] = "true"
+        patient_user_list[i]["is_provider"] = "false"
+
     parameter_dict = {
         "email": user.email,
         "name": provider.name,
@@ -238,6 +251,7 @@ def provider_profile(request):
         "total_upload_count": total_upload_count,
         "offer_rate": offer_rate,
         "acceptance_rate": acceptance_rate,
+        "patient_user_list": patient_user_list,
     }
 
     return render(request, "provider_profile.html", context=parameter_dict)

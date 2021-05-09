@@ -78,9 +78,11 @@
                                         var all_uploaded_appointments = {{ all_uploaded_appointments | safe}};
                                         var all_offer_appointments = {{ all_offer_appointments | safe}};
                                         var all_accepted_appointments = {{ all_accepted_appointments | safe}};
+                                        var patient_user_list = {{patient_user_list | safe}};
                                         // console.log(all_uploaded_appointments);
                                         // console.log(all_offer_appointments);
                                         // console.log(all_accepted_appointments);
+                                        // console.log(patient_user_list);
                                         var table = document.getElementById("respond_accept_table");
                                         var accepted_offer_id_list = [];
 
@@ -107,51 +109,58 @@
                                                     var curr_dict2 = all_uploaded_appointments[k];
                                                     // console.log(curr_dict2);
                                                     if(curr_dict1["appointment_id"]==curr_dict2["appointment_id"]){
-                                                        if(j==0){
-                                                            td.innerHTML = curr_dict1["appointment_id"];
-                                                        }
-                                                        if(j==1){
-                                                            td.innerHTML = curr_dict2["appointment_time"];
-                                                        }
-                                                        if(j==2){
-                                                            td.innerHTML = curr_dict1["patient_id"];
-                                                        }
-                                                        if(j==3){
-                                                            td.innerHTML = curr_dict1["status"];
-                                                        }
-                                                        if(j==4){
-                                                            // finish button
-                                                            if(curr_dict1["status"]== "accepted" ){
-                                                                var button = document.createElement('input');
-                                                                button.type = "button";
-                                                                button.name = "respond_button";
-                                                                button.className = "btn";
-                                                                button.onclick = function(){
-                                                                    SubmitResponse(accepted_offer_id_list[this.parentNode.parentNode.rowIndex-1], 1)
+                                                        for(var m=0; m<Object.keys(patient_user_list).length; m++) {
+                                                            var curr_dict3 = patient_user_list[m];
+                                                            if (curr_dict1["patient_id"] == curr_dict3["id"]) {
+                                                                if (j == 0) {
+                                                                    td.innerHTML = curr_dict1["appointment_id"];
                                                                 }
-                                                                td.appendChild(button);
-                                                            }else{
-                                                                td.innerHTML = "";
+                                                                if (j == 1) {
+                                                                    td.innerHTML = curr_dict2["appointment_time"];
+                                                                }
+                                                                if (j == 2) {
+                                                                    var patient_name = curr_dict3["first_name"].concat(" ").concat(curr_dict3["last_name"])
+                                                                    td.innerHTML = patient_name;
+                                                                }
+                                                                if (j == 3) {
+                                                                    td.innerHTML = curr_dict1["status"];
+                                                                }
+                                                                if (j == 4) {
+                                                                    // finish button
+                                                                    if (curr_dict1["status"] == "accepted") {
+                                                                        var button = document.createElement('input');
+                                                                        button.type = "button";
+                                                                        button.name = "respond_button";
+                                                                        button.className = "btn";
+                                                                        button.onclick = function () {
+                                                                            SubmitResponse(accepted_offer_id_list[this.parentNode.parentNode.rowIndex - 1], 1)
+                                                                        }
+                                                                        td.appendChild(button);
+                                                                    } else {
+                                                                        td.innerHTML = "";
+                                                                    }
+                                                                }
+                                                                if (j == 5) {
+                                                                    // miss button
+                                                                    if (curr_dict1["status"] == "accepted") {
+                                                                        var button = document.createElement('input');
+                                                                        button.type = "button";
+                                                                        button.name = "respond_button";
+                                                                        button.className = "btn";
+                                                                        button.onclick = function () {
+                                                                            SubmitResponse(accepted_offer_id_list[this.parentNode.parentNode.rowIndex - 1], 2)
+                                                                        }
+                                                                        td.appendChild(button);
+                                                                    } else {
+                                                                        td.innerHTML = "";
+                                                                    }
+                                                                }
                                                             }
                                                         }
-                                                        if(j==5){
-                                                            // miss button
-                                                            if(curr_dict1["status"]== "accepted" ){
-                                                                var button = document.createElement('input');
-                                                                button.type = "button";
-                                                                button.name = "respond_button";
-                                                                button.className = "btn";
-                                                                button.onclick = function(){
-                                                                    SubmitResponse(accepted_offer_id_list[this.parentNode.parentNode.rowIndex-1], 2)
-                                                                }
-                                                                td.appendChild(button);
-                                                            }else{
-                                                                td.innerHTML = "";
-                                                            }
-                                                        }
+
                                                     }
                                                 }
-                                                    tr.appendChild(td)
+                                                tr.appendChild(td)
                                             }
                                             table.appendChild(tr);
                                         }
