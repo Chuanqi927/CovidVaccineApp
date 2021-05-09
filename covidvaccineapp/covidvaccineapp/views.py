@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from staticInfo.models import PriorityGroup
+from staticInfo.utils import get_priority_group_info
 
 
 # def homepage(request):
@@ -19,4 +21,11 @@ def index(request):
 
 
 def home(request):
-    return render(request, "home.html")
+
+    all_priority_groups_info = get_priority_group_info()
+    # print(all_priority_groups_info)
+    context = {
+        "all_priority_groups": all_priority_groups_info,
+    }
+
+    return render(request, "home.html", context)

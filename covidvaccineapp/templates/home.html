@@ -100,10 +100,54 @@
             </div>
           </div>
 
+
+	        <div class="row feature">
+            <div class="max-inner">
+              <div class="columns col-7 feature-image">
+                <img src="{% static 'images/why_pic.png' %}">
+              </div>
+              <div class="columns col-5 feature-desc">
+                <h2>Priority and Eligible Date</h2>
+	              <table id="PriorityGroups" style="text-align: center">
+                    <tr>
+                    <th >Group Number</th>
+	                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    <th>Eligible Date</th>
+                    </tr>
+	              </table>
+{#                <p><a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/vaccine-benefits.html?s_cid=10466:should%20i%20get%20the%20covid%20vaccine:sem.ga:p:RG:GM:gen:PTN:FY21" title="Learn more" class="btn">Learn more</a></p>#}
+              </div>
+            </div>
+          </div>
+
+        <script>
+    var all_priority_groups = {{ all_priority_groups | safe}};
+    // console.log(all_priority_groups);
+    // console.log(typeof all_priority_groups);
+    function CreatePriorityGroupTable() {
+        var table = document.getElementById("PriorityGroups");
+        var i;
+        for(i=0; i<all_priority_groups.length; i++) {
+            var temp_dict = all_priority_groups[i];
+            // console.log(temp_dict);
+            // console.log(typeof temp_dict);
+            var row = table.insertRow(i+1);
+            var cell_group_number = row.insertCell(0);
+            var cell_blank = row.insertCell(1);
+            var cell_blank = row.insertCell(2);
+            var cell_eligible_date = row.insertCell(3);
+            cell_group_number.innerHTML = temp_dict.group_number;
+
+            cell_eligible_date.innerHTML = temp_dict.eligible_date;
+        }
+    }
+    CreatePriorityGroupTable()
+</script>
+
         </section>
 
-
-        <section class="reviews-block">
+    <section class="reviews-block" style="background-color: #eaeaea">
           <div class="row">
             <div class="max-inner">
               <div class="columns col-8 col-centered reviews-slider">
@@ -140,8 +184,7 @@
                             </blockquote>
                         </div>
                       </div>
-                    </li>
-                    <!-- end: slide -->
+                    </li><!-- end: slide -->
 
                   </ul>
                 </div>
@@ -150,5 +193,7 @@
             </div>
           </div>
         </section>
+
+
       </div>
 {% endblock content %}

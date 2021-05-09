@@ -18,9 +18,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Patient, Provider
 from staticInfo.models import WeeklyTimeSlot, PriorityGroup
 from appointment.models import Appointment, OfferAppointment
-from staticInfo.utils import get_time_slot_info
 from appointment.utils import check_expiration
 from .utils import offer
+from staticInfo.utils import get_time_slot_info
 
 def sign_up(request):
     return render(request, "signup.html")
