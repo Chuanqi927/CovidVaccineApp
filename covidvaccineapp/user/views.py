@@ -100,18 +100,31 @@ def patient_profile(request):
                 return redirect("patient_profile")
 
     check_expiration()
-    offer = OfferAppointment.objects.filter(patient_id=request.user.id)
-    # print(offer)
-    offered_appointment = list(Appointment.objects.filter(appointment_id__in=offer.values_list('appointment')).values())
-    offer_list = list(offer.values())
+    all_offer = OfferAppointment.objects.filter(patient_id=request.user.id)
+    # print(all_offer)
+    all_appointment = Appointment.objects.filter(appointment_id__in=all_offer.values_list('appointment'))
+    # print(all_appointment)
+    all_provider = Provider.objects.filter(user_id__in=all_appointment.values_list('provider_id'))
+    # print(all_provider)
+    offer_list = list(all_offer.values())
+    offered_appointment_list = list(all_appointment.values())
+    all_provider_list = list(all_provider.values())
+
     for i in range(len(offer_list)):
         if offer_list[i]["expire_time"] is None:
             offer_list[i]["expire_time"] = datetime.now()
         offer_list[i]["expire_time"] = offer_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
-    for i in range(len(offered_appointment)):
-        offered_appointment[i]["appointment_time"] = offered_appointment[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
+    for i in range(len(offered_appointment_list)):
+        offered_appointment_list[i]["appointment_time"] = offered_appointment_list[i]["appointment_time"].strftime("%Y-%m-%d %H:%M:%S")
     # print(offer_list)
     # print(offered_appointment)
+    for i in range(len(all_provider_list)):
+        if all_provider_list[i]["longitude"] is None or all_provider_list[i]["latitude"] is None:
+            # assign 6 MetroTech Center's longitude and latitude
+            all_provider_list[i]["longitude"] = "40.693710"
+            all_provider_list[i]["latitude"] = "-73.987221"
+        all_provider_list[i]["longitude"] = str(all_provider_list[i]["longitude"])
+        all_provider_list[i]["latitude"] = str(all_provider_list[i]["latitude"])
 
     all_time_slots_info = get_time_slot_info()
     # print(all_time_slots_info)
@@ -135,11 +148,12 @@ def patient_profile(request):
         "zipcode": patient.zipcode,
         "username": username,
         "offer_list": offer_list,
-        "appointment_list": offered_appointment,
+        "appointment_list": offered_appointment_list,
         "all_time_slots_info": all_time_slots_info,
         "saved_slots": saved_slots,
         "pp_form": pp_form,
-        "user": user
+        "user": user,
+        "all_provider_list": all_provider_list,
     }
     return render(request, "patient_profile.html", context)
 
@@ -175,7 +189,7 @@ def provider_profile(request):
     user = request.user
     provider = Provider.objects.get(user=user)
     all_uploaded_appointments = Appointment.objects.filter(provider=provider)
-    total_upload_count = all_uploaded_appointments.count()
+    # total_upload_appointment_count = all_uploaded_appointments.count()
     # print(all_uploaded_appointments)
     all_uploaded_appointments_list = list(all_uploaded_appointments.values())
     all_offer_appointments = OfferAppointment.objects.filter(appointment_id__in=all_uploaded_appointments)
@@ -196,6 +210,9 @@ def provider_profile(request):
             all_accepted_appointments_list[i]["expire_time"] = datetime.now()
         all_accepted_appointments_list[i]["expire_time"] = all_accepted_appointments_list[i]["expire_time"].strftime("%Y-%m-%d %H:%M:%S")
 
+    total_upload_count = 0
+    for uploaded_appointment in all_uploaded_appointments:
+        total_upload_count += uploaded_appointment.available_number
     acceptance = all_offer_appointments.filter(status__in=["accepted", "finished"])
     acceptance_rate = 100 * float(acceptance.count()) / float(total_upload_count)
     offer_rate = 100*float(all_offer_appointments.count()) / float(total_upload_count)

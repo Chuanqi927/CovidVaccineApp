@@ -41,6 +41,7 @@
                         <th style="text-align:center">Expire Time</th>
                         <th style="text-align:center">Appointment Time</th>
                         <th style="text-align:center">Provider</th>
+                        <th style="text-align:center">Appointment Address</th>
                         <th style="text-align:center">Accept</th>
                         <th style="text-align:center">Decline</th>
                         <th style="text-align:center">Cancel</th>
@@ -48,8 +49,10 @@
                     <script>
                     var offer_list = {{ offer_list | safe}};
                     var offered_appointment = {{ appointment_list | safe}};
+                    var all_provider_list = {{all_provider_list | safe}};
                     // console.log(offer_list);
                     // console.log(offered_appointment);
+                    console.log(all_provider_list);
                     var table = document.getElementById("offered_app_table");
                     var offer_app_id_list = [];
 
@@ -71,77 +74,88 @@
                         var curr_dict1 = offer_list[i];
                         // console.log(curr_dict1);
                         offer_app_id_list.push(curr_dict1["id"]);
-                        for(var j=0; j<8; j++){
+                        for(var j=0; j<9; j++){
                             var td = document.createElement('td');
                             td.style="text-align:center";
                             for(var k=0; k<Object.keys(offered_appointment).length; k++){
                                 var curr_dict2 = offered_appointment[k];
                                 // console.log(curr_dict2);
                                 if(curr_dict1["appointment_id"]==curr_dict2["appointment_id"]){
-                                    if(j==0){
-                                        td.innerHTML = curr_dict1["appointment_id"];
-                                    }
-                                    if(j==1){
-                                        td.innerHTML = curr_dict1["status"];
-                                    }
-                                    if(j==2){
-                                        td.innerHTML = curr_dict1["expire_time"];
-                                    }
-                                    if(j==3){
-                                        td.innerHTML = curr_dict2["appointment_time"];
-                                    }
-                                    if(j==4){
-                                        td.innerHTML = curr_dict2["provider_id"];
-                                    }
-                                    if(j==5){
-                                        // accept button
-                                        if(curr_dict1["status"]== "pending" ){
-                                            var button = document.createElement('input');
-                                            button.type = "button";
-                                            button.name = "respond_button";
-                                            button.className = "btn";
-                                            button.onclick = function(){
-                                                SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 1)
+                                    for(var m=0; m<Object.keys(all_provider_list).length; m++){
+                                        var curr_dict3 = all_provider_list[m];
+                                        // console.log(curr_dict3);
+                                        if(curr_dict2["provider_id"]==curr_dict3["user_id"]){
+                                            if(j==0){
+                                                td.innerHTML = curr_dict1["appointment_id"];
                                             }
-                                            td.appendChild(button);
-                                        }else{
-                                            td.innerHTML = "";
+                                            if(j==1){
+                                                td.innerHTML = curr_dict1["status"];
+                                            }
+                                            if(j==2){
+                                                td.innerHTML = curr_dict1["expire_time"];
+                                            }
+                                            if(j==3){
+                                                td.innerHTML = curr_dict2["appointment_time"];
+                                            }
+                                            if(j==4){
+                                                td.innerHTML = curr_dict3["name"];
+                                            }
+                                            if(j==5){
+                                                var addr = curr_dict3["address_line1"].concat(" ").concat(curr_dict3["address_line2"]).concat(", ").concat(curr_dict3["city"]).concat(", ").concat(curr_dict3["state"]).concat(", ").concat(curr_dict3["country"]).concat(", ").concat(curr_dict3["zipcode"])
+                                                td.innerHTML = addr;
+                                            }
+                                            if(j==6){
+                                                // accept button
+                                                if(curr_dict1["status"]== "pending" ){
+                                                    var button = document.createElement('input');
+                                                    button.type = "button";
+                                                    button.name = "respond_button";
+                                                    button.className = "btn";
+                                                    button.onclick = function(){
+                                                        SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 1)
+                                                    }
+                                                    td.appendChild(button);
+                                                }else{
+                                                    td.innerHTML = "";
+                                                }
+                                            }
+                                            if(j==7){
+                                                // decline button
+                                                if(curr_dict1["status"]== "pending" ){
+                                                    var button = document.createElement('input');
+                                                    button.type = "button";
+                                                    button.name = "respond_button";
+                                                    button.className = "btn";
+                                                    button.onclick = function(){
+                                                        SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 2)
+                                                    }
+                                                    td.appendChild(button);
+                                                }else{
+                                                    td.innerHTML = "";
+                                                }
+                                            }
+                                            if(j==8){
+                                            // cancel button
+                                            if(curr_dict1["status"]== "accepted" ){
+                                                var button = document.createElement('input');
+                                                button.type = "button";
+                                                button.name = "respond_button";
+                                                button.className = "btn";
+                                                button.onclick = function(){
+                                                    SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 3)
+                                                }
+                                                td.appendChild(button);
+                                            }else{
+                                                td.innerHTML = "";
+                                            }
                                         }
-                                    }
-                                    if(j==6){
-                                        // decline button
-                                        if(curr_dict1["status"]== "pending" ){
-                                            var button = document.createElement('input');
-                                            button.type = "button";
-                                            button.name = "respond_button";
-                                            button.className = "btn";
-                                            button.onclick = function(){
-                                                SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 2)
-                                            }
-                                            td.appendChild(button);
-                                        }else{
-                                            td.innerHTML = "";
-                                        }
-                                    }
-                                    if(j==7){
-                                        // cancel button
-                                        if(curr_dict1["status"]== "accepted" ){
-                                            var button = document.createElement('input');
-                                            button.type = "button";
-                                            button.name = "respond_button";
-                                            button.className = "btn";
-                                            button.onclick = function(){
-                                                SubmitResponse(offer_app_id_list[this.parentNode.parentNode.rowIndex-1], 3)
-                                            }
-                                            td.appendChild(button);
-                                        }else{
-                                            td.innerHTML = "";
                                         }
                                     }
 
+
                                 }
                             }
-                                tr.appendChild(td)
+                            tr.appendChild(td)
                         }
                         table.appendChild(tr);
 
