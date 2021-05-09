@@ -53,6 +53,7 @@
                     <div class="row mb-3">
                         <div class="col-sm-9">
                             <div class="row pt-4">
+                                {% if total_upload_count %}
                                 <p>You have uploaded &nbsp&nbsp {{ total_upload_count }} &nbsp&nbsp  different appointments</p>
                                 <br>
 
@@ -62,6 +63,7 @@
                                 <p>The offer rate is {{offer_rate}} %</p>
                                 <p>The percentage indicating how many the appointment from you are offered to patients</p>
                                 <br>
+                                {% endif %}
                             </div>
                             <div class="row pt-4">
                                 <table class="center" cellpadding="2" cellspacing="2" border="1" id="respond_accept_table">

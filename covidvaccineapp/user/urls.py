@@ -28,7 +28,6 @@ urlpatterns = [
     path("patient_respond/<offer_app_id>/<status>/", views.patient_respond, name="patient_response"),
     path("provider_respond/<offer_app_id>/<status>/", views.provider_respond, name="provider_respond"),
     path("start_offer/", views.start_offer, name="start_offer"),
-    # path("send_email_notification/<patient_id>/", views.send_email_notification, name="send_email_email"),
 ]
 
 

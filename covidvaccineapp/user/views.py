@@ -213,17 +213,21 @@ def provider_profile(request):
     total_upload_count = 0
     for uploaded_appointment in all_uploaded_appointments:
         total_upload_count += uploaded_appointment.available_number
-    acceptance = all_offer_appointments.filter(status__in=["accepted", "finished"])
-    acceptance_rate = 100 * float(acceptance.count()) / float(total_upload_count)
-    offer_rate = 100*float(all_offer_appointments.count()) / float(total_upload_count)
-    # print(float(acceptance.count()))
-    # print(float(all_offer_appointments.count()))
-    # print(float(total_upload_count))
-    offer_rate = round(offer_rate, 2)
-    acceptance_rate = round(acceptance_rate, 2)
+    if total_upload_count == 0:
+        acceptance_rate = 0
+        offer_rate = 0
+    else:
+        acceptance = all_offer_appointments.filter(status__in=["accepted", "finished"])
+        acceptance_rate = 100 * float(acceptance.count()) / float(total_upload_count)
+        offer_rate = 100*float(all_offer_appointments.count()) / float(total_upload_count)
+        # print(float(acceptance.count()))
+        # print(float(all_offer_appointments.count()))
+        # print(float(total_upload_count))
+        offer_rate = round(offer_rate, 2)
+        acceptance_rate = round(acceptance_rate, 2)
 
     patient_user = User.objects.filter(id__in=all_offer_appointments.values_list('patient_id'))
-    print(patient_user)
+    # print(patient_user)
     patient_user_list = list(patient_user.values())
     for i in range(len(patient_user_list)):
         patient_user_list[i]["last_login"] = patient_user_list[i]["last_login"].strftime("%Y-%m-%d %H:%M:%S")

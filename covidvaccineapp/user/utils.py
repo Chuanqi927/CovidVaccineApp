@@ -209,17 +209,19 @@ def send_invitation(available_app, patient_list, preference_flag, number):
             # }
             # patient_received_offer_count.append(curr_patient_received_offer_count_dict)
             # patient_received_offer_count = sorted(patient_received_offer_count, key=itemgetter('received_offer'))
-            patient_received_offer_count[patient_dict["user_id"]] = 1
+            patient_received_offer_count[patient_dict["user_id"]] = 0
             dict(sorted(patient_received_offer_count.items(), key=lambda item: item[1]))
             # print(patient_received_offer_count)
 
         # start to sending offers, if have the patient has received offers < number, send
         for appointment_dict in available_app:
-            for patient_dict in patient_list:
-                if match(appointment_dict["appointment_id"], patient_dict["user_id"]):
-                    if patient_received_offer_count[patient_dict["user_id"]] < number and appointment_dict["remaining_number"] > 0:
-                        notify(patient_dict["user_id"], appointment_dict["appointment_id"])
-                        patient_received_offer_count[patient_dict["user_id"]] += 1
+            for patient_id, count in patient_match_count.items():
+                if count == 0:
+                    continue
+                if match(appointment_dict["appointment_id"], patient_id):
+                    if patient_received_offer_count[patient_id] < number and appointment_dict["remaining_number"] > 0:
+                        notify(patient_id, appointment_dict["appointment_id"])
+                        patient_received_offer_count[patient_id] += 1
                         appointment_dict["remaining_number"] -= 1
 
         # there may be patient who unfortunately have not received any offers
@@ -257,9 +259,9 @@ def offer():
     eligible_patients = get_eligible_patients_id()
     low_priority_patients = get_low_priority_patients_id()
 
-    print(available_app)
-    print(eligible_patients)
-    print(low_priority_patients)
+    # print(available_app)
+    # print(eligible_patients)
+    # print(low_priority_patients)
 
     send_invitation(available_app, eligible_patients, 1, 3)
     available_app = get_available_app()
