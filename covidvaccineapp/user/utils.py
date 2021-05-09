@@ -6,11 +6,13 @@ from django.db.models import Exists
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django import template
 from .models import User, Patient, Provider
 from appointment.models import Appointment, OfferAppointment
 from staticInfo.models import WeeklyTimeSlot, PriorityGroup
+
+from covidvaccineapp.settings import EMAIL_HOST_USER
 
 
 def send_reset_password_email(request, email):
@@ -65,8 +67,7 @@ def get_eligible_patients_id():
 
     for patient_dict in output:
         if OfferAppointment.objects.filter(status__in=["expired", "canceled", "miss"],
-                                           patient_id=patient_dict[
-                                               "user_id"]).count() > 2:
+                                           patient_id=patient_dict["user_id"]).count() > 2:
             output.remove(patient_dict)
     return output
 
@@ -166,6 +167,13 @@ def notify(patient_id, appointment_id):
         appointment.save()
         print("have sent appointment ", appointment_id, " to ", patient_id)
 
+        # send notification
+        user = User.objects.get(id=patient_id)
+        subject = 'Thanks for choosing EasyVaccine'
+        message = 'You have received an offer for COVID vaccine appointment. Login to your account to checkout!'
+        receiver = user.email
+        send_mail(subject, message, EMAIL_HOST_USER, [receiver], fail_silently=False)
+
 
 # preference_flag is a int variable: 1->consider patients' preference; 0->otherwise
 # number is the maximum number of appointment sent to one patient
@@ -201,7 +209,7 @@ def send_invitation(available_app, patient_list, preference_flag, number):
             # }
             # patient_received_offer_count.append(curr_patient_received_offer_count_dict)
             # patient_received_offer_count = sorted(patient_received_offer_count, key=itemgetter('received_offer'))
-            patient_received_offer_count[patient_dict["user_id"]] = 0
+            patient_received_offer_count[patient_dict["user_id"]] = 1
             dict(sorted(patient_received_offer_count.items(), key=lambda item: item[1]))
             # print(patient_received_offer_count)
 
@@ -230,7 +238,7 @@ def send_invitation(available_app, patient_list, preference_flag, number):
 
         # initialize patient_received_offer_count to 0 for each patient
         for patient_dict in patient_list:
-            patient_received_offer_count[patient_dict["user_id"]] = 0
+            patient_received_offer_count[patient_dict["user_id"]] = 1
             dict(sorted(patient_received_offer_count.items(), key=lambda item: item[1]))
             # print(patient_received_offer_count)
 
