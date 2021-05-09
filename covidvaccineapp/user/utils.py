@@ -209,7 +209,7 @@ def send_invitation(available_app, patient_list, preference_flag, number):
             # }
             # patient_received_offer_count.append(curr_patient_received_offer_count_dict)
             # patient_received_offer_count = sorted(patient_received_offer_count, key=itemgetter('received_offer'))
-            patient_received_offer_count[patient_dict["user_id"]] = 0
+            patient_received_offer_count[patient_dict["user_id"]] = 1
             dict(sorted(patient_received_offer_count.items(), key=lambda item: item[1]))
             # print(patient_received_offer_count)
 
@@ -238,7 +238,7 @@ def send_invitation(available_app, patient_list, preference_flag, number):
 
         # initialize patient_received_offer_count to 0 for each patient
         for patient_dict in patient_list:
-            patient_received_offer_count[patient_dict["user_id"]] = 0
+            patient_received_offer_count[patient_dict["user_id"]] = 1
             dict(sorted(patient_received_offer_count.items(), key=lambda item: item[1]))
             # print(patient_received_offer_count)
 
